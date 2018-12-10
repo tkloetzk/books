@@ -1,32 +1,28 @@
 {
-  "name": "bookaggregator",
+  "name": "books",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
+    "client-install": "npm install --prefix client",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint .",
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Tucker Kloetzke",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
+    "concurrently": "^4.1.0",
     "express": "^4.16.4",
-    "lodash": "^4.17.11",
     "mongoose": "^5.3.15",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   },
   "devDependencies": {
-    "eslint": "^5.10.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^3.3.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-prettier": "^3.0.0",
-    "nodemon": "^1.18.7",
-    "prettier": "^1.15.3"
+    "nodemon": "^1.18.7"
   }
 }
