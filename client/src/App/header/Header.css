@@ -1,0 +1,30 @@
+.header {
+  background-color: white;
+  height: 100px;
+  max-height: 100px;
+  min-height: 50px;
+  background-size: cover;
+  left: 0;
+  right: 0;
+  position: fixed;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid;
+}
+.header-content {
+  position: relative;
+  z-index: 1;
+}
+.header::before {
+  content: '';
+  background: rgba(#000, 0.45);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: background 400ms;
+  z-index: 0;
+}
