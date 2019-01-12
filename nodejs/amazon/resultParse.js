@@ -9,22 +9,27 @@ const resultParse = isbn => {
     );
   return rp(url)
     .then(html => {
+      const keywordSelector = `a[href*="keywords=${isbn}"]`;
       return {
         title: $(
-          '.a-size-medium.s-inline.s-access-title.a-text-normal',
+          `${keywordSelector} > .a-size-medium.s-inline.s-access-title.a-text-normal`,
           html
         ).text(),
         amazonAverageRating: parseFloat(
-          $('i.a-icon.a-icon-star > span', html)
+          $('span[data-a-popover*="average-customer-review"]', html)
             .text()
             .split(' o')[0]
         ),
-        amazonRatingsCount: parseInt(
-          $('div.a-column.a-span5.a-span-last > div > a', html).text()
-        ),
-        price: $('.a-offscreen', html).text(),
-        image: $('a.a-link-normal.a-text-normal > img', html).attr('src'),
-        href: $('a.a-link-normal.a-text-normal', html).attr('href'),
+        amazonRatingsCount: $(
+          `a[href*="keywords=${isbn}#customerReviews"].a-size-small.a-link-normal.a-text-normal`,
+          html
+        ).text(),
+        price: $(`${keywordSelector} > .a-offscreen`, html).text(),
+        image: $(`${keywordSelector} > img`, html).attr('src'),
+        href: $(
+          `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
+          html
+        ).attr('href'),
         isbn,
       };
     })

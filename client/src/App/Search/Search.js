@@ -36,9 +36,10 @@ class Search extends Component {
 
   search = () => {
     //this.props.getGoodreadsBook(this.state.multiline);
-    this.props
-      .getAmazonBook(this.state.multiline)
-      .then(books => this.props.getGoodreadsBooks(books));
+    this.props.getAmazonBook(this.state.multiline).then(books => {
+      console.log(books);
+      this.props.getGoodreadsBooks(books);
+    });
   };
   render() {
     const { classes } = this.props;
