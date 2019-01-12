@@ -3,10 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { Button, TextField } from '@material-ui/core';
 import { getAmazonBook } from '../../store/amazon/amazonActions';
-import {
-  getGoodreadsBook,
-  getGoodreadsBooks,
-} from '../../store/goodreads/goodreadsActions';
+import { getGoodreadsBooks } from '../../store/goodreads/goodreadsActions';
 import { connect } from 'react-redux';
 
 const styles = theme => ({
@@ -37,7 +34,6 @@ class Search extends Component {
   search = () => {
     //this.props.getGoodreadsBook(this.state.multiline);
     this.props.getAmazonBook(this.state.multiline).then(books => {
-      console.log(books);
       this.props.getGoodreadsBooks(books);
     });
   };
@@ -69,19 +65,18 @@ class Search extends Component {
 }
 Search.propTypes = {
   classes: PropTypes.object.isRequired,
+  amazonBooks: PropTypes.array,
+  booklist: PropTypes.array,
 };
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
     amazonBooks: state.amazon.books,
-    goodreadsBooks: state.goodreads.books,
     booklist: state.booklist,
   };
 };
 const mapDispatchToProps = {
   getAmazonBook,
-  getGoodreadsBook,
   getGoodreadsBooks,
 };
 

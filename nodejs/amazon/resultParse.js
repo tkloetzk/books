@@ -20,12 +20,16 @@ const resultParse = isbn => {
             .text()
             .split(' o')[0]
         ),
-        amazonRatingsCount: $(
-          `a[href*="keywords=${isbn}#customerReviews"].a-size-small.a-link-normal.a-text-normal`,
-          html
-        ).text(),
+        amazonRatingsCount: parseInt(
+          $(
+            `a[href*="keywords=${isbn}#customerReviews"].a-size-small.a-link-normal.a-text-normal`,
+            html
+          )
+            .text()
+            .replace(',', '')
+        ),
         price: $(`${keywordSelector} > .a-offscreen`, html).text(),
-        image: $(`${keywordSelector} > img`, html).attr('src'),
+        image: $(`${keywordSelector} > img`, html).src,
         href: $(
           `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
           html

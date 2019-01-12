@@ -1,17 +1,12 @@
 import * as types from './goodreadsActionTypes';
 
 const initialState = {
-  hasErrored: null,
-  books: [],
+  hasErrored: false,
   booklist: [],
 };
 
 export default function goodreadsBookSearch(state = initialState, action) {
   switch (action.type) {
-    case types.FETCH_GOODREADS_BOOK_SUCCESS:
-      return Object.assign({}, state, {
-        books: action.books,
-      });
     case types.FETCH_GOODREADS_BOOKS_SUCCESS:
       return Object.assign({}, state, {
         booklist: action.booklist,

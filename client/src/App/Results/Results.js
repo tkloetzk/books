@@ -15,12 +15,14 @@ const styles = () => ({
 });
 
 const Results = props => {
-  const { classes, movies } = props;
+  const { classes, booklist } = props;
+  console.log('booklist', booklist);
   return (
     <Grid item lg>
       <List component="nav">
-        {movies.map(movie => (
-          <div key={movie.title} className={`row rounded ${classes.root}`}>
+        {booklist.map(book => (
+          <div key={book.title} className={`row rounded ${classes.root}`}>
+            {book.title}
             <Divider />
           </div>
         ))}
@@ -29,17 +31,15 @@ const Results = props => {
   );
 };
 
-const mapStateToProps = state => ({
-  movies: state.movies,
-});
-
-Results.propTypes = {
-  movies: PropTypes.arrayOf(PropTypes.shape),
-  classes: PropTypes.shape.isRequired,
+const mapStateToProps = state => {
+  console.log(state.goodreads);
+  return {
+    booklist: state.goodreads.booklist,
+  };
 };
 
 Results.defaultProps = {
-  movies: [],
+  booklist: [],
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(Results));

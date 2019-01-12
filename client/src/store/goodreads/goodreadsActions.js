@@ -1,8 +1,5 @@
 import * as types from './goodreadsActionTypes';
-import {
-  getGoodreadsBookService,
-  getGoodreadsBooksService,
-} from '../../services/goodreadsService';
+import { getGoodreadsBooksService } from '../../services/goodreadsService';
 
 export function getGoodreadsBookFailure(bool) {
   return {
@@ -18,32 +15,10 @@ export function getGoodreadsBookIsLoading(bool) {
   };
 }
 
-export function getGoodreadsBookSuccess(books) {
-  return {
-    type: types.FETCH_GOODREADS_BOOK_SUCCESS,
-    books,
-  };
-}
-
 export function getGoodreadsBooksSuccess(booklist) {
   return {
     type: types.FETCH_GOODREADS_BOOKS_SUCCESS,
     booklist,
-  };
-}
-
-export function getGoodreadsBook(isbns) {
-  return dispatch => {
-    dispatch(getGoodreadsBookIsLoading(true));
-    return getGoodreadsBookService(isbns)
-      .then(resp => {
-        dispatch(getGoodreadsBookIsLoading(false));
-        dispatch(getGoodreadsBookSuccess(resp.books));
-      })
-      .catch(error => {
-        dispatch(getGoodreadsBookIsLoading(false));
-        dispatch(getGoodreadsBookFailure(true));
-      });
   };
 }
 
@@ -53,7 +28,7 @@ export function getGoodreadsBooks(booklist) {
     return getGoodreadsBooksService(booklist)
       .then(resp => {
         dispatch(getGoodreadsBookIsLoading(false));
-        dispatch(getGoodreadsBooksSuccess(resp.books));
+        dispatch(getGoodreadsBooksSuccess(resp));
       })
       .catch(error => {
         dispatch(getGoodreadsBookIsLoading(false));
