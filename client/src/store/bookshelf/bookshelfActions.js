@@ -4,6 +4,13 @@ import get from 'lodash/get';
 export default function sortBooklist(booklist) {
   calculateMeans(booklist);
   calculateAdjustedRating(booklist);
+  booklist.sort((a, b) =>
+    a.adjustedRating < b.adjustedRating
+      ? 1
+      : b.adjustedRating < a.adjustedRating
+      ? -1
+      : 0
+  );
   return booklist;
 }
 

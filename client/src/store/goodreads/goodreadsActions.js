@@ -34,7 +34,7 @@ export function getGoodreadsBooks(booklist) {
         dispatch(getGoodreadsBookIsLoading(false));
         const sortedResp = sortBooklist(resp);
         console.log('sorted', sortedResp);
-        // dispatch(getGoodreadsBooksSuccess(resp));
+        dispatch(getGoodreadsBooksSuccess(sortedResp));
       })
       .catch(error => {
         dispatch(getGoodreadsBookIsLoading(false));
