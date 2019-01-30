@@ -1,5 +1,8 @@
 import * as types from './amazonActionTypes';
-import { getAmazonBookService } from '../../services/amazonService';
+import {
+  getAmazonBookService,
+  getAmazonBookServiceSingle,
+} from '../../services/amazonService';
 
 export function getAmazonBookFailure(bool) {
   return {
@@ -22,6 +25,13 @@ export function getAmazonBookSuccess(books) {
   };
 }
 
+export function getSingleAmazonBookSuccess(book) {
+  return {
+    type: types.FETCH_SINGLE_AMAZON_BOOK_SUCCESS,
+    book,
+  };
+}
+
 export function getAmazonBook(isbns) {
   return dispatch => {
     dispatch(getAmazonBookIsLoading(true));
@@ -30,6 +40,23 @@ export function getAmazonBook(isbns) {
         dispatch(getAmazonBookIsLoading(false));
         dispatch(getAmazonBookSuccess(resp.books));
         return resp.books;
+      })
+      .catch(error => {
+        dispatch(getAmazonBookIsLoading(false));
+        dispatch(getAmazonBookFailure(true));
+      });
+  };
+}
+
+export function getAmazonSingleBook(isbn) {
+  return dispatch => {
+    dispatch(getAmazonBookIsLoading(true));
+    return getAmazonBookServiceSingle(isbn)
+      .then(resp => {
+        console.log('resp', resp);
+        dispatch(getAmazonBookIsLoading(false));
+        dispatch(getSingleAmazonBookSuccess(resp.book));
+        return resp.book;
       })
       .catch(error => {
         dispatch(getAmazonBookIsLoading(false));

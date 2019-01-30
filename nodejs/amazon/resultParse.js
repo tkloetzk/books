@@ -2,6 +2,7 @@ const rp = require('request-promise');
 const $ = require('cheerio');
 
 const resultParse = isbn => {
+  console.log(isbn);
   const url =
     'http://api.scraperapi.com/?key=90d416faaa0849a3aac0e060f6faf854&url=' +
     encodeURIComponent(
@@ -10,6 +11,13 @@ const resultParse = isbn => {
   return rp(url)
     .then(html => {
       const keywordSelector = `a[href*="keywords=${isbn}"]`;
+
+      console.log(
+        $(
+          `${keywordSelector} > .a-size-medium.s-inline.s-access-title.a-text-normal`,
+          html
+        ).text()
+      );
       return {
         title: $(
           `${keywordSelector} > .a-size-medium.s-inline.s-access-title.a-text-normal`,
@@ -29,7 +37,7 @@ const resultParse = isbn => {
             .replace(',', '')
         ),
         price: $(`${keywordSelector} > .a-offscreen`, html).text(),
-        image: $(`${keywordSelector} > img`, html).src,
+        image: $(`${keywordSelector} > img`, html).attr('src'),
         href: $(
           `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
           html
@@ -38,7 +46,7 @@ const resultParse = isbn => {
       };
     })
     .catch(err => {
-      console.log(err);
+      console.log('result parse err', err);
     });
 };
 

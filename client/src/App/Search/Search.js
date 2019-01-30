@@ -2,15 +2,23 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { Button, TextField } from '@material-ui/core';
-import { getAmazonBook } from '../../store/amazon/amazonActions';
-import { getGoodreadsBooks } from '../../store/goodreads/goodreadsActions';
+import {
+  getAmazonBook,
+  getAmazonSingleBook,
+} from '../../store/amazon/amazonActions';
+import {
+  getGoodreadsBooks,
+  getGoodreadsBook,
+} from '../../store/goodreads/goodreadsActions';
 import { connect } from 'react-redux';
+import find from 'lodash/find';
 
 const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    paddingBottom: '18px',
   },
   button: {
     marginTop: '15px',
@@ -22,9 +30,22 @@ const styles = theme => ({
 
 class Search extends Component {
   state = {
+    searchIsbns: [],
     multiline: '',
   };
 
+  componentDidUpdate(prevProps) {
+    // Maybe combine them in the actions
+    const { amazonBooks, booklist, goodreadsBooks } = this.props;
+    if (
+      amazonBooks !== prevProps.amazonBooks &&
+      amazonBooks.length === this.state.searchIsbns.length
+    ) {
+      console.log('amazonBooks', amazonBooks);
+
+      this.props.getGoodreadsBooks(amazonBooks);
+    }
+  }
   handleChange = name => event => {
     this.setState({
       multiline: event.target.value,
@@ -32,10 +53,21 @@ class Search extends Component {
   };
 
   search = () => {
-    //this.props.getGoodreadsBook(this.state.multiline);
-    this.props.getAmazonBook(this.state.multiline).then(books => {
-      this.props.getGoodreadsBooks(books);
-    });
+    const { amazonBooks } = this.props;
+    const isbns = this.state.multiline.split('\n');
+    this.setState({ searchIsbns: isbns });
+
+    // this.props.getAmazonBook(isbns);
+    Promise.all(
+      isbns.map(isbn => {
+        if (!find(amazonBooks, { isbn })) {
+          this.props.getAmazonSingleBook(isbn);
+          // this.props.getGoodreadsBook(isbn);
+        } else {
+          // Show some warning explainig already exists
+        }
+      })
+    );
   };
   render() {
     const { classes } = this.props;
@@ -72,12 +104,15 @@ Search.propTypes = {
 const mapStateToProps = state => {
   return {
     amazonBooks: state.amazon.books,
+    goodreadsBooks: state.goodreads.books,
     booklist: state.booklist,
   };
 };
 const mapDispatchToProps = {
   getAmazonBook,
+  getAmazonSingleBook,
   getGoodreadsBooks,
+  getGoodreadsBook,
 };
 
 export default connect(

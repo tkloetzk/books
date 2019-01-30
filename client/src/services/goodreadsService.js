@@ -9,3 +9,12 @@ export function getGoodreadsBooksService(booklist) {
       throw error;
     });
 }
+
+export function getGoodreadsSingleBooksService(booklist) {
+  return axios
+    .get(`${apiConfig.goodreads}/${booklist}`)
+    .then(booklist => booklist.data)
+    .catch(error => {
+      throw error;
+    });
+}

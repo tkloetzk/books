@@ -11,6 +11,10 @@ export default function amazonBookSearch(state = initialState, action) {
       return Object.assign({}, state, {
         books: action.books,
       });
+    case types.FETCH_SINGLE_AMAZON_BOOK_SUCCESS:
+      return Object.assign({}, state, {
+        books: [...state.books, action.book],
+      });
     case types.FETCH_AMAZON_BOOK_HAS_ERRORED:
       return Object.assign({}, state, {
         hasErrored: action.hasErrored,
