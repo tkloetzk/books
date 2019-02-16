@@ -1,5 +1,11 @@
 import React from 'react';
 import Book from './Book/Book';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -24,29 +30,58 @@ const styles = () => ({
     overflow: 'hidden',
     // backgroundColor: theme.palette.background.paper,
   },
+  card: {
+    maxWidth: 180,
+    margin: '10px',
+  },
+  header: {
+    '& span': {
+      fontSize: '12px',
+    },
+    padding: '6px',
+  },
+  media: {
+    height: 0,
+    paddingTop: '150%',
+  },
 });
 
 const Results = props => {
   const { classes, booklist } = props;
   return (
-    <div className={classes.root}>
-      <GridList cellHeight={240} className={classes.gridList}>
-        {booklist.map(tile => (
-          <GridListTile key={tile.isbn} style={{ maxWidth: '240' }}>
-            <img src={tile.image} alt={tile.title} />
-            <GridListTileBar
-              title={tile.title}
-              // subtitle={<span>by: {tile.author}</span>}
-              actionIcon={
-                <IconButton className={classes.image}>
-                  {/* <InfoIcon /> */}
-                </IconButton>
-              }
-            />
-          </GridListTile>
-        ))}
-      </GridList>
-    </div>
+    <React.Fragment>
+      {booklist.map(tile => (
+        <Card className={classes.card}>
+          <CardHeader
+            className={classes.header}
+            //action={
+            // <IconButton>
+            //   <MoreVertIcon />
+            // </IconButton>
+            //}
+            title={tile.title}
+            subheader={tile.author}
+          />
+          <CardMedia
+            className={classes.media}
+            image={tile.image}
+            title="Paella dish"
+          />
+        </Card>
+        // <GridListTile key={tile.isbn} cols={4}>
+        //   <img src={tile.image} alt={tile.title} />
+        //   <GridListTileBar
+        //     title={tile.title}
+        //     // subtitle={<span>by: {tile.author}</span>}
+        //     actionIcon={
+        //       <IconButton className={classes.image}>
+        //         {/* <InfoIcon /> */}
+        //       </IconButton>
+        //     }
+        //   />
+        // </GridListTile>
+      ))}
+    </React.Fragment>
     // <Grid item lg>
     //   <List component="nav">
     //     {booklist.map(book => (
