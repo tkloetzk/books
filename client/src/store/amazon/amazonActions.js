@@ -53,7 +53,6 @@ export function getAmazonSingleBook(isbn) {
     dispatch(getAmazonBookIsLoading(true));
     return getAmazonBookServiceSingle(isbn)
       .then(resp => {
-        console.log('resp', resp);
         dispatch(getAmazonBookIsLoading(false));
         dispatch(getSingleAmazonBookSuccess(resp.book));
         return resp.book;

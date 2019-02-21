@@ -6,7 +6,6 @@ const initialState = {
 };
 
 export default function bookshelf(state = initialState, action) {
-  console.log('action', action);
   switch (action.type) {
     case types.FETCH_BOOKSHELF_SUCCESS:
       return Object.assign({}, state, {
@@ -15,6 +14,10 @@ export default function bookshelf(state = initialState, action) {
     case types.FETCH_BOOKSHELF_HAS_ERRORED:
       return Object.assign({}, state, {
         hasErrored: action.hasErrored,
+      });
+    case types.SAVE_COMBINED_BOOKS_SUCESS:
+      return Object.assign({}, state, {
+        booklist: action.booklist,
       });
     default:
       return state;

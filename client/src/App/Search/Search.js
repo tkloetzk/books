@@ -43,7 +43,7 @@ class Search extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    booklist: state.goodreads.booklist,
+    booklist: state.bookshelf.booklist,
   };
 };
 

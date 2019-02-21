@@ -12,17 +12,7 @@ const resultParse = isbn => {
     .then(html => {
       const keywordSelector = `a[href*="keywords=${isbn}"]`;
 
-      console.log(
-        $(
-          `${keywordSelector} > .a-size-medium.s-inline.s-access-title.a-text-normal`,
-          html
-        ).text()
-      );
       return {
-        title: $(
-          `${keywordSelector} > .a-size-medium.s-inline.s-access-title.a-text-normal`,
-          html
-        ).text(),
         amazonAverageRating: parseFloat(
           $('span[data-a-popover*="average-customer-review"]', html)
             .text()
@@ -37,7 +27,6 @@ const resultParse = isbn => {
             .replace(',', '')
         ),
         price: $(`${keywordSelector} > .a-offscreen`, html).text(),
-        image: $(`${keywordSelector} > img`, html).attr('src'),
         href: $(
           `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
           html
