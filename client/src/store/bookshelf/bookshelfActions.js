@@ -139,6 +139,17 @@ export function getBookshelfFailure(bool) {
   };
 }
 
+export function saveCombinedBooksSuccess(booklist) {
+  return {
+    type: types.SAVE_COMBINED_BOOKS_SUCESS,
+    booklist,
+  };
+}
+export function saveCombinedBooks(books) {
+  return dispatch => {
+    dispatch(saveCombinedBooksSuccess(books));
+  };
+}
 export function getBookshelf() {
   return dispatch => {
     dispatch(getBookshelfIsLoading(true));

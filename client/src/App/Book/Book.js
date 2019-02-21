@@ -11,10 +11,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import UnreadBook from './unread-book.svg';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const styles = {
   card: {
-    maxWidth: 193,
+    maxWidth: 200,
     margin: '6px',
     padding: '5px',
   },
@@ -32,11 +33,13 @@ const styles = {
   },
   media: {
     height: 0,
-    paddingTop: '150%',
+    paddingTop: '83%',
+    backgroundSize: '100px',
   },
   actions: {
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'flex-end',
   },
 };
 
@@ -68,12 +71,21 @@ class Book extends Component {
     const title =
       book.title.length < 92 ? book.title : book.title.substring(0, 92) + '...';
 
+    const subheader =
+      book.subtitle.length < 54
+        ? book.subtitle
+        : book.subtitle.substring(0, 54) + '...';
+
+    const description =
+      book.description.length < 285
+        ? book.description
+        : book.description.substring(0, 285) + '...';
+
     const highlighted =
       !book.amazonAverageRating ||
       !book.amazonRatingsCount ||
       !book.goodreadsAverageRating ||
-      !book.goodreadsRatingsCount ||
-      !book.adjustedRating;
+      !book.goodreadsRatingsCount;
 
     return (
       <Card
@@ -91,6 +103,7 @@ class Book extends Component {
             )
           }
           title={title}
+          subheader={subheader}
         />
         <Menu
           id="simple-menu"
@@ -104,12 +117,10 @@ class Book extends Component {
         </Menu>
         <CardMedia
           className={classes.media}
-          image={book.image}
+          image={book.thumbnail}
           title={book.title}
         />
-        <CardContent className={classes.content}>
-          {unescape(book.description).substring(0, 285)}...
-        </CardContent>
+        <CardContent className={classes.content}>{description}</CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
           <img src={UnreadBook} alt="Unread Book" />
           {Math.round(book.adjustedRating * 100) / 100}
@@ -119,4 +130,11 @@ class Book extends Component {
   }
 }
 
+Book.defaultProps = {
+  book: {
+    title: '',
+    subtitle: '',
+    description: '',
+  },
+};
 export default withStyles(styles)(Book);

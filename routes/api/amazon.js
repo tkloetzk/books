@@ -12,24 +12,6 @@ const router = express.Router();
 router.post('/v1', (req, res) => {
   const isbnArray = get(req.body, 'isbns').split(',');
 
-  // const apiCall = isbn => {
-  //   return new Promise(async (resolve, reject) => {
-  //     await Promise.delay(1000);
-  //     resolve(resultParse(isbn));
-  //   });
-  // };
-  // Promise.map(
-  //   isbnArray,
-  //   async query => {
-  //     console.log(await apiCall(query));
-  //   },
-  //   { concurrency: 1 }
-  // ).then(test => console.log('then', test));
-
-  // isbnArray
-  //   .map(isbn => resultParse(isbn))
-  //   .reduce((p, f) => p.then(f), Promise.resolve())
-  //   .then(books => console.log('books', books));
   Promise.all(isbnArray.map(isbn => resultParse(isbn)))
     .then(books => {
       res.send({ books });
@@ -62,26 +44,20 @@ router.post('/v2', (req, res) => {
       console.log('Error:', error);
 
       const keywordSelector = `a[href*="keywords=${isbn}"]`;
-      console.log('HREF=====', $('#result_0 img', html).attr('src'));
       const book = {
-        title: $(
-          `${keywordSelector} > .a-size-medium.s-inline.s-access-title.a-text-normal`,
-          html
-        ).text(),
         amazonAverageRating: parseFloat(
           $('span[data-a-popover*="average-customer-review"]', html)
             .text()
             .split(' o')[0]
         ),
-        amazonRatingsCount: $(
-          'span[data-a-popover*="average-customer-review"]',
-          html
-        )
-          .parent()
-          .next()
-          .text()
-          .trim()
-          .replace(',', ''),
+        amazonRatingsCount: parseInt(
+          $('span[data-a-popover*="average-customer-review"]', html)
+            .parent()
+            .next()
+            .text()
+            .trim()
+            .replace(',', '')
+        ),
         price: $(`${keywordSelector} > .a-offscreen`, html).text(),
         // href: $(
         //   `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
