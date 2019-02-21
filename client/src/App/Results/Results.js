@@ -1,45 +1,30 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
+import Grid from '@material-ui/core/Grid';
+import Book from '../Book/Book';
 
 const styles = () => ({
   root: {
-    width: '100%',
-    backgroundColor: 'white',
     display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    // backgroundColor: theme.palette.background.paper,
   },
 });
 
-const Results = props => {
-  const { classes, movies } = props;
+const Results = ({ booklist }) => {
   return (
-    <Grid item lg>
-      <List component="nav">
-        {movies.map(movie => (
-          <div key={movie.title} className={`row rounded ${classes.root}`}>
-            <Divider />
-          </div>
-        ))}
-      </List>
+    <Grid container>
+      {booklist.map(book => {
+        return <Book key={book.isbn} book={book} />;
+      })}
     </Grid>
   );
 };
 
-const mapStateToProps = state => ({
-  movies: state.movies,
-});
-
-Results.propTypes = {
-  movies: PropTypes.arrayOf(PropTypes.shape),
-  classes: PropTypes.shape.isRequired,
-};
-
 Results.defaultProps = {
-  movies: [],
+  booklist: [],
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(Results));
+export default withStyles(styles)(Results);

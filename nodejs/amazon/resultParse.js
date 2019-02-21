@@ -2,6 +2,7 @@ const rp = require('request-promise');
 const $ = require('cheerio');
 
 const resultParse = isbn => {
+  console.log(isbn);
   const url =
     'http://api.scraperapi.com/?key=90d416faaa0849a3aac0e060f6faf854&url=' +
     encodeURIComponent(
@@ -9,27 +10,32 @@ const resultParse = isbn => {
     );
   return rp(url)
     .then(html => {
+      const keywordSelector = `a[href*="keywords=${isbn}"]`;
+
       return {
-        title: $(
-          '.a-size-medium.s-inline.s-access-title.a-text-normal',
-          html
-        ).text(),
         amazonAverageRating: parseFloat(
-          $('i.a-icon.a-icon-star > span', html)
+          $('span[data-a-popover*="average-customer-review"]', html)
             .text()
             .split(' o')[0]
         ),
         amazonRatingsCount: parseInt(
-          $('div.a-column.a-span5.a-span-last > div > a', html).text()
+          $(
+            `a[href*="keywords=${isbn}#customerReviews"].a-size-small.a-link-normal.a-text-normal`,
+            html
+          )
+            .text()
+            .replace(',', '')
         ),
-        price: $('.a-offscreen', html).text(),
-        image: $('a.a-link-normal.a-text-normal > img', html).attr('src'),
-        href: $('a.a-link-normal.a-text-normal', html).attr('href'),
+        price: $(`${keywordSelector} > .a-offscreen`, html).text(),
+        href: $(
+          `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
+          html
+        ).attr('href'),
         isbn,
       };
     })
     .catch(err => {
-      console.log(err);
+      console.log('result parse err', err);
     });
 };
 

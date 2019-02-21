@@ -1,8 +1,9 @@
 import * as types from './goodreadsActionTypes';
 import {
-  getGoodreadsBookService,
   getGoodreadsBooksService,
+  getGoodreadsSingleBooksService,
 } from '../../services/goodreadsService';
+import sortBooklist from '../bookshelf/bookshelfActions';
 
 export function getGoodreadsBookFailure(bool) {
   return {
@@ -18,32 +19,10 @@ export function getGoodreadsBookIsLoading(bool) {
   };
 }
 
-export function getGoodreadsBookSuccess(books) {
-  return {
-    type: types.FETCH_GOODREADS_BOOK_SUCCESS,
-    books,
-  };
-}
-
 export function getGoodreadsBooksSuccess(booklist) {
   return {
     type: types.FETCH_GOODREADS_BOOKS_SUCCESS,
     booklist,
-  };
-}
-
-export function getGoodreadsBook(isbns) {
-  return dispatch => {
-    dispatch(getGoodreadsBookIsLoading(true));
-    return getGoodreadsBookService(isbns)
-      .then(resp => {
-        dispatch(getGoodreadsBookIsLoading(false));
-        dispatch(getGoodreadsBookSuccess(resp.books));
-      })
-      .catch(error => {
-        dispatch(getGoodreadsBookIsLoading(false));
-        dispatch(getGoodreadsBookFailure(true));
-      });
   };
 }
 
@@ -53,7 +32,31 @@ export function getGoodreadsBooks(booklist) {
     return getGoodreadsBooksService(booklist)
       .then(resp => {
         dispatch(getGoodreadsBookIsLoading(false));
-        dispatch(getGoodreadsBooksSuccess(resp.books));
+        const sortedResp = sortBooklist(resp);
+        console.log('sorted', sortedResp);
+        dispatch(getGoodreadsBooksSuccess(sortedResp));
+      })
+      .catch(error => {
+        dispatch(getGoodreadsBookIsLoading(false));
+        dispatch(getGoodreadsBookFailure(true));
+      });
+  };
+}
+
+export function getGoodreadsBookSuccess(book) {
+  return {
+    type: types.FETCH_GOODREADS_BOOK_SUCCESS,
+    book,
+  };
+}
+
+export function getGoodreadsBook(isbn) {
+  return dispatch => {
+    dispatch(getGoodreadsBookIsLoading(true));
+    return getGoodreadsSingleBooksService(isbn)
+      .then(resp => {
+        dispatch(getGoodreadsBookIsLoading(false));
+        dispatch(getGoodreadsBookSuccess(resp));
       })
       .catch(error => {
         dispatch(getGoodreadsBookIsLoading(false));

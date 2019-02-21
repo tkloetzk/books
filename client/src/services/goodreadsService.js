@@ -1,19 +1,19 @@
 import apiConfig from '../config/apiConfig';
 import axios from 'axios';
 
-export function getGoodreadsBookService(isbns) {
+export function getGoodreadsBooksService(booklist) {
   return axios
-    .get(`${apiConfig.goodreads}/${isbns}`)
-    .then(books => books.data)
+    .post(apiConfig.goodreads, booklist)
+    .then(booklist => booklist.data)
     .catch(error => {
       throw error;
     });
 }
 
-export function getGoodreadsBooksService(booklist) {
+export function getGoodreadsSingleBooksService(booklist) {
   return axios
-    .post(`${apiConfig.goodreads}/bookshelf`, booklist)
-    .then(booklist => console.log(booklist))
+    .get(`${apiConfig.goodreads}/${booklist}`)
+    .then(booklist => booklist.data)
     .catch(error => {
       throw error;
     });

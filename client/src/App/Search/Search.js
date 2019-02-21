@@ -1,87 +1,54 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { Button, TextField } from '@material-ui/core';
-import { getAmazonBook } from '../../store/amazon/amazonActions';
-import {
-  getGoodreadsBook,
-  getGoodreadsBooks,
-} from '../../store/goodreads/goodreadsActions';
+import React from 'react';
+import SearchBar from './SearchBar/SearchBar';
+import Results from '../Results/Results';
 import { connect } from 'react-redux';
+import { addBookToBookshelf } from '../../store/bookshelf/bookshelfActions';
+import { withStyles } from '@material-ui/core/styles';
+import SaveIcon from '@material-ui/icons/Save';
+import Fab from '@material-ui/core/Fab';
 
-const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+const styles = {
+  fab: {
+    alignSelf: 'flex-end',
   },
-  button: {
-    marginTop: '15px',
-    marginBottom: '8px',
-    marginLeft: '15px',
-    alignSelf: 'center',
-  },
-});
-
-class Search extends Component {
-  state = {
-    multiline: '',
-  };
-
-  handleChange = name => event => {
-    this.setState({
-      multiline: event.target.value,
-    });
-  };
-
-  search = () => {
-    //this.props.getGoodreadsBook(this.state.multiline);
+};
+class Search extends React.Component {
+  handleSave = () => {
     this.props
-      .getAmazonBook(this.state.multiline)
-      .then(books => this.props.getGoodreadsBooks(books));
+      .addBookToBookshelf([this.state.booklist[0]])
+      .then(res => console.log('saved', res));
   };
+
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ open: false });
+  };
+
   render() {
-    const { classes } = this.props;
+    const { booklist, classes } = this.props;
     return (
-      <form className={classes.container} noValidate autoComplete="off">
-        <TextField
-          id="outlined-full-width"
-          multiline
-          style={{ width: '700px' }}
-          value={this.state.multiline}
-          onChange={this.handleChange()}
-          className={classes.textField}
-          margin="normal"
-          variant="outlined"
-        />
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.button}
-          onClick={this.search}
-        >
-          Search
-        </Button>
-      </form>
+      <React.Fragment>
+        <SearchBar />
+        <Results booklist={booklist} />
+        <Fab color="primary" aria-label="Save" className={classes.fab}>
+          <SaveIcon onClick={this.handleSave} />
+        </Fab>
+      </React.Fragment>
     );
   }
 }
-Search.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
-    amazonBooks: state.amazon.books,
-    goodreadsBooks: state.goodreads.books,
-    booklist: state.booklist,
+    booklist: state.bookshelf.booklist,
   };
 };
+
 const mapDispatchToProps = {
-  getAmazonBook,
-  getGoodreadsBook,
-  getGoodreadsBooks,
+  addBookToBookshelf,
 };
 
 export default connect(

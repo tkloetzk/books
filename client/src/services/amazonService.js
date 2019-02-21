@@ -9,3 +9,12 @@ export function getAmazonBookService(isbns) {
       throw error;
     });
 }
+
+export function getAmazonBookServiceSingle(isbn) {
+  return axios
+    .post(apiConfig.amazonV2, { isbn })
+    .then(res => res.data)
+    .catch(error => {
+      throw error;
+    });
+}

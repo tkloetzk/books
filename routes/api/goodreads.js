@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 
 const router = express.Router();
 
-router.get("/", (req, res) => res.json({ msg: "Goodreads endpoint" }));
+// router.get("/", (req, res) => res.json({ msg: "Goodreads endpoint" }));
 
 module.exports = router;
