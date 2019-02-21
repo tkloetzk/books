@@ -1,7 +1,6 @@
 const express = require('express');
 const books = require('google-books-search');
 const router = express.Router();
-const joi = require('joi');
 
 router.get('/v1/:isbn', (req, res) => {
   books.search(req.params.isbn, function(error, books) {
