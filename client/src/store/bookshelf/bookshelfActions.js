@@ -1,4 +1,10 @@
 import get from 'lodash/get';
+import {
+  addBookshelfService,
+  getGennresService,
+  getBookshelfService,
+} from '../../services/bookshelfService';
+import * as types from './bookshelfActionTypes';
 
 //TODO: probably shouldn't be modifying original booklist
 export default function sortBooklist(booklist) {
@@ -110,4 +116,67 @@ function getMean(array) {
     sum += array[i];
   }
   return sum / array.length;
+}
+
+export function getBookshelfIsLoading(bool) {
+  return {
+    type: types.FETCH_BOOKSHELF_IS_LOADING,
+    isLoading: bool,
+  };
+}
+
+export function getBookshelfSuccess(bookshelf) {
+  return {
+    type: types.FETCH_BOOKSHELF_SUCCESS,
+    bookshelf,
+  };
+}
+
+export function getBookshelfFailure(bool) {
+  return {
+    type: types.FETCH_BOOKSHELF_HAS_ERRORED,
+    hasErrored: bool,
+  };
+}
+
+export function getBookshelf() {
+  return dispatch => {
+    dispatch(getBookshelfIsLoading(true));
+    return getBookshelfService()
+      .then(bookshelf => {
+        dispatch(getBookshelfIsLoading(false));
+        dispatch(getBookshelfSuccess(bookshelf));
+        return bookshelf;
+      })
+      .catch(error => {
+        dispatch(getBookshelfIsLoading(false));
+        dispatch(getBookshelfFailure(true));
+        console.error('bookshelf error', error);
+      });
+  };
+}
+
+export function addBookToBookshelf(booklist) {
+  return dispatch => {
+    return addBookshelfService(booklist)
+      .then(resp => {
+        console.log('resp', resp);
+        return true;
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  };
+}
+
+export function getGennresFromBookshelf() {
+  return dispatch => {
+    return getGennresService()
+      .then(resp => {
+        return resp;
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  };
 }
