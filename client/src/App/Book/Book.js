@@ -121,7 +121,7 @@ class Book extends Component {
           title={book.title}
         />
         <CardContent className={classes.content}>{description}</CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
+        <CardActions className={classes.actions}>
           <img src={UnreadBook} alt="Unread Book" />
           {Math.round(book.adjustedRating * 100) / 100}
         </CardActions>

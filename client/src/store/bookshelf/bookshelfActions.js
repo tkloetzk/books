@@ -1,8 +1,8 @@
 import get from 'lodash/get';
 import {
   addBookshelfService,
-  getGennresService,
   getBookshelfService,
+  getExcludedBookshelfService,
 } from '../../services/bookshelfService';
 import * as types from './bookshelfActionTypes';
 
@@ -150,10 +150,10 @@ export function saveCombinedBooks(books) {
     dispatch(saveCombinedBooksSuccess(books));
   };
 }
-export function getBookshelf() {
+export function getBookshelf(excludeGenre = []) {
   return dispatch => {
     dispatch(getBookshelfIsLoading(true));
-    return getBookshelfService()
+    return getBookshelfService(excludeGenre)
       .then(bookshelf => {
         dispatch(getBookshelfIsLoading(false));
         dispatch(getBookshelfSuccess(bookshelf));
@@ -179,18 +179,6 @@ export function addBookToBookshelf(booklist) {
       .then(resp => {
         dispatch(addBookToBookshelfSuccess(booklist));
         return true;
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
-  };
-}
-
-export function getGennresFromBookshelf() {
-  return dispatch => {
-    return getGennresService()
-      .then(resp => {
-        return resp;
       })
       .catch(error => {
         console.log('error', error);

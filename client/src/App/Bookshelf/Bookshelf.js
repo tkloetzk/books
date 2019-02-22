@@ -3,21 +3,62 @@ import GenreSelector from './GenreSelector/GenreSelector';
 import { getBookshelf } from '../../store/bookshelf/bookshelfActions';
 import { connect } from 'react-redux';
 import Results from '../Results/Results';
+import find from 'lodash/find';
+import forEach from 'lodash/forEach';
 
 class Bookshelf extends Component {
+  state = {
+    genres: [],
+  };
+
   componentDidMount() {
     this.props.getBookshelf();
   }
-  componentDidUpdate(prevProps) {
-    if (this.props.savedBooklist != prevProps.savedBooklist) {
-      this.props.getBookshelf();
+
+  componentDidUpdate(prevProps, prevState) {
+    const { savedBooklist, getBookshelf, bookshelf } = this.props;
+    const { genres } = this.state;
+
+    if (!prevState.genres.length && bookshelf.length && !genres.length) {
+      const genres = [];
+      bookshelf.forEach(book =>
+        book.categories.forEach(category => {
+          if (!find(genres, { category })) {
+            genres.push({ category, checked: true });
+          }
+        })
+      );
+      this.setState({ genres });
+    }
+    if (savedBooklist != prevProps.savedBooklist) {
+      getBookshelf();
+    }
+    if (genres !== prevState.genres) {
+      const excludeGenre = [];
+      forEach(genres, genre => {
+        if (!genre.checked) {
+          excludeGenre.push(genre.category);
+        }
+      });
+      getBookshelf(excludeGenre);
     }
   }
+
+  handleChange = name => event => {
+    const { genres } = this.state;
+    this.setState({
+      genres: [
+        ...genres.filter(genre => name !== genre.category),
+        { category: name, checked: event.target.checked },
+      ],
+    });
+  };
   render() {
     const { bookshelf } = this.props;
+    const { genres } = this.state;
     return (
       <React.Fragment>
-        <GenreSelector />
+        <GenreSelector handleChange={this.handleChange} genres={genres} />
         <Results booklist={bookshelf} />
       </React.Fragment>
     );
