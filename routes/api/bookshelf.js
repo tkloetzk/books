@@ -17,8 +17,6 @@ bookRoutes.route('/').post((req, res) => {
 });
 
 bookRoutes.route('/add').post((req, res) => {
-  //console.log(res.json());
-  //const book = new Book(req.body);
   const books = map(req.body, book => {
     Book.find({ isbn: book.isbn }, { isbn: 1 }).limit(1);
     return new Book(book);
