@@ -11,7 +11,10 @@ const BookSchema = new Schema(
     title: {
       type: String,
     },
-    image: {
+    subtitle: {
+      type: String,
+    },
+    thumbnail: {
       type: String,
     },
     href: {
@@ -19,6 +22,9 @@ const BookSchema = new Schema(
     },
     price: {
       type: String,
+    },
+    categories: {
+      type: Array,
     },
     description: {
       type: String,
@@ -33,9 +39,6 @@ const BookSchema = new Schema(
       type: Number,
     },
     goodreadsRatingsCount: {
-      type: Number,
-    },
-    adjustedRating: {
       type: Number,
     },
   },

@@ -3,6 +3,7 @@ import * as types from './bookshelfActionTypes';
 const initialState = {
   hasErrored: null,
   bookshelf: [],
+  savedBooklist: [],
 };
 
 export default function bookshelf(state = initialState, action) {
@@ -19,6 +20,11 @@ export default function bookshelf(state = initialState, action) {
       return Object.assign({}, state, {
         booklist: action.booklist,
       });
+    case types.ADD_BOOK_TO_BOOKSHELF_SUCCESS: {
+      return Object.assign({}, state, {
+        savedBooklist: action.booklist,
+      });
+    }
     default:
       return state;
   }

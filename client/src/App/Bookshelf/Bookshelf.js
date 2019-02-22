@@ -8,6 +8,11 @@ class Bookshelf extends Component {
   componentDidMount() {
     this.props.getBookshelf();
   }
+  componentDidUpdate(prevProps) {
+    if (this.props.savedBooklist != prevProps.savedBooklist) {
+      this.props.getBookshelf();
+    }
+  }
   render() {
     const { bookshelf } = this.props;
     return (
@@ -22,6 +27,7 @@ class Bookshelf extends Component {
 const mapStateToProps = state => {
   return {
     bookshelf: state.bookshelf.bookshelf, // TODO: huh?
+    savedBooklist: state.bookshelf.savedBooklist,
   };
 };
 

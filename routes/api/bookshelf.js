@@ -5,12 +5,10 @@ const map = require('lodash').map;
 const Book = require('../../models/Book');
 
 bookRoutes.route('/').get((req, res) => {
-  console.log('get all books');
   Book.find({}, function(err, books) {
     var bookshelf = [];
 
     books.forEach(function(book) {
-      console.log('book', book);
       bookshelf.push(book);
     });
 
@@ -27,10 +25,15 @@ bookRoutes.route('/add').post((req, res) => {
     Book.find({ isbn: book.isbn }, { isbn: 1 }).limit(1);
     return new Book(book);
   });
-  console.log(books);
-  //Book.insertMany(books);
-  // console.log('book', book);
-  res.json({ books });
+  console.log('mongo insertMany', books);
+  Book.insertMany(books, (err, doc) => {
+    if (err) {
+      res.send(err);
+    } else {
+      console.log('doc', doc);
+      res.send(doc);
+    }
+  });
 });
 
 module.exports = bookRoutes;

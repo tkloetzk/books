@@ -72,9 +72,9 @@ class Book extends Component {
       book.title.length < 92 ? book.title : book.title.substring(0, 92) + '...';
 
     const subheader =
-      book.subtitle.length < 54
+      book.subtitle.length < 45
         ? book.subtitle
-        : book.subtitle.substring(0, 54) + '...';
+        : book.subtitle.substring(0, 45) + '...';
 
     const description =
       book.description.length < 285

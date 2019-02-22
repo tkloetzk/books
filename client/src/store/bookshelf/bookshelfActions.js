@@ -167,11 +167,17 @@ export function getBookshelf() {
   };
 }
 
+export function addBookToBookshelfSuccess(booklist) {
+  return {
+    type: types.ADD_BOOK_TO_BOOKSHELF_SUCCESS,
+    booklist,
+  };
+}
 export function addBookToBookshelf(booklist) {
   return dispatch => {
     return addBookshelfService(booklist)
       .then(resp => {
-        console.log('resp', resp);
+        dispatch(addBookToBookshelfSuccess(booklist));
         return true;
       })
       .catch(error => {

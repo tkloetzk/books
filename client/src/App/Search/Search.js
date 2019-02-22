@@ -14,9 +14,8 @@ const styles = {
 };
 class Search extends React.Component {
   handleSave = () => {
-    this.props
-      .addBookToBookshelf([this.state.booklist[0]])
-      .then(res => console.log('saved', res));
+    const { booklist, addBookToBookshelf } = this.props;
+    addBookToBookshelf(booklist).then(res => console.log('saved', res));
   };
 
   handleClose = (event, reason) => {
@@ -44,6 +43,7 @@ class Search extends React.Component {
 const mapStateToProps = state => {
   return {
     booklist: state.bookshelf.booklist,
+    savedBooklist: state.bookshelf.savedBooklist,
   };
 };
 
