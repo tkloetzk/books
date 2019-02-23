@@ -39,7 +39,7 @@ class SearchBar extends Component {
   componentDidUpdate(prevProps) {
     // Maybe combine them in the actions
     const { searchIsbns } = this.state;
-    const { amazonBooks, booklist, goodreadsBooks, googleBooks } = this.props;
+    const { amazonBooks, goodreadsBooks, googleBooks } = this.props;
 
     // TODO: This error checking needs to be better
     if (

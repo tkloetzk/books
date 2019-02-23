@@ -11,7 +11,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import UnreadBook from './unread-book.svg';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 
 const styles = {
   card: {
@@ -121,7 +120,7 @@ class Book extends Component {
           title={book.title}
         />
         <CardContent className={classes.content}>{description}</CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
+        <CardActions className={classes.actions}>
           <img src={UnreadBook} alt="Unread Book" />
           {Math.round(book.adjustedRating * 100) / 100}
         </CardActions>
