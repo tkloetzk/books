@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -8,9 +7,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 // import ReadBook from './read-book.svg';
-import UnreadBook from './unread-book.svg';
+import UnreadBook from '@material-ui/icons/BookOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const styles = {
   card: {
@@ -29,6 +29,7 @@ const styles = {
   content: {
     fontSize: '12px',
     padding: '6px',
+    height: '145px',
   },
   media: {
     height: 0,
@@ -38,10 +39,37 @@ const styles = {
   actions: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'center',
+  },
+  icon: {
+    paddingLeft: '0px',
   },
 };
+function RatingDisplay(props) {
+  if (!props.book) {
+    return null;
+  }
 
+  if (props.book.adjustedRating) {
+    return (
+      <Typography>
+        {Math.round(props.book.adjustedRating * 1000) / 1000}
+      </Typography>
+    );
+  }
+
+  return (
+    <React.Fragment>
+      <Typography style={{ textAlign: 'end' }}>
+        Amazon Rating:{' '}
+        {Math.round(props.book.amazonAverageRating * 1000) / 1000}
+        <br />
+        Goodreads Rating:{' '}
+        {Math.round(props.book.goodreadsAverageRating * 1000) / 1000}
+      </Typography>
+    </React.Fragment>
+  );
+}
 class Book extends Component {
   state = {
     anchorEl: null,
@@ -120,10 +148,13 @@ class Book extends Component {
           title={book.title}
         />
         <CardContent className={classes.content}>{description}</CardContent>
-        <CardActions className={classes.actions}>
-          <img src={UnreadBook} alt="Unread Book" />
-          {Math.round(book.adjustedRating * 100) / 100}
-        </CardActions>
+
+        <div className={classes.actions}>
+          <IconButton aria-label="Delete" className={classes.icon}>
+            <UnreadBook fontSize="large" />
+          </IconButton>
+          <RatingDisplay book={book} />
+        </div>
       </Card>
     );
   }

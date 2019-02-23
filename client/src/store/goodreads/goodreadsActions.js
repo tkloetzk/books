@@ -3,7 +3,6 @@ import {
   getGoodreadsBooksService,
   getGoodreadsSingleBooksService,
 } from '../../services/goodreadsService';
-import sortBooklist from '../bookshelf/bookshelfActions';
 
 export function getGoodreadsBookFailure(bool) {
   return {
@@ -32,9 +31,7 @@ export function getGoodreadsBooks(booklist) {
     return getGoodreadsBooksService(booklist)
       .then(resp => {
         dispatch(getGoodreadsBookIsLoading(false));
-        const sortedResp = sortBooklist(resp);
-        console.log('sorted', sortedResp);
-        dispatch(getGoodreadsBooksSuccess(sortedResp));
+        dispatch(getGoodreadsBooksSuccess(resp));
       })
       .catch(error => {
         dispatch(getGoodreadsBookIsLoading(false));

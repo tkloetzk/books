@@ -33,7 +33,7 @@ class Bookshelf extends Component {
     if (savedBooklist !== prevProps.savedBooklist) {
       getBookshelf();
     }
-    if (genres !== prevState.genres) {
+    if (genres !== prevState.genres && prevState.genres.length) {
       const excludeGenre = [];
       forEach(genres, genre => {
         if (!genre.checked) {
@@ -53,6 +53,7 @@ class Bookshelf extends Component {
       ],
     });
   };
+  // TODO: This is being rendered twice
   render() {
     const { bookshelf } = this.props;
     const { genres } = this.state;

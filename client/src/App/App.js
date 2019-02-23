@@ -22,6 +22,7 @@ class App extends React.Component {
   };
   render() {
     const { value } = this.state;
+
     return (
       <div className="App">
         <Header>Book Review Aggregator</Header>
