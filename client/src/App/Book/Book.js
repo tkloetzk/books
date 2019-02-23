@@ -11,7 +11,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import UnreadBook from './unread-book.svg';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 
 const styles = {
   card: {

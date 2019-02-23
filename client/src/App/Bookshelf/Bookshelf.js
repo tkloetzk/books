@@ -30,7 +30,7 @@ class Bookshelf extends Component {
       );
       this.setState({ genres });
     }
-    if (savedBooklist != prevProps.savedBooklist) {
+    if (savedBooklist !== prevProps.savedBooklist) {
       getBookshelf();
     }
     if (genres !== prevState.genres) {

@@ -2,7 +2,6 @@ import get from 'lodash/get';
 import {
   addBookshelfService,
   getBookshelfService,
-  getExcludedBookshelfService,
 } from '../../services/bookshelfService';
 import * as types from './bookshelfActionTypes';
 
