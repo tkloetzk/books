@@ -27,7 +27,11 @@ class App extends React.Component {
       <div className="App">
         <Header>Book Review Aggregator</Header>
         <section className="container">
-          <AppBar position="static" color="default">
+          <AppBar
+            position="static"
+            color="default"
+            style={{ marginTop: '-13px', marginBottom: '14px' }}
+          >
             <Tabs
               value={value}
               onChange={this.handleChange}

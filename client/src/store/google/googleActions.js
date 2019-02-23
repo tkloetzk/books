@@ -1,5 +1,6 @@
 import * as types from './googleActionTypes';
 import { getGoogleBookService } from '../../services/googleService';
+import { LOADING_STATUSES } from '../../util/constants';
 
 export function getGoogleBookFailure(bool) {
   return {
@@ -8,10 +9,10 @@ export function getGoogleBookFailure(bool) {
   };
 }
 
-export function getGoogleBookIsLoading(bool) {
+export function getGoogleBookIsLoading(status) {
   return {
     type: types.FETCH_GOOGLE_BOOK_IS_LOADING,
-    isLoading: bool,
+    isLoading: status,
   };
 }
 
@@ -24,14 +25,14 @@ export function getGoogleBookSuccess(book) {
 
 export function getGoogleBook(isbn) {
   return dispatch => {
-    dispatch(getGoogleBookIsLoading(true));
+    dispatch(getGoogleBookIsLoading(LOADING_STATUSES.loading));
     return getGoogleBookService(isbn)
       .then(resp => {
-        dispatch(getGoogleBookIsLoading(false));
+        dispatch(getGoogleBookIsLoading(LOADING_STATUSES.success));
         dispatch(getGoogleBookSuccess(resp));
       })
       .catch(error => {
-        dispatch(getGoogleBookIsLoading(false));
+        dispatch(getGoogleBookIsLoading(LOADING_STATUSES.errored));
         dispatch(getGoogleBookFailure(true));
       });
   };
