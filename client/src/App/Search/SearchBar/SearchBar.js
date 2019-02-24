@@ -10,12 +10,8 @@ import {
 import { saveCombinedBooks } from '../../../store/bookshelf/bookshelfActions';
 import { getGoogleBook } from '../../../store/google/googleActions';
 import { connect } from 'react-redux';
-import find from 'lodash/find';
 import ReactTooltip from 'react-tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Grid from '@material-ui/core/Grid';
 import { LOADING_STATUSES } from '../../../util/constants';
 import forEach from 'lodash/forEach';
 import InitialIcon from '@material-ui/icons/RadioButtonUnchecked';
@@ -72,18 +68,21 @@ function TooltipContent(props) {
     return null;
   }
   return (
-    <Grid container spacing={8}>
+    <div style={{ width: 100 }}>
       {props.content.map(tooltip => (
-        <React.Fragment key={tooltip.label}>
-          <Grid item xs={5} style={{ marginTop: '2px' }}>
-            {tooltip.label}
-          </Grid>
-          <Grid item xs={4}>
-            <TooltipProgress progress={tooltip.loading} />
-          </Grid>
-        </React.Fragment>
+        <span
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+          key={tooltip.label}
+        >
+          <Typography style={{ color: 'white' }}>{tooltip.label}</Typography>
+          <TooltipProgress progress={tooltip.loading} />
+        </span>
       ))}
-    </Grid>
+    </div>
   );
 }
 class SearchBar extends Component {
@@ -126,7 +125,6 @@ class SearchBar extends Component {
   };
 
   search = () => {
-    const { amazonBooks } = this.props;
     const isbns = this.state.multiline.split('\n');
     if (!this.state.loading) {
       this.setState({ success: false, loading: true, searchIsbns: isbns });
@@ -153,8 +151,7 @@ class SearchBar extends Component {
       goodreadsBookLoading,
       googleBookLoading,
     } = this.props;
-    const { loading, success } = this.state;
-    console.log('googleBookLoading', googleBookLoading);
+    const { loading } = this.state;
     const tooltipObj = [
       { label: 'Amazon', loading: amazonBookLoading },
       { label: 'Goodreads', loading: goodreadsBookLoading },
@@ -193,14 +190,8 @@ class SearchBar extends Component {
         <ReactTooltip
           id="searchButtonWrapper"
           place="right"
-          type="light"
           effect="solid"
-          style={{ top: '6px', padding: '0' }}
-          getContent={() => (
-            <div className={classes.tooltipDiv}>
-              <TooltipContent content={tooltipObj} />
-            </div>
-          )}
+          getContent={() => <TooltipContent content={tooltipObj} />}
         />
       </form>
     );
