@@ -98,12 +98,9 @@ class SearchBar extends Component {
     clearTimeout(this.timer);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    // Maybe combine them in the actions
-    const { searchIsbns } = this.state;
+  componentDidUpdate(prevProps) {
     const { amazonBooks, goodreadsBooks, googleBooks, booklist } = this.props;
 
-    // TODO: This error checking needs to be better
     if (
       amazonBooks !== prevProps.amazonBooks &&
       amazonBooks.length &&
@@ -127,17 +124,18 @@ class SearchBar extends Component {
   };
 
   search = () => {
-    const isbns = this.state.multiline.split('\n');
+    const isbns = this.state.multiline.split(/[\n,]/);
     if (!this.state.loading) {
       this.setState({ success: false, loading: true, searchIsbns: isbns });
     }
 
     Promise.all(
       forEach(isbns, isbn => {
+        const formattedIsbn = isbn.replace(/[- ]/g, '');
         return [
-          this.props.getAmazonSingleBook(isbn),
-          this.props.getGoogleBook(isbn),
-          this.props.getGoodreadsBook(isbn),
+          this.props.getAmazonSingleBook(formattedIsbn),
+          this.props.getGoogleBook(formattedIsbn),
+          this.props.getGoodreadsBook(formattedIsbn),
         ];
       })
     );
