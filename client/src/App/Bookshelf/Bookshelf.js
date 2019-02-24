@@ -16,7 +16,7 @@ class Bookshelf extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { savedBooklist, getBookshelf, bookshelf } = this.props;
+    const { booklist, getBookshelf, bookshelf } = this.props;
     const { genres } = this.state;
 
     if (!prevState.genres.length && bookshelf.length && !genres.length) {
@@ -30,9 +30,12 @@ class Bookshelf extends Component {
       );
       this.setState({ genres });
     }
-    if (savedBooklist !== prevProps.savedBooklist) {
+
+    // TODO: Not quite right, running after a search
+    if (booklist && booklist !== prevProps.booklist) {
       getBookshelf();
     }
+
     if (genres !== prevState.genres && prevState.genres.length) {
       const excludeGenre = [];
       forEach(genres, genre => {
@@ -69,7 +72,7 @@ class Bookshelf extends Component {
 const mapStateToProps = state => {
   return {
     bookshelf: state.bookshelf.bookshelf, // TODO: huh?
-    savedBooklist: state.bookshelf.savedBooklist,
+    booklist: state.bookshelf.booklist,
   };
 };
 

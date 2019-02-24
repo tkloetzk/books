@@ -7,11 +7,38 @@ import Bookshelf from './Bookshelf/Bookshelf';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
+import Notification from './Notification/Notification';
+import { connect } from 'react-redux';
+import { LOADING_STATUSES } from '../util/constants';
+import { withStyles } from '@material-ui/core';
 
+const styles = {
+  header: {
+    backgroundColor: 'white',
+    height: 60,
+    backgroundSize: 'cover',
+    left: 0,
+    right: 0,
+    position: 'fixed',
+    top: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottom: '2px solid',
+  },
+};
 class App extends React.Component {
   state = {
     value: 0,
+    open: true,
   };
+
+  componentDidUpdate(prevProps) {
+    const { saveStatus } = this.props;
+    if (saveStatus === LOADING_STATUSES.success) {
+      this.setState({ open: true });
+    }
+  }
 
   handleChange = (event, value) => {
     this.setState({ value });
@@ -20,12 +47,20 @@ class App extends React.Component {
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
-  render() {
-    const { value } = this.state;
 
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ open: false });
+  };
+  render() {
+    const { value, open } = this.state;
+    const { saveStatus, classes } = this.props;
     return (
       <div className="App">
-        <Header>Book Review Aggregator</Header>
+        <header className={classes.header}>Book Review Aggregator</header>
         <section className="container">
           <AppBar
             position="static"
@@ -51,10 +86,23 @@ class App extends React.Component {
             <Search />
             <Bookshelf />
           </SwipeableViews>
+          <Notification
+            open={open}
+            handleClose={this.handleClose}
+            autoHideDuration={4000}
+            message={saveStatus.message}
+            type={saveStatus.status}
+          />
         </section>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    saveStatus: state.bookshelf.saveStatus,
+  };
+};
+
+export default connect(mapStateToProps)(withStyles(styles)(App));

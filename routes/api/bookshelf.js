@@ -21,12 +21,13 @@ bookRoutes.route('/add').post((req, res) => {
     Book.find({ isbn: book.isbn }, { isbn: 1 }).limit(1);
     return new Book(book);
   });
-  Book.insertMany(books, (err, doc) => {
+  Book.insertMany(books, (err, books) => {
     if (err) {
+      console.log('error mongo', err);
       res.send(err);
     } else {
-      console.log('doc', doc);
-      res.send(doc);
+      console.log('mongo saved', books);
+      res.send(books);
     }
   });
 });

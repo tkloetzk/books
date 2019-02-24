@@ -18,14 +18,6 @@ class Search extends React.Component {
     addBookToBookshelf(booklist).then(res => console.log('saved', res));
   };
 
-  handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    this.setState({ open: false });
-  };
-
   render() {
     const { booklist, classes } = this.props;
     return (
@@ -43,7 +35,6 @@ class Search extends React.Component {
 const mapStateToProps = state => {
   return {
     booklist: state.bookshelf.booklist,
-    savedBooklist: state.bookshelf.savedBooklist,
   };
 };
 

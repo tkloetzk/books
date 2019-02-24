@@ -3,6 +3,7 @@ import {
   getBookshelfService,
 } from '../../services/bookshelfService';
 import * as types from './bookshelfActionTypes';
+import remove from 'lodash/remove';
 
 export function getBookshelfIsLoading(bool) {
   return {
@@ -59,14 +60,25 @@ export function addBookToBookshelfSuccess(booklist) {
     booklist,
   };
 }
+export function addBookToBookshelfFailure(error) {
+  return {
+    type: types.ADD_BOOK_TO_BOOKSHELF_FAILURE,
+    error,
+  };
+}
+
 export function addBookToBookshelf(booklist) {
   return dispatch => {
     return addBookshelfService(booklist)
-      .then(resp => {
-        dispatch(addBookToBookshelfSuccess(booklist));
+      .then(saved => {
+        const remainingbooklist = remove(saved, obj =>
+          booklist.includes(obj.isbn)
+        );
+        dispatch(addBookToBookshelfSuccess(remainingbooklist));
         return true;
       })
       .catch(error => {
+        dispatch(addBookToBookshelfFailure(error));
         console.log('error', error);
       });
   };
