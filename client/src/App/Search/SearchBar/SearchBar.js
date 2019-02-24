@@ -61,7 +61,7 @@ function TooltipProgress(props) {
     );
   }
   if (progress === LOADING_STATUSES.success) return <DoneIcon style={green} />;
-  if (progress === LOADING_STATUSES.errored) return <ErrorIcon style={green} />;
+  if (progress === LOADING_STATUSES.errored) return <ErrorIcon style={{ color: 'red' }} />;
 }
 function TooltipContent(props) {
   if (!props.content) {
