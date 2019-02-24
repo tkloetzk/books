@@ -60,7 +60,7 @@ class App extends React.Component {
     const { saveStatus, classes } = this.props;
     return (
       <div className="App">
-        <header className={classes.header}>Book Review Aggregator</header>
+        <Header>Book Review Aggregator</Header>
         <section className="container">
           <AppBar
             position="static"

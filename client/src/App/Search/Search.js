@@ -15,7 +15,7 @@ const styles = {
 class Search extends React.Component {
   handleSave = () => {
     const { booklist, addBookToBookshelf } = this.props;
-    addBookToBookshelf(booklist).then(res => console.log('saved', res));
+    addBookToBookshelf(booklist).then(res => window.scrollTo(0, 0));
   };
 
   render() {

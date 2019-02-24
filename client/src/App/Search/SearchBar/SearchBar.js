@@ -55,7 +55,7 @@ function TooltipProgress(props) {
     return (
       <CircularProgress
         size={18}
-        style={{ color: '#007800', marginTop: '1px' }}
+        style={{ color: 'yellow', marginTop: '1px' }}
         thickness={4}
       />
     );
