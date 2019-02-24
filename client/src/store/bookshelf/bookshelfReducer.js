@@ -19,9 +19,9 @@ export default function bookshelf(state = initialState, action) {
       return Object.assign({}, state, {
         hasErrored: action.hasErrored,
       });
-    case types.SAVE_COMBINED_BOOKS_SUCESS:
+    case types.SAVE_COMBINED_BOOKS_SUCCESS:
       return Object.assign({}, state, {
-        booklist: action.booklist,
+        booklist: [...action.booklist],
       });
     case types.ADD_BOOK_TO_BOOKSHELF_SUCCESS: {
       return Object.assign({}, state, {

@@ -28,7 +28,7 @@ export function getBookshelfFailure(bool) {
 
 export function saveCombinedBooksSuccess(booklist) {
   return {
-    type: types.SAVE_COMBINED_BOOKS_SUCESS,
+    type: types.SAVE_COMBINED_BOOKS_SUCCESS,
     booklist,
   };
 }

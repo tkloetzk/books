@@ -61,7 +61,8 @@ function TooltipProgress(props) {
     );
   }
   if (progress === LOADING_STATUSES.success) return <DoneIcon style={green} />;
-  if (progress === LOADING_STATUSES.errored) return <ErrorIcon style={{ color: 'red' }} />;
+  if (progress === LOADING_STATUSES.errored)
+    return <ErrorIcon style={{ color: 'red' }} />;
 }
 function TooltipContent(props) {
   if (!props.content) {
@@ -97,7 +98,7 @@ class SearchBar extends Component {
     clearTimeout(this.timer);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     // Maybe combine them in the actions
     const { searchIsbns } = this.state;
     const { amazonBooks, goodreadsBooks, googleBooks, booklist } = this.props;
@@ -105,8 +106,9 @@ class SearchBar extends Component {
     // TODO: This error checking needs to be better
     if (
       amazonBooks !== prevProps.amazonBooks &&
-      (amazonBooks.length && googleBooks.length && goodreadsBooks.length) ===
-        searchIsbns.length
+      amazonBooks.length &&
+      googleBooks.length &&
+      goodreadsBooks.length
     ) {
       const combinedBooks = [amazonBooks, googleBooks, goodreadsBooks].reduce(
         (a, b) => a.map((c, i) => Object.assign({}, c, b[i]))

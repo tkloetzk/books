@@ -7,9 +7,10 @@ router.get('/v1/:isbn', (req, res) => {
     if (!error) {
       console.log('book', books[0]);
       // TODO: This needed? Use schema/model?
+      const subtitle = books[0].subtitle ? books[0].subtitle : '';
       const book = {
         title: books[0].title,
-        subtitle: books[0].subtitle,
+        subtitle: subtitle,
         description: books[0].description,
         thumbnail: books[0].thumbnail,
         categories: books[0].categories,
