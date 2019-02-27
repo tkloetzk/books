@@ -11,12 +11,20 @@ import UnreadBook from '@material-ui/icons/BookOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Icon from '@material-ui/icons/AnnouncementOutlined';
+import ReactTooltip from 'react-tooltip';
+import get from 'lodash/get';
 
 const styles = {
   card: {
     maxWidth: 200,
     margin: '6px',
     padding: '5px',
+  },
+  different: {
+    cursor: 'pointer',
+    boxShadow:
+      '0px 0px 3px 6px yellow, 0px 1px 1px 2px yellow, 0px 2px 1px 1px yellow',
   },
   header: {
     '& span': {
@@ -108,17 +116,13 @@ class Book extends Component {
         ? book.description
         : book.description.substring(0, 285) + '...';
 
-    const highlighted =
-      !book.amazonAverageRating ||
-      !book.amazonRatingsCount ||
-      !book.goodreadsAverageRating ||
-      !book.goodreadsRatingsCount;
+    const differences = get(book, 'differences', []);
 
     return (
       <Card
-        className={classes.card}
+        className={differences.length ? classes.different : null}
+        style={{ maxWidth: 200, margin: '6px', padding: '5px' }}
         key={book.isbn}
-        style={{ backgroundColor: highlighted ? 'yellow' : null }}
       >
         <CardHeader
           className={classes.header}
@@ -150,9 +154,29 @@ class Book extends Component {
         <CardContent className={classes.content}>{description}</CardContent>
 
         <div className={classes.actions}>
-          <IconButton aria-label="Delete" className={classes.icon}>
-            <UnreadBook fontSize="large" />
-          </IconButton>
+          {differences.length ? (
+            <React.Fragment>
+              <Icon
+                aria-label="Differences"
+                className={classes.icon}
+                data-tip
+                data-for="differencesIcon"
+              />
+              <ReactTooltip id="differencesIcon" type="info" effect="solid">
+                {differences.map(different => (
+                  <span key={different.key}>
+                    {different.key} {different.currentValue} ->{' '}
+                    {different.newValue}
+                    <br />
+                  </span>
+                ))}
+              </ReactTooltip>
+            </React.Fragment>
+          ) : (
+            <IconButton aria-label="Unread" className={classes.icon}>
+              <UnreadBook fontSize="large" />
+            </IconButton>
+          )}
           <RatingDisplay book={book} />
         </div>
       </Card>
@@ -165,6 +189,7 @@ Book.defaultProps = {
     title: '',
     subtitle: '',
     description: '',
+    differences: [],
   },
 };
 export default withStyles(styles)(Book);

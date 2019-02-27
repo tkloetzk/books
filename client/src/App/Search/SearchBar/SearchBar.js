@@ -17,6 +17,7 @@ import forEach from 'lodash/forEach';
 import InitialIcon from '@material-ui/icons/RadioButtonUnchecked';
 import DoneIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
+import remove from 'lodash/remove';
 
 const styles = theme => ({
   container: {
@@ -86,9 +87,31 @@ function TooltipContent(props) {
     </div>
   );
 }
+function compareDifferences(oldBook, newBook, difference) {
+  Object.keys(oldBook).forEach(key => {
+    if (typeof oldBook[key] !== 'object') {
+      if (
+        oldBook[key] != newBook[key] &&
+        key !== '_id' &&
+        key !== '__v' &&
+        key !== 'adjustedRating'
+      )
+        difference.push({
+          key,
+          currentValue: oldBook[key],
+          newValue: newBook[key],
+        });
+    } else {
+      compareDifferences(oldBook[key], newBook[key], difference);
+    }
+  }, difference);
+
+  return difference;
+}
 class SearchBar extends Component {
   state = {
     searchIsbns: [],
+    duplicatedISBNs: [],
     multiline: '',
     loading: false,
     success: null,
@@ -99,19 +122,54 @@ class SearchBar extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { amazonBooks, goodreadsBooks, googleBooks, booklist } = this.props;
+    const {
+      amazonBooks,
+      goodreadsBooks,
+      googleBooks,
+      booklist,
+      bookshelf,
+    } = this.props;
 
     if (
       amazonBooks !== prevProps.amazonBooks &&
       amazonBooks.length &&
       googleBooks.length &&
-      goodreadsBooks.length
+      goodreadsBooks.length &&
+      amazonBooks.length === googleBooks.length
     ) {
       const combinedBooks = [amazonBooks, googleBooks, goodreadsBooks].reduce(
         (a, b) => a.map((c, i) => Object.assign({}, c, b[i]))
       );
 
+      const duplicates = combinedBooks.filter(duplicatedBook => {
+        return bookshelf.some(existingBook => {
+          if (existingBook.isbn === duplicatedBook.isbn) {
+            remove(combinedBooks, duplicatedBook);
+            duplicatedBook.differences = compareDifferences(
+              existingBook,
+              duplicatedBook,
+              []
+            );
+
+            // TODO: If duplicate but no differences exist, don't add but show notification
+            if (duplicatedBook.differences.length) {
+              return duplicatedBook;
+            } else {
+              this.setState({
+                duplicatedISBNs: [
+                  ...this.state.duplicatedISBNs,
+                  duplicatedBook.isbn,
+                ],
+              });
+            }
+          }
+        });
+      });
+      console.log('combinedBooks', combinedBooks);
+      console.log('duplicates', duplicates);
+
       this.props.saveCombinedBooks(combinedBooks);
+      //this.props.saveDuplicatedBooks(duplicates)
     }
     if (booklist !== prevProps.booklist) {
       this.setState({ success: true, loading: false });
@@ -124,7 +182,7 @@ class SearchBar extends Component {
   };
 
   search = () => {
-    const isbns = this.state.multiline.split(/[\n,]/);
+    const isbns = this.state.multiline.split(/[\n, ]/);
     if (!this.state.loading) {
       this.setState({ success: false, loading: true, searchIsbns: isbns });
     }
@@ -212,6 +270,7 @@ const mapStateToProps = state => {
     goodreadsBooks: state.goodreads.books,
     googleBookLoading: state.google.isLoading,
     booklist: state.bookshelf.booklist,
+    bookshelf: state.bookshelf.bookshelf,
   };
 };
 const mapDispatchToProps = {

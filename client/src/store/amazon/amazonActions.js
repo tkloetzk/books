@@ -56,7 +56,6 @@ export function getAmazonSingleBook(isbn) {
       .then(resp => {
         dispatch(getAmazonBookIsLoading(LOADING_STATUSES.success));
         dispatch(getSingleAmazonBookSuccess(resp.book));
-        return resp.book;
       })
       .catch(error => {
         dispatch(getAmazonBookIsLoading(LOADING_STATUSES.errored));
