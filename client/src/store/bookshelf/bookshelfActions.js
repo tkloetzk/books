@@ -1,6 +1,7 @@
 import {
   addBookshelfService,
   getBookshelfService,
+  updateBookOnBookshelfService,
 } from '../../services/bookshelfService';
 import * as types from './bookshelfActionTypes';
 import remove from 'lodash/remove';
@@ -32,9 +33,23 @@ export function saveCombinedBooksSuccess(booklist) {
     booklist,
   };
 }
+
 export function saveCombinedBooks(books) {
   return dispatch => {
     dispatch(saveCombinedBooksSuccess(books));
+  };
+}
+
+export function saveModifiedBooksSuccess(modifiedBooklist) {
+  return {
+    type: types.SAVE_MODIFIED_BOOKS_SUCCESS,
+    modifiedBooklist,
+  };
+}
+
+export function saveModifiedBooks(books) {
+  return dispatch => {
+    dispatch(saveModifiedBooksSuccess(books));
   };
 }
 export function getBookshelf(excludeGenre = []) {
@@ -79,6 +94,31 @@ export function addBookToBookshelf(booklist) {
       })
       .catch(error => {
         dispatch(addBookToBookshelfFailure(error));
+        console.log('error', error);
+      });
+  };
+}
+
+export function updateBookOnBookshelfSuccess(modifiedBooklist) {
+  return {
+    type: types.UPDATE_BOOK_ON_BOOKSHELF_SUCCESS,
+    modifiedBooklist,
+  };
+}
+export function updateBookOnBookshelfFailure(error) {
+  return {
+    type: types.UPDATE_BOOK_ON_BOOKSHELF_FAILURE,
+    error,
+  };
+}
+export function updateBookOnBookshelf(id, fields) {
+  return dispatch => {
+    return updateBookOnBookshelfService(id, fields)
+      .then(saved => {
+        dispatch(updateBookOnBookshelfSuccess([]));
+      })
+      .catch(error => {
+        dispatch(updateBookOnBookshelfFailure(error));
         console.log('error', error);
       });
   };

@@ -7,7 +7,12 @@ import {
   getGoodreadsBooks,
   getGoodreadsBook,
 } from '../../../store/goodreads/goodreadsActions';
-import { saveCombinedBooks } from '../../../store/bookshelf/bookshelfActions';
+import {
+  saveCombinedBooks,
+  saveModifiedBooks,
+  addBookToBookshelf,
+  updateBookOnBookshelf,
+} from '../../../store/bookshelf/bookshelfActions';
 import { getGoogleBook } from '../../../store/google/googleActions';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
@@ -18,7 +23,14 @@ import InitialIcon from '@material-ui/icons/RadioButtonUnchecked';
 import DoneIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import remove from 'lodash/remove';
+import mergeByKey from 'array-merge-by-key';
+import SaveIcon from '@material-ui/icons/Save';
+import Fab from '@material-ui/core/Fab';
+import map from 'lodash/map';
+import assign from 'lodash/assign';
+import Notification from '../../Notification/Notification';
 
+// TODO: This file is getting huge
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -43,6 +55,9 @@ const styles = theme => ({
     position: 'absolute',
     width: 180,
     marginTop: -36,
+  },
+  fab: {
+    alignSelf: 'flex-end',
   },
 });
 
@@ -92,8 +107,8 @@ function compareDifferences(oldBook, newBook, difference) {
     if (typeof oldBook[key] !== 'object') {
       if (
         oldBook[key] != newBook[key] &&
-        key !== '_id' &&
         key !== '__v' &&
+        key !== '_id' &&
         key !== 'adjustedRating'
       )
         difference.push({
@@ -128,6 +143,8 @@ class SearchBar extends Component {
       googleBooks,
       booklist,
       bookshelf,
+      saveModifiedBooks,
+      saveCombinedBooks,
     } = this.props;
 
     if (
@@ -137,10 +154,13 @@ class SearchBar extends Component {
       goodreadsBooks.length &&
       amazonBooks.length === googleBooks.length
     ) {
-      const combinedBooks = [amazonBooks, googleBooks, goodreadsBooks].reduce(
-        (a, b) => a.map((c, i) => Object.assign({}, c, b[i]))
+      const combinedBooks = mergeByKey(
+        'isbn',
+        amazonBooks,
+        googleBooks,
+        goodreadsBooks
       );
-
+      let duplicateIsbns = [];
       const duplicates = combinedBooks.filter(duplicatedBook => {
         return bookshelf.some(existingBook => {
           if (existingBook.isbn === duplicatedBook.isbn) {
@@ -153,23 +173,16 @@ class SearchBar extends Component {
 
             // TODO: If duplicate but no differences exist, don't add but show notification
             if (duplicatedBook.differences.length) {
+              duplicatedBook._id = existingBook._id;
               return duplicatedBook;
             } else {
-              this.setState({
-                duplicatedISBNs: [
-                  ...this.state.duplicatedISBNs,
-                  duplicatedBook.isbn,
-                ],
-              });
+              this.state.duplicatedISBNs.push(duplicatedBook.isbn);
             }
           }
         });
       });
-      console.log('combinedBooks', combinedBooks);
-      console.log('duplicates', duplicates);
-
-      this.props.saveCombinedBooks(combinedBooks);
-      //this.props.saveDuplicatedBooks(duplicates)
+      saveModifiedBooks(duplicates);
+      saveCombinedBooks(combinedBooks);
     }
     if (booklist !== prevProps.booklist) {
       this.setState({ success: true, loading: false });
@@ -199,8 +212,28 @@ class SearchBar extends Component {
     );
   };
 
-  onSave = () => {
-    console.log('save');
+  handleSave = () => {
+    const {
+      booklist,
+      modifiedBooklist,
+      addBookToBookshelf,
+      updateBookOnBookshelf,
+    } = this.props;
+    if (modifiedBooklist.length) {
+      Promise.all(
+        forEach(modifiedBooklist, book => {
+          const fields = map(book.differences, diff => {
+            return { [diff.key]: diff.newValue };
+          });
+          return updateBookOnBookshelf(book._id, assign(...fields));
+        })
+      );
+    }
+    addBookToBookshelf(booklist).then(res => window.scrollTo(0, 0));
+  };
+
+  onClose = () => {
+    this.setState({ duplicatedISBNs: [] });
   };
   render() {
     const {
@@ -209,7 +242,7 @@ class SearchBar extends Component {
       goodreadsBookLoading,
       googleBookLoading,
     } = this.props;
-    const { loading } = this.state;
+    const { loading, duplicatedISBNs } = this.state;
     const tooltipObj = [
       { label: 'Amazon', loading: amazonBookLoading },
       { label: 'Goodreads', loading: goodreadsBookLoading },
@@ -242,6 +275,9 @@ class SearchBar extends Component {
             Search
           </Button>
         </span>
+        <Fab color="primary" aria-label="Save" className={classes.fab}>
+          <SaveIcon onClick={this.handleSave} />
+        </Fab>
         {loading && (
           <CircularProgress size={24} className={classes.buttonProgress} />
         )}
@@ -250,6 +286,15 @@ class SearchBar extends Component {
           place="right"
           effect="solid"
           getContent={() => <TooltipContent content={tooltipObj} />}
+        />
+        <Notification
+          open={duplicatedISBNs.length ? true : false}
+          handleClose={this.onClose}
+          autoHideDuration={3500}
+          message={`${duplicatedISBNs.join(
+            ', '
+          )} already shelved with no differences`}
+          type="info"
         />
       </form>
     );
@@ -271,6 +316,7 @@ const mapStateToProps = state => {
     googleBookLoading: state.google.isLoading,
     booklist: state.bookshelf.booklist,
     bookshelf: state.bookshelf.bookshelf,
+    modifiedBooklist: state.bookshelf.modifiedBooklist,
   };
 };
 const mapDispatchToProps = {
@@ -279,6 +325,9 @@ const mapDispatchToProps = {
   getGoodreadsBook,
   getGoogleBook,
   saveCombinedBooks,
+  saveModifiedBooks,
+  addBookToBookshelf,
+  updateBookOnBookshelf,
 };
 
 export default connect(

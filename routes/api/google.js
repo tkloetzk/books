@@ -10,6 +10,7 @@ router.get('/v1/:isbn', (req, res) => {
       const subtitle = books[0].subtitle ? books[0].subtitle : '';
       const book = {
         title: books[0].title,
+        isbn: req.params.isbn,
         subtitle: subtitle,
         description: books[0].description,
         thumbnail: books[0].thumbnail,

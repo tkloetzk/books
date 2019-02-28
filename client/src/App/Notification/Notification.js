@@ -26,7 +26,7 @@ const styles = () => ({
     backgroundColor: 'red',
   },
   info: {
-    backgroundColor: 'yellow',
+    backgroundColor: 'blue',
   },
   warning: {
     backgroundColor: amber[700],

@@ -18,3 +18,12 @@ export function addBookshelfService(booklist) {
       throw error;
     });
 }
+
+export function updateBookOnBookshelfService(id, fields) {
+  return axios
+    .put(`${apiConfig.bookshelf}/update/${id}`, fields)
+    .then(res => console.log(res.data))
+    .catch(error => {
+      throw error;
+    });
+}

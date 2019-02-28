@@ -5,6 +5,7 @@ const initialState = {
   hasErrored: null,
   bookshelf: [],
   booklist: [],
+  modifiedBooklist: [],
   error: null,
   saveStatus: { status: LOADING_STATUSES.initial, message: '' },
 };
@@ -21,7 +22,12 @@ export default function bookshelf(state = initialState, action) {
       });
     case types.SAVE_COMBINED_BOOKS_SUCCESS:
       return Object.assign({}, state, {
-        booklist: [...action.booklist],
+        booklist: [...action.booklist], // TODO: Do i need to array and deconstructing?
+      });
+    case types.SAVE_MODIFIED_BOOKS_SUCCESS:
+      console.log('reducer', action.modifiedBooklist);
+      return Object.assign({}, state, {
+        modifiedBooklist: action.modifiedBooklist,
       });
     case types.ADD_BOOK_TO_BOOKSHELF_SUCCESS: {
       return Object.assign({}, state, {

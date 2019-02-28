@@ -1,7 +1,7 @@
 const express = require('express');
 const bookRoutes = express.Router();
 const map = require('lodash').map;
-
+const { ObjectId } = require('mongodb');
 const Book = require('../../models/Book');
 
 bookRoutes.route('/').post((req, res) => {
@@ -30,6 +30,22 @@ bookRoutes.route('/add').post((req, res) => {
       res.send(books);
     }
   });
+});
+
+bookRoutes.route('/update/:id').put((req, res) => {
+  Book.updateMany(
+    { _id: ObjectId(req.params.id) },
+    { $set: req.body },
+    (err, books) => {
+      if (err) {
+        console.log('error mongo', err);
+        res.send(err);
+      } else {
+        console.log('mongo saved', books);
+        res.send(books);
+      }
+    }
+  );
 });
 
 module.exports = bookRoutes;

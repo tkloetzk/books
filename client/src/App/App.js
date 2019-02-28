@@ -82,6 +82,7 @@ class App extends React.Component {
             // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
             index={value}
             onChangeIndex={this.handleChangeIndex}
+            style={{ maxHeight: '78vh' }}
           >
             <Search />
             <Bookshelf />
