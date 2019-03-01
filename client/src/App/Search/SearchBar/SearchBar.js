@@ -160,27 +160,33 @@ class SearchBar extends Component {
         googleBooks,
         goodreadsBooks
       );
-      let duplicateIsbns = [];
-      const duplicates = combinedBooks.filter(duplicatedBook => {
-        return bookshelf.some(existingBook => {
-          if (existingBook.isbn === duplicatedBook.isbn) {
-            remove(combinedBooks, duplicatedBook);
+
+      // TODO: This all probably could be better
+      let duplicates = [];
+      forEach(combinedBooks, duplicatedBook => {
+        return forEach(bookshelf, existingBook => {
+          if (duplicatedBook.isbn === existingBook.isbn) {
             duplicatedBook.differences = compareDifferences(
               existingBook,
               duplicatedBook,
               []
             );
-
             // TODO: If duplicate but no differences exist, don't add but show notification
             if (duplicatedBook.differences.length) {
               duplicatedBook._id = existingBook._id;
-              return duplicatedBook;
+              duplicates.push(duplicatedBook);
             } else {
-              this.state.duplicatedISBNs.push(duplicatedBook.isbn);
+              this.state.duplicatedISBNs.push({ isbn: duplicatedBook.isbn });
             }
           }
         });
       });
+      forEach([...duplicates, ...this.state.duplicatedISBNs], duplicate =>
+        forEach([...combinedBooks], obj =>
+          obj.isbn === duplicate.isbn ? remove(combinedBooks, obj) : null
+        )
+      );
+
       saveModifiedBooks(duplicates);
       saveCombinedBooks(combinedBooks);
     }
@@ -288,7 +294,8 @@ class SearchBar extends Component {
           getContent={() => <TooltipContent content={tooltipObj} />}
         />
         <Notification
-          open={duplicatedISBNs.length ? true : false}
+          open={false}
+          //open={duplicatedISBNs.length ? true : false}
           handleClose={this.onClose}
           autoHideDuration={3500}
           message={`${duplicatedISBNs.join(

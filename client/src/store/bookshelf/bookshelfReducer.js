@@ -25,13 +25,21 @@ export default function bookshelf(state = initialState, action) {
         booklist: [...action.booklist], // TODO: Do i need to array and deconstructing?
       });
     case types.SAVE_MODIFIED_BOOKS_SUCCESS:
-      console.log('reducer', action.modifiedBooklist);
       return Object.assign({}, state, {
         modifiedBooklist: action.modifiedBooklist,
       });
     case types.ADD_BOOK_TO_BOOKSHELF_SUCCESS: {
       return Object.assign({}, state, {
         booklist: action.booklist,
+        saveStatus: {
+          status: LOADING_STATUSES.success,
+          message: 'Save Successful',
+        },
+      });
+    }
+    case types.UPDATE_BOOK_ON_BOOKSHELF_SUCCESS: {
+      return Object.assign({}, state, {
+        modifiedBooklist: action.modifiedBooklist,
         saveStatus: {
           status: LOADING_STATUSES.success,
           message: 'Save Successful',
