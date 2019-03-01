@@ -29,6 +29,7 @@ import Fab from '@material-ui/core/Fab';
 import map from 'lodash/map';
 import assign from 'lodash/assign';
 import Notification from '../../Notification/Notification';
+import { combinedBooks } from '../../../util/combineBooks';
 
 // TODO: This file is getting huge
 const styles = theme => ({
@@ -102,27 +103,7 @@ function TooltipContent(props) {
     </div>
   );
 }
-function compareDifferences(oldBook, newBook, difference) {
-  Object.keys(oldBook).forEach(key => {
-    if (typeof oldBook[key] !== 'object') {
-      if (
-        oldBook[key] != newBook[key] &&
-        key !== '__v' &&
-        key !== '_id' &&
-        key !== 'adjustedRating'
-      )
-        difference.push({
-          key,
-          currentValue: oldBook[key],
-          newValue: newBook[key],
-        });
-    } else {
-      compareDifferences(oldBook[key], newBook[key], difference);
-    }
-  }, difference);
 
-  return difference;
-}
 class SearchBar extends Component {
   state = {
     searchIsbns: [],
@@ -147,6 +128,10 @@ class SearchBar extends Component {
       saveCombinedBooks,
     } = this.props;
 
+    if (this.props.amazonBookErrored) {
+      console.log('errored');
+      this.state.loading = false;
+    }
     if (
       amazonBooks !== prevProps.amazonBooks &&
       amazonBooks.length &&
@@ -162,25 +147,8 @@ class SearchBar extends Component {
       );
 
       // TODO: This all probably could be better
-      let duplicates = [];
-      forEach(combinedBooks, duplicatedBook => {
-        return forEach(bookshelf, existingBook => {
-          if (duplicatedBook.isbn === existingBook.isbn) {
-            duplicatedBook.differences = compareDifferences(
-              existingBook,
-              duplicatedBook,
-              []
-            );
-            // TODO: If duplicate but no differences exist, don't add but show notification
-            if (duplicatedBook.differences.length) {
-              duplicatedBook._id = existingBook._id;
-              duplicates.push(duplicatedBook);
-            } else {
-              this.state.duplicatedISBNs.push({ isbn: duplicatedBook.isbn });
-            }
-          }
-        });
-      });
+      let duplicates = combinedBooks(combinedBooks, bookshelf);
+      console.log(duplicates);
       forEach([...duplicates, ...this.state.duplicatedISBNs], duplicate =>
         forEach([...combinedBooks], obj =>
           obj.isbn === duplicate.isbn ? remove(combinedBooks, obj) : null
@@ -317,9 +285,12 @@ const mapStateToProps = state => {
   return {
     amazonBooks: state.amazon.books,
     amazonBookLoading: state.amazon.isLoading,
+    amazonBookErrored: state.amazon.hasErrored,
     googleBooks: state.google.books,
+    googleBooksErrored: state.google.hasErrored,
     goodreadsBookLoading: state.goodreads.isLoading,
     goodreadsBooks: state.goodreads.books,
+    goodreadsBooksErrored: state.goodreads.hasErrored,
     googleBookLoading: state.google.isLoading,
     booklist: state.bookshelf.booklist,
     bookshelf: state.bookshelf.bookshelf,

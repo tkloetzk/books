@@ -11,6 +11,8 @@ import Notification from './Notification/Notification';
 import { connect } from 'react-redux';
 import { LOADING_STATUSES } from '../util/constants';
 import { withStyles } from '@material-ui/core';
+import forEach from 'lodash/forEach';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 const styles = {
   header: {
@@ -25,6 +27,13 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     borderBottom: '2px solid',
+  },
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+  },
+  label: {
+    width: 'unset',
   },
 };
 class App extends React.Component {
@@ -55,6 +64,23 @@ class App extends React.Component {
 
     this.setState({ open: false });
   };
+
+  refreshBookshelf = () => {
+    console.log('refresh');
+    const { bookshelf } = this.props;
+    forEach(bookshelf, book => {
+      console.log(book.isbn);
+    });
+    // Promise.all(
+    //   forEach(bookshelf, book => {
+    //     return [
+    //       this.props.getAmazonSingleBook(book.isbn),
+    //       this.props.getGoogleBook(book.isbn),
+    //       this.props.getGoodreadsBook(book.isbn),
+    //     ];
+    //   })
+    // );
+  };
   render() {
     const { value, open } = this.state;
     const { saveStatus, classes } = this.props;
@@ -75,7 +101,14 @@ class App extends React.Component {
               variant="fullWidth"
             >
               <Tab label="Search" />
-              <Tab label="Bookshelf" />
+              <Tab
+                label="Bookshelf"
+                icon={<RefreshIcon onClick={this.refreshBookshelf} />}
+                classes={{
+                  wrapper: classes.wrapper,
+                  labelContainer: classes.label,
+                }}
+              />
             </Tabs>
           </AppBar>
           <SwipeableViews
@@ -103,6 +136,7 @@ class App extends React.Component {
 const mapStateToProps = state => {
   return {
     saveStatus: state.bookshelf.saveStatus,
+    bookshelf: state.bookshelf.bookshelf,
   };
 };
 
