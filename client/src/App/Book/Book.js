@@ -8,7 +8,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 // import ReadBook from './read-book.svg';
 import UnreadBook from '@material-ui/icons/BookOutlined';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import EditIcon from '@material-ui/icons/EditOutlined';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/icons/AnnouncementOutlined';
@@ -30,9 +30,11 @@ const styles = {
     '& span': {
       fontSize: '14px',
     },
-    padding: '6px',
     height: '73px',
     textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   content: {
     fontSize: '12px',
@@ -124,19 +126,20 @@ class Book extends Component {
         style={{ maxWidth: 200, margin: '6px', padding: '5px' }}
         key={book.isbn}
       >
-        <CardHeader
-          className={classes.header}
+        <div className={classes.header}>
+          <Typography variant="body1">{title}</Typography>
+          <Typography variant="caption">{subheader}</Typography>
+        </div>
+        {/* className={classes.header}
           action={
-            book.href && (
-              <IconButton onClick={this.handleExpandClick}>
-                <MoreVertIcon />
-              </IconButton>
-            )
+            <IconButton onClick={this.handleExpandClick}>
+              <EditIcon />
+            </IconButton>
           }
           title={title}
           subheader={subheader}
-        />
-        <Menu
+        /> */}
+        {/* <Menu
           id="simple-menu"
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -145,7 +148,7 @@ class Book extends Component {
           <MenuItem onClick={() => this.viewAmazonPage(book.href)}>
             View on Amazon
           </MenuItem>
-        </Menu>
+        </Menu> */}
         <CardMedia
           className={classes.media}
           image={book.thumbnail}
