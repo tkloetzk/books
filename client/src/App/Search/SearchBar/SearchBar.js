@@ -128,8 +128,8 @@ class SearchBar extends Component {
     if (this.props.amazonBookErrored) {
       console.log('errored');
       this.setState({
-        loading: false
-      })
+        loading: false,
+      });
     }
     if (
       amazonBooks !== prevProps.amazonBooks &&
@@ -168,7 +168,7 @@ class SearchBar extends Component {
   search = () => {
     const { getAmazonSingleBook, getGoogleBook, getGoodreadsBook } = this.props;
     const { multiline, loading } = this.state;
-    const isbns = multiline.split(/[\n, ]/);
+    const isbns = multiline.split(/[\n, ]/).filter(v => v != '');
     if (!loading) {
       this.setState({ success: false, loading: true, searchIsbns: isbns });
     }
