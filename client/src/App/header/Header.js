@@ -32,7 +32,7 @@ export default class Header extends Component {
         ref={n => {
           this.containerDOM = n;
         }}
-        style={{ height: this.state.height }}
+        style={{ height: this.state.height, zIndex: 1 }}
       >
         <div className="header-content display-4">{this.props.children}</div>
       </header>
@@ -41,8 +41,8 @@ export default class Header extends Component {
 }
 Header.propTypes = {
   children: PropTypes.string.isRequired,
-  scrollAction: PropTypes.number
+  scrollAction: PropTypes.number,
 };
 Header.defaultProps = {
-  scrollAction: 250
+  scrollAction: 250,
 };

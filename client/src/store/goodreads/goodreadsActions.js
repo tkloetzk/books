@@ -3,7 +3,7 @@ import {
   getGoodreadsBooksService,
   getGoodreadsSingleBooksService,
 } from '../../services/goodreadsService';
-import sortBooklist from '../bookshelf/bookshelfActions';
+import { LOADING_STATUSES } from '../../util/constants';
 
 export function getGoodreadsBookFailure(bool) {
   return {
@@ -12,10 +12,10 @@ export function getGoodreadsBookFailure(bool) {
   };
 }
 
-export function getGoodreadsBookIsLoading(bool) {
+export function getGoodreadsBookIsLoading(status) {
   return {
     type: types.FETCH_GOODREADS_BOOK_IS_LOADING,
-    isLoading: bool,
+    isLoading: status,
   };
 }
 
@@ -28,16 +28,14 @@ export function getGoodreadsBooksSuccess(booklist) {
 
 export function getGoodreadsBooks(booklist) {
   return dispatch => {
-    dispatch(getGoodreadsBookIsLoading(true));
+    dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.loading));
     return getGoodreadsBooksService(booklist)
       .then(resp => {
-        dispatch(getGoodreadsBookIsLoading(false));
-        const sortedResp = sortBooklist(resp);
-        console.log('sorted', sortedResp);
-        dispatch(getGoodreadsBooksSuccess(sortedResp));
+        dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.success));
+        dispatch(getGoodreadsBooksSuccess(resp));
       })
       .catch(error => {
-        dispatch(getGoodreadsBookIsLoading(false));
+        dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.errored));
         dispatch(getGoodreadsBookFailure(true));
       });
   };
@@ -52,14 +50,14 @@ export function getGoodreadsBookSuccess(book) {
 
 export function getGoodreadsBook(isbn) {
   return dispatch => {
-    dispatch(getGoodreadsBookIsLoading(true));
+    dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.loading));
     return getGoodreadsSingleBooksService(isbn)
       .then(resp => {
-        dispatch(getGoodreadsBookIsLoading(false));
+        dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.success));
         dispatch(getGoodreadsBookSuccess(resp));
       })
       .catch(error => {
-        dispatch(getGoodreadsBookIsLoading(false));
+        dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.errored));
         dispatch(getGoodreadsBookFailure(true));
       });
   };

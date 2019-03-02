@@ -1,20 +1,33 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
+import { getAmazonSingleBook } from '../../../store/amazon/amazonActions';
+import { getGoodreadsBook } from '../../../store/goodreads/goodreadsActions';
 import {
-  getAmazonBook,
-  getAmazonSingleBook,
-} from '../../../store/amazon/amazonActions';
-import {
-  getGoodreadsBooks,
-  getGoodreadsBook,
-} from '../../../store/goodreads/goodreadsActions';
-import { saveCombinedBooks } from '../../../store/bookshelf/bookshelfActions';
+  saveCombinedBooks,
+  saveModifiedBooks,
+  addBookToBookshelf,
+  updateBookOnBookshelf,
+} from '../../../store/bookshelf/bookshelfActions';
 import { getGoogleBook } from '../../../store/google/googleActions';
 import { connect } from 'react-redux';
-import find from 'lodash/find';
+import ReactTooltip from 'react-tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { LOADING_STATUSES } from '../../../util/constants';
+import forEach from 'lodash/forEach';
+import InitialIcon from '@material-ui/icons/RadioButtonUnchecked';
+import DoneIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import remove from 'lodash/remove';
+import SaveIcon from '@material-ui/icons/Save';
+import Fab from '@material-ui/core/Fab';
+import map from 'lodash/map';
+import assign from 'lodash/assign';
+import Notification from '../../Notification/Notification';
+import util from '../../../util/combineBooks';
 
+// TODO: This file is getting huge
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -28,30 +41,122 @@ const styles = theme => ({
     marginLeft: '15px',
     alignSelf: 'center',
   },
+  buttonProgress: {
+    color: 'green',
+    position: 'relative',
+    marginTop: 30,
+    marginLeft: -59,
+  },
+  tooltipDiv: {
+    zIndex: '1',
+    position: 'absolute',
+    width: 180,
+    marginTop: -36,
+  },
+  fab: {
+    alignSelf: 'flex-end',
+  },
 });
+
+function TooltipProgress(props) {
+  const { progress } = props;
+  const green = { color: 'green' };
+  if (progress === LOADING_STATUSES.initial)
+    return <InitialIcon style={green} fontSize="small" />;
+
+  if (progress === LOADING_STATUSES.loading) {
+    return (
+      <CircularProgress
+        size={18}
+        style={{ color: 'yellow', marginTop: '1px' }}
+        thickness={4}
+      />
+    );
+  }
+  if (progress === LOADING_STATUSES.success) return <DoneIcon style={green} />;
+  if (progress === LOADING_STATUSES.errored)
+    return <ErrorIcon style={{ color: 'red' }} />;
+}
+function TooltipContent(props) {
+  if (!props.content) {
+    return null;
+  }
+  return (
+    <div style={{ width: 100 }}>
+      {props.content.map(tooltip => (
+        <span
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+          key={tooltip.label}
+        >
+          <Typography style={{ color: 'white' }}>{tooltip.label}</Typography>
+          <TooltipProgress progress={tooltip.loading} />
+        </span>
+      ))}
+    </div>
+  );
+}
 
 class SearchBar extends Component {
   state = {
     searchIsbns: [],
+    duplicatedISBNs: [],
     multiline: '',
+    loading: false,
+    success: null,
   };
 
-  componentDidUpdate(prevProps) {
-    // Maybe combine them in the actions
-    const { searchIsbns } = this.state;
-    const { amazonBooks, booklist, goodreadsBooks, googleBooks } = this.props;
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
 
-    // TODO: This error checking needs to be better
+  componentDidUpdate(prevProps) {
+    const {
+      amazonBooks,
+      goodreadsBooks,
+      googleBooks,
+      booklist,
+      bookshelf,
+      saveModifiedBooks,
+      saveCombinedBooks,
+      refreshedBookshelf,
+    } = this.props;
+
+    if (this.props.amazonBookErrored) {
+      console.log('errored');
+      this.setState({
+        loading: false
+      })
+    }
     if (
       amazonBooks !== prevProps.amazonBooks &&
-      (amazonBooks.length && googleBooks.length && goodreadsBooks.length) ===
-        searchIsbns.length
+      amazonBooks.length &&
+      googleBooks.length &&
+      goodreadsBooks.length &&
+      amazonBooks.length === googleBooks.length &&
+      !refreshedBookshelf
     ) {
-      const combinedBooks = [amazonBooks, googleBooks, goodreadsBooks].reduce(
-        (a, b) => a.map((c, i) => Object.assign({}, c, b[i]))
+      // TODO: This all probably could be better
+      const { combinedBooks, duplicates, duplicatedISBNs } = util.combineBooks(
+        amazonBooks,
+        googleBooks,
+        goodreadsBooks,
+        bookshelf
+      );
+      forEach([...duplicates, ...duplicatedISBNs], duplicate =>
+        forEach([...combinedBooks], obj =>
+          obj.isbn === duplicate.isbn ? remove(combinedBooks, obj) : null
+        )
       );
 
-      this.props.saveCombinedBooks(combinedBooks);
+      saveModifiedBooks(duplicates);
+      saveCombinedBooks(combinedBooks);
+    }
+    if (booklist !== prevProps.booklist) {
+      this.setState({ success: true, loading: false });
     }
   }
   handleChange = name => event => {
@@ -61,29 +166,61 @@ class SearchBar extends Component {
   };
 
   search = () => {
-    const { amazonBooks } = this.props;
-    const isbns = this.state.multiline.split('\n');
-    this.setState({ searchIsbns: isbns });
+    const { getAmazonSingleBook, getGoogleBook, getGoodreadsBook } = this.props;
+    const { multiline, loading } = this.state;
+    const isbns = multiline.split(/[\n, ]/);
+    if (!loading) {
+      this.setState({ success: false, loading: true, searchIsbns: isbns });
+    }
 
-    // this.props.getAmazonBook(isbns);
     Promise.all(
-      isbns.forEach(isbn => {
-        if (!find(amazonBooks, { isbn })) {
-          this.props.getAmazonSingleBook(isbn);
-          this.props.getGoogleBook(isbn);
-          this.props.getGoodreadsBook(isbn);
-        } else {
-          // Show some warning explainig already exists
-        }
+      forEach(isbns, isbn => {
+        const formattedIsbn = isbn.replace(/[- ]/g, '');
+        return [
+          getAmazonSingleBook(formattedIsbn),
+          getGoogleBook(formattedIsbn),
+          getGoodreadsBook(formattedIsbn),
+        ];
       })
     );
   };
 
-  onSave = () => {
-    console.log('save');
+  handleSave = () => {
+    const {
+      booklist,
+      modifiedBooklist,
+      addBookToBookshelf,
+      updateBookOnBookshelf,
+    } = this.props;
+    if (modifiedBooklist.length) {
+      Promise.all(
+        forEach(modifiedBooklist, book => {
+          const fields = map(book.differences, diff => {
+            return { [diff.key]: diff.newValue };
+          });
+          return updateBookOnBookshelf(book._id, assign(...fields));
+        })
+      );
+    }
+    addBookToBookshelf(booklist).then(res => window.scrollTo(0, 0));
+  };
+
+  onClose = () => {
+    this.setState({ duplicatedISBNs: [] });
   };
   render() {
-    const { classes } = this.props;
+    const {
+      classes,
+      amazonBookLoading,
+      goodreadsBookLoading,
+      googleBookLoading,
+    } = this.props;
+    const { loading, duplicatedISBNs } = this.state;
+    const tooltipObj = [
+      { label: 'Amazon', loading: amazonBookLoading },
+      { label: 'Goodreads', loading: goodreadsBookLoading },
+      { label: 'Google', loading: googleBookLoading },
+    ];
     return (
       <form className={classes.container} noValidate autoComplete="off">
         <TextField
@@ -96,14 +233,43 @@ class SearchBar extends Component {
           margin="normal"
           variant="outlined"
         />
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.button}
-          onClick={this.search}
+        <span
+          data-tip
+          data-for="searchButtonWrapper"
+          style={{ display: 'flex' }}
         >
-          Search
-        </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.button}
+            onClick={this.search}
+            disabled={loading}
+          >
+            Search
+          </Button>
+        </span>
+        <Fab color="primary" aria-label="Save" className={classes.fab}>
+          <SaveIcon onClick={this.handleSave} />
+        </Fab>
+        {loading && (
+          <CircularProgress size={24} className={classes.buttonProgress} />
+        )}
+        <ReactTooltip
+          id="searchButtonWrapper"
+          place="right"
+          effect="solid"
+          getContent={() => <TooltipContent content={tooltipObj} />}
+        />
+        <Notification
+          open={false}
+          //open={duplicatedISBNs.length ? true : false}
+          handleClose={this.onClose}
+          autoHideDuration={3500}
+          message={`${duplicatedISBNs.join(
+            ', '
+          )} already shelved with no differences`}
+          type="info"
+        />
       </form>
     );
   }
@@ -117,18 +283,28 @@ SearchBar.propTypes = {
 const mapStateToProps = state => {
   return {
     amazonBooks: state.amazon.books,
+    amazonBookLoading: state.amazon.isLoading,
+    amazonBookErrored: state.amazon.hasErrored,
     googleBooks: state.google.books,
+    googleBooksErrored: state.google.hasErrored,
+    goodreadsBookLoading: state.goodreads.isLoading,
     goodreadsBooks: state.goodreads.books,
+    goodreadsBooksErrored: state.goodreads.hasErrored,
+    googleBookLoading: state.google.isLoading,
     booklist: state.bookshelf.booklist,
+    bookshelf: state.bookshelf.bookshelf,
+    modifiedBooklist: state.bookshelf.modifiedBooklist,
+    refreshedBookshelf: state.bookshelf.refreshed,
   };
 };
 const mapDispatchToProps = {
-  getAmazonBook,
   getAmazonSingleBook,
-  getGoodreadsBooks,
   getGoodreadsBook,
   getGoogleBook,
   saveCombinedBooks,
+  saveModifiedBooks,
+  addBookToBookshelf,
+  updateBookOnBookshelf,
 };
 
 export default connect(

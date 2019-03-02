@@ -1,16 +1,14 @@
 const express = require('express');
 const bookRoutes = express.Router();
 const map = require('lodash').map;
-
+const { ObjectId } = require('mongodb');
 const Book = require('../../models/Book');
 
-bookRoutes.route('/').get((req, res) => {
-  console.log('get all books');
-  Book.find({}, function(err, books) {
+bookRoutes.route('/').post((req, res) => {
+  Book.find({ categories: { $nin: req.body } }, function(err, books) {
     var bookshelf = [];
 
     books.forEach(function(book) {
-      console.log('book', book);
       bookshelf.push(book);
     });
 
@@ -18,19 +16,36 @@ bookRoutes.route('/').get((req, res) => {
   });
 });
 
-bookRoutes.route('/genres').get((req, res) => res.json({ msg: 'Works' }));
-
 bookRoutes.route('/add').post((req, res) => {
-  //console.log(res.json());
-  //const book = new Book(req.body);
   const books = map(req.body, book => {
     Book.find({ isbn: book.isbn }, { isbn: 1 }).limit(1);
     return new Book(book);
   });
-  console.log(books);
-  //Book.insertMany(books);
-  // console.log('book', book);
-  res.json({ books });
+  Book.insertMany(books, (err, books) => {
+    if (err) {
+      console.log('error mongo', err);
+      res.send(err);
+    } else {
+      console.log('mongo saved', books);
+      res.send(books);
+    }
+  });
+});
+
+bookRoutes.route('/update/:id').put((req, res) => {
+  Book.updateMany(
+    { _id: ObjectId(req.params.id) },
+    { $set: req.body },
+    (err, books) => {
+      if (err) {
+        console.log('error mongo', err);
+        res.send(err);
+      } else {
+        console.log('mongo saved', books);
+        res.send(books);
+      }
+    }
+  );
 });
 
 module.exports = bookRoutes;

@@ -1,10 +1,11 @@
 import apiConfig from '../config/apiConfig';
 import axios from 'axios';
+import sortBooklist from '../util/calculator';
 
-export function getBookshelfService() {
+export function getBookshelfService(excludedGenres) {
   return axios
-    .get(apiConfig.bookshelf)
-    .then(res => res.data)
+    .post(apiConfig.bookshelf, excludedGenres)
+    .then(res => sortBooklist(res.data))
     .catch(error => {
       throw error;
     });
@@ -18,10 +19,10 @@ export function addBookshelfService(booklist) {
     });
 }
 
-export function getGennresService() {
+export function updateBookOnBookshelfService(id, fields) {
   return axios
-    .get(`${apiConfig.bookshelf}/genres`)
-    .then(res => res.data)
+    .put(`${apiConfig.bookshelf}/update/${id}`, fields)
+    .then(res => console.log(res.data))
     .catch(error => {
       throw error;
     });
