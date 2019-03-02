@@ -3,10 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { Button, TextField, Typography } from '@material-ui/core';
 import { getAmazonSingleBook } from '../../../store/amazon/amazonActions';
-import {
-  getGoodreadsBooks,
-  getGoodreadsBook,
-} from '../../../store/goodreads/goodreadsActions';
+import { getGoodreadsBook } from '../../../store/goodreads/goodreadsActions';
 import {
   saveCombinedBooks,
   saveModifiedBooks,
@@ -23,13 +20,12 @@ import InitialIcon from '@material-ui/icons/RadioButtonUnchecked';
 import DoneIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import remove from 'lodash/remove';
-import mergeByKey from 'array-merge-by-key';
 import SaveIcon from '@material-ui/icons/Save';
 import Fab from '@material-ui/core/Fab';
 import map from 'lodash/map';
 import assign from 'lodash/assign';
 import Notification from '../../Notification/Notification';
-import { combinedBooks } from '../../../util/combineBooks';
+import util from '../../../util/combineBooks';
 
 // TODO: This file is getting huge
 const styles = theme => ({
@@ -126,30 +122,31 @@ class SearchBar extends Component {
       bookshelf,
       saveModifiedBooks,
       saveCombinedBooks,
+      refreshedBookshelf,
     } = this.props;
 
     if (this.props.amazonBookErrored) {
       console.log('errored');
-      this.state.loading = false;
+      this.setState({
+        loading: false
+      })
     }
     if (
       amazonBooks !== prevProps.amazonBooks &&
       amazonBooks.length &&
       googleBooks.length &&
       goodreadsBooks.length &&
-      amazonBooks.length === googleBooks.length
+      amazonBooks.length === googleBooks.length &&
+      !refreshedBookshelf
     ) {
-      const combinedBooks = mergeByKey(
-        'isbn',
+      // TODO: This all probably could be better
+      const { combinedBooks, duplicates, duplicatedISBNs } = util.combineBooks(
         amazonBooks,
         googleBooks,
-        goodreadsBooks
+        goodreadsBooks,
+        bookshelf
       );
-
-      // TODO: This all probably could be better
-      let duplicates = combinedBooks(combinedBooks, bookshelf);
-      console.log(duplicates);
-      forEach([...duplicates, ...this.state.duplicatedISBNs], duplicate =>
+      forEach([...duplicates, ...duplicatedISBNs], duplicate =>
         forEach([...combinedBooks], obj =>
           obj.isbn === duplicate.isbn ? remove(combinedBooks, obj) : null
         )
@@ -169,8 +166,10 @@ class SearchBar extends Component {
   };
 
   search = () => {
-    const isbns = this.state.multiline.split(/[\n, ]/);
-    if (!this.state.loading) {
+    const { getAmazonSingleBook, getGoogleBook, getGoodreadsBook } = this.props;
+    const { multiline, loading } = this.state;
+    const isbns = multiline.split(/[\n, ]/);
+    if (!loading) {
       this.setState({ success: false, loading: true, searchIsbns: isbns });
     }
 
@@ -178,9 +177,9 @@ class SearchBar extends Component {
       forEach(isbns, isbn => {
         const formattedIsbn = isbn.replace(/[- ]/g, '');
         return [
-          this.props.getAmazonSingleBook(formattedIsbn),
-          this.props.getGoogleBook(formattedIsbn),
-          this.props.getGoodreadsBook(formattedIsbn),
+          getAmazonSingleBook(formattedIsbn),
+          getGoogleBook(formattedIsbn),
+          getGoodreadsBook(formattedIsbn),
         ];
       })
     );
@@ -295,11 +294,11 @@ const mapStateToProps = state => {
     booklist: state.bookshelf.booklist,
     bookshelf: state.bookshelf.bookshelf,
     modifiedBooklist: state.bookshelf.modifiedBooklist,
+    refreshedBookshelf: state.bookshelf.refreshed,
   };
 };
 const mapDispatchToProps = {
   getAmazonSingleBook,
-  getGoodreadsBooks,
   getGoodreadsBook,
   getGoogleBook,
   saveCombinedBooks,

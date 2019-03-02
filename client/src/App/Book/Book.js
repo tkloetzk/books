@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 // import ReadBook from './read-book.svg';
 import UnreadBook from '@material-ui/icons/BookOutlined';
-import EditIcon from '@material-ui/icons/EditOutlined';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/icons/AnnouncementOutlined';
@@ -103,7 +99,6 @@ class Book extends Component {
 
   render() {
     const { book, classes } = this.props;
-    const { anchorEl } = this.state;
 
     const title =
       book.title.length < 92 ? book.title : book.title.substring(0, 92) + '...';

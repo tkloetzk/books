@@ -8,6 +8,7 @@ const initialState = {
   modifiedBooklist: [],
   error: null,
   saveStatus: { status: LOADING_STATUSES.initial, message: '' },
+  refreshed: false,
 };
 
 export default function bookshelf(state = initialState, action) {
@@ -52,6 +53,11 @@ export default function bookshelf(state = initialState, action) {
           status: LOADING_STATUSES.errored,
           message: 'Save Failed',
         },
+      });
+    }
+    case types.REFRESHED_BOOKSHELF: {
+      return Object.assign({}, state, {
+        refreshed: action.refreshed,
       });
     }
     default:

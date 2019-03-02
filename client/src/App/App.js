@@ -13,6 +13,17 @@ import { LOADING_STATUSES } from '../util/constants';
 import { withStyles } from '@material-ui/core';
 import forEach from 'lodash/forEach';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import { getAmazonSingleBook } from '../store/amazon/amazonActions';
+import { getGoodreadsBook } from '../store/goodreads/goodreadsActions';
+import { getGoogleBook } from '../store/google/googleActions';
+import {
+  refreshBookshelf,
+  updateBookOnBookshelf,
+  getBookshelf,
+} from '../store/bookshelf/bookshelfActions';
+import map from 'lodash/map';
+import util from '../util/combineBooks';
+import assign from 'lodash/assign';
 
 const styles = {
   header: {
@@ -43,9 +54,46 @@ class App extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    const { saveStatus } = this.props;
+    const {
+      saveStatus,
+      updateBookOnBookshelf,
+      bookshelf,
+      refreshed,
+      amazonBooks,
+      googleBooks,
+      goodreadsBooks,
+      getBookshelf,
+    } = this.props;
     if (saveStatus === LOADING_STATUSES.success) {
       this.setState({ open: true });
+    }
+    if (
+      amazonBooks !== prevProps.amazonBooks &&
+      amazonBooks.length &&
+      googleBooks.length &&
+      goodreadsBooks.length &&
+      amazonBooks.length === googleBooks.length &&
+      refreshed
+    ) {
+      const { duplicates } = util.combineBooks(
+        amazonBooks,
+        googleBooks,
+        goodreadsBooks,
+        bookshelf
+      );
+      if (duplicates.length) {
+        Promise.all(
+          forEach(duplicates, book => {
+            const fields = map(book.differences, diff => {
+              return { [diff.key]: diff.newValue };
+            });
+            return updateBookOnBookshelf(book._id, assign(...fields));
+          })
+        );
+      }
+    }
+    if (prevProps.refreshed && !refreshed) {
+      getBookshelf();
     }
   }
 
@@ -67,19 +115,23 @@ class App extends React.Component {
 
   refreshBookshelf = () => {
     console.log('refresh');
-    const { bookshelf } = this.props;
-    forEach(bookshelf, book => {
-      console.log(book.isbn);
+    const {
+      bookshelf,
+      getAmazonSingleBook,
+      getGoogleBook,
+      getGoodreadsBook,
+      refreshBookshelf,
+    } = this.props;
+    let serviceCalls = map(bookshelf, book => {
+      return [
+        getAmazonSingleBook(book.isbn),
+        getGoogleBook(book.isbn),
+        getGoodreadsBook(book.isbn),
+      ];
     });
-    // Promise.all(
-    //   forEach(bookshelf, book => {
-    //     return [
-    //       this.props.getAmazonSingleBook(book.isbn),
-    //       this.props.getGoogleBook(book.isbn),
-    //       this.props.getGoodreadsBook(book.isbn),
-    //     ];
-    //   })
-    // );
+    serviceCalls.push(refreshBookshelf(true));
+    console.log(serviceCalls);
+    Promise.all(serviceCalls);
   };
   render() {
     const { value, open } = this.state;
@@ -137,7 +189,23 @@ const mapStateToProps = state => {
   return {
     saveStatus: state.bookshelf.saveStatus,
     bookshelf: state.bookshelf.bookshelf,
+    refreshed: state.bookshelf.refreshed,
+    amazonBooks: state.amazon.books,
+    googleBooks: state.google.books,
+    goodreadsBooks: state.goodreads.books,
   };
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(App));
+const mapDispatchToProps = {
+  getAmazonSingleBook,
+  getGoodreadsBook,
+  getGoogleBook,
+  refreshBookshelf,
+  updateBookOnBookshelf,
+  getBookshelf,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(App));
