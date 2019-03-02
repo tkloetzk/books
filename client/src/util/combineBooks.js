@@ -1,5 +1,6 @@
 import forEach from 'lodash/forEach';
 import mergeByKey from 'array-merge-by-key';
+import isEmpty from 'lodash/isEmpty';
 
 export function combineBooks(
   amazonBooks,
@@ -33,7 +34,7 @@ export function combineBooks(
       }
     });
   });
-  return { duplicates, duplicatedISBNs };
+  return { combinedBooks, duplicates, duplicatedISBNs };
 }
 export function compareDifferences(oldBook, newBook, difference) {
   Object.keys(oldBook).forEach(key => {
@@ -42,7 +43,8 @@ export function compareDifferences(oldBook, newBook, difference) {
         oldBook[key] !== newBook[key] &&
         key !== '__v' &&
         key !== '_id' &&
-        key !== 'adjustedRating'
+        key !== 'adjustedRating' &&
+        !isEmpty(newBook[key])
       )
         difference.push({
           key,
