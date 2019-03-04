@@ -13,11 +13,11 @@ const styles = () => ({
   },
 });
 
-const Results = ({ booklist }) => {
+const Results = ({ booklist, handleSave }) => {
   return (
     <Grid container>
       {booklist.map(book => {
-        return <Book key={book.isbn} book={book} />;
+        return <Book key={book.isbn} book={book} handleSave={handleSave} />;
       })}
     </Grid>
   );

@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import GenreSelector from './GenreSelector/GenreSelector';
-import { getBookshelf } from '../../store/bookshelf/bookshelfActions';
+import {
+  getBookshelf,
+  updateBookOnBookshelf,
+} from '../../store/bookshelf/bookshelfActions';
 import { connect } from 'react-redux';
 import Results from '../Results/Results';
 import find from 'lodash/find';
 import forEach from 'lodash/forEach';
+import map from 'lodash/map';
+import assign from 'lodash/assign';
 
 class Bookshelf extends Component {
   state = {
@@ -56,6 +61,17 @@ class Bookshelf extends Component {
       ],
     });
   };
+
+  handleSave = (book, edits) => {
+    const { updateBookOnBookshelf, getBookshelf } = this.props;
+
+    const fields = map(edits, diff => {
+      return { [diff.key]: diff.newValue };
+    });
+    updateBookOnBookshelf(book._id, assign(...fields)).then(
+      () => getBookshelf(this.state.genres) //Not refreshing
+    );
+  };
   // TODO: This is being rendered twice
   render() {
     const { bookshelf } = this.props;
@@ -63,7 +79,10 @@ class Bookshelf extends Component {
     return (
       <React.Fragment>
         <GenreSelector handleChange={this.handleChange} genres={genres} />
-        <Results booklist={bookshelf} />
+        <Results
+          booklist={bookshelf}
+          handleSave={(book, edits) => this.handleSave(book, edits)}
+        />
       </React.Fragment>
     );
   }
@@ -78,6 +97,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   getBookshelf,
+  updateBookOnBookshelf,
 };
 
 Bookshelf.defaultProps = {

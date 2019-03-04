@@ -1,5 +1,7 @@
 import * as types from './bookshelfActionTypes';
 import { LOADING_STATUSES } from '../../util/constants';
+import some from 'lodash/some';
+import remove from 'lodash/remove';
 
 const initialState = {
   hasErrored: null,
@@ -28,6 +30,30 @@ export default function bookshelf(state = initialState, action) {
     case types.SAVE_MODIFIED_BOOKS_SUCCESS:
       return Object.assign({}, state, {
         modifiedBooklist: action.modifiedBooklist,
+      });
+    case types.INSERT_MODIFIED_BOOK_SUCCESS:
+      const { modifiedBook } = action;
+      const { modifiedBooklist } = state;
+
+      var exisiting = some(
+        modifiedBooklist,
+        book => book.isbn === modifiedBook.isbn
+      );
+
+      if (exisiting) {
+        const newModifiedBooklist = modifiedBooklist.map(book => {
+          if (book.isbn === modifiedBook.isbn)
+            return Object.assign({}, book, modifiedBook);
+          return book;
+        });
+        console.log(newModifiedBooklist);
+        return Object.assign({}, state, {
+          modifiedBooklist: newModifiedBooklist,
+        });
+      }
+      remove(state.booklist, book => book.isbn === modifiedBook.isbn);
+      return Object.assign({}, state, {
+        booklist: [...state.booklist, modifiedBook],
       });
     case types.ADD_BOOK_TO_BOOKSHELF_SUCCESS: {
       return Object.assign({}, state, {

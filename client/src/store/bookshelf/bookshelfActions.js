@@ -52,6 +52,19 @@ export function saveModifiedBooks(books) {
     dispatch(saveModifiedBooksSuccess(books));
   };
 }
+
+export function insertModifiedBookSuccess(modifiedBook) {
+  return {
+    type: types.INSERT_MODIFIED_BOOK_SUCCESS,
+    modifiedBook,
+  };
+}
+
+export function insertModifiedBook(book) {
+  return dispatch => {
+    dispatch(insertModifiedBookSuccess(book));
+  };
+}
 export function getBookshelf(excludeGenre = []) {
   return dispatch => {
     dispatch(getBookshelfIsLoading(true));

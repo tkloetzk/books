@@ -107,13 +107,16 @@ class SearchBar extends Component {
     multiline: '',
     loading: false,
     success: null,
+    amazonBookLoading: LOADING_STATUSES.initial,
+    goodreadsBookLoading: LOADING_STATUSES.initial,
+    googleBookLoading: LOADING_STATUSES.initial,
   };
 
   componentWillUnmount() {
     clearTimeout(this.timer);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const {
       amazonBooks,
       goodreadsBooks,
@@ -123,22 +126,61 @@ class SearchBar extends Component {
       saveModifiedBooks,
       saveCombinedBooks,
       refreshedBookshelf,
+      amazonBookErrored,
+      goodreadsBooksErrored,
+      googleBooksErrored,
     } = this.props;
+    const { searchIsbns, loading } = this.state;
 
-    if (this.props.amazonBookErrored) {
-      console.log('errored');
+    if (amazonBookErrored) {
       this.setState({
         loading: false,
+        amazonBookLoading: LOADING_STATUSES.errored,
       });
     }
+    if (goodreadsBooksErrored) {
+      this.setState({
+        loading: false,
+        goodreadsBookLoading: LOADING_STATUSES.errored,
+      });
+    }
+    if (goodreadsBooksErrored) {
+      this.setState({
+        loading: false,
+        goodreadsBookLoading: LOADING_STATUSES.errored,
+      });
+    }
+    if (searchIsbns.length) {
+      if (
+        amazonBooks.length === searchIsbns.length &&
+        prevProps.amazonBooks.length !== amazonBooks.length
+      ) {
+        this.setState({ amazonBookLoading: LOADING_STATUSES.success });
+      }
+      if (
+        goodreadsBooks.length === searchIsbns.length &&
+        prevProps.goodreadsBooks.length !== goodreadsBooks.length
+      ) {
+        this.setState({ goodreadsBookLoading: LOADING_STATUSES.success });
+      }
+      if (
+        googleBooks.length === searchIsbns.length &&
+        prevProps.googleBooks.length !== googleBooks.length
+      ) {
+        this.setState({ googleBookLoading: LOADING_STATUSES.success });
+      }
+    }
+
     if (
-      amazonBooks !== prevProps.amazonBooks &&
       amazonBooks.length &&
       googleBooks.length &&
       goodreadsBooks.length &&
-      amazonBooks.length === googleBooks.length &&
-      !refreshedBookshelf
+      (amazonBooks.length && googleBooks.length && goodreadsBooks.length) ===
+        searchIsbns.length &&
+      !refreshedBookshelf &&
+      loading
     ) {
+      console.log(booklist, prevProps.booklist);
       // TODO: This all probably could be better
       const { combinedBooks, duplicates, duplicatedISBNs } = util.combineBooks(
         amazonBooks,
@@ -154,8 +196,6 @@ class SearchBar extends Component {
 
       saveModifiedBooks(duplicates);
       saveCombinedBooks(combinedBooks);
-    }
-    if (booklist !== prevProps.booklist) {
       this.setState({ success: true, loading: false });
     }
   }
@@ -170,7 +210,14 @@ class SearchBar extends Component {
     const { multiline, loading } = this.state;
     const isbns = multiline.split(/[\n, ]/).filter(v => v != '');
     if (!loading) {
-      this.setState({ success: false, loading: true, searchIsbns: isbns });
+      this.setState({
+        success: false,
+        loading: true,
+        searchIsbns: isbns,
+        goodreadsBookLoading: LOADING_STATUSES.loading,
+        googleBookLoading: LOADING_STATUSES.loading,
+        amazonBookLoading: LOADING_STATUSES.loading,
+      });
     }
 
     Promise.all(
@@ -209,13 +256,14 @@ class SearchBar extends Component {
     this.setState({ duplicatedISBNs: [] });
   };
   render() {
+    const { classes } = this.props;
     const {
-      classes,
+      loading,
+      duplicatedISBNs,
       amazonBookLoading,
       goodreadsBookLoading,
       googleBookLoading,
-    } = this.props;
-    const { loading, duplicatedISBNs } = this.state;
+    } = this.state;
     const tooltipObj = [
       { label: 'Amazon', loading: amazonBookLoading },
       { label: 'Goodreads', loading: goodreadsBookLoading },
@@ -283,14 +331,11 @@ SearchBar.propTypes = {
 const mapStateToProps = state => {
   return {
     amazonBooks: state.amazon.books,
-    amazonBookLoading: state.amazon.isLoading,
     amazonBookErrored: state.amazon.hasErrored,
     googleBooks: state.google.books,
     googleBooksErrored: state.google.hasErrored,
-    goodreadsBookLoading: state.goodreads.isLoading,
     goodreadsBooks: state.goodreads.books,
     goodreadsBooksErrored: state.goodreads.hasErrored,
-    googleBookLoading: state.google.isLoading,
     booklist: state.bookshelf.booklist,
     bookshelf: state.bookshelf.bookshelf,
     modifiedBooklist: state.bookshelf.modifiedBooklist,
