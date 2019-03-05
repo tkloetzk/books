@@ -6,7 +6,12 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-const GenreSelector = ({ classes, handleChange, genres }) => (
+const GenreSelector = ({
+  classes,
+  handleChange,
+  genres,
+  selectionControls,
+}) => (
   <FormControl component="fieldset" fullWidth>
     <FormGroup row className={classes.formGroup}>
       <FormLabel component="label" className={classes.legend}>
@@ -20,6 +25,22 @@ const GenreSelector = ({ classes, handleChange, genres }) => (
               <Checkbox
                 checked={checked}
                 onChange={handleChange(category)}
+                value={category}
+              />
+            }
+            label={category}
+            key={category}
+          />
+        );
+      })}
+      {selectionControls.map(selection => {
+        const { checked, category, handler } = selection;
+        return (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={checked}
+                onChange={handler(category)}
                 value={category}
               />
             }

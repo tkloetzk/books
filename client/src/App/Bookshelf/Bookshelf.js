@@ -14,6 +14,8 @@ import assign from 'lodash/assign';
 class Bookshelf extends Component {
   state = {
     genres: [],
+    selectAll: true,
+    deselectAll: false,
   };
 
   componentDidMount() {
@@ -22,14 +24,16 @@ class Bookshelf extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { booklist, getBookshelf, bookshelf } = this.props;
-    const { genres } = this.state;
+    const { genres, selectAll, deselectAll } = this.state;
 
-    if (!prevState.genres.length && bookshelf.length && !genres.length) {
-      const genres = [];
+    if (
+      (!prevState.genres.length && bookshelf.length && !genres.length) ||
+      (!prevState.selectAll && selectAll && bookshelf.length && genres.length)
+    ) {
       bookshelf.forEach(book =>
         book.categories.forEach(category => {
           if (!find(genres, { category })) {
-            genres.push({ category, checked: true });
+            genres.push({ category, checked: false });
           }
         })
       );
@@ -59,6 +63,8 @@ class Bookshelf extends Component {
         ...genres.filter(genre => name !== genre.category),
         { category: name, checked: event.target.checked },
       ],
+      deselectAll: false,
+      selectAll: false,
     });
   };
 
@@ -72,13 +78,31 @@ class Bookshelf extends Component {
       () => getBookshelf(this.state.genres) //Not refreshing
     );
   };
+  handleSelectAll = name => event => {
+    console.log('select all', name, event.target.checked);
+    this.setState({
+      selectAll: event.target.checked,
+      deselectAll: false,
+    });
+  };
   // TODO: This is being rendered twice
   render() {
     const { bookshelf } = this.props;
-    const { genres } = this.state;
+    const { genres, selectAll } = this.state;
+    const selectionControls = [
+      {
+        handler: this.handleSelectAll,
+        category: 'SELECT ALL',
+        checked: selectAll,
+      },
+    ];
     return (
       <React.Fragment>
-        <GenreSelector handleChange={this.handleChange} genres={genres} />
+        <GenreSelector
+          handleChange={this.handleChange}
+          genres={genres}
+          selectionControls={selectionControls}
+        />
         <Results
           booklist={bookshelf}
           handleSave={(book, edits) => this.handleSave(book, edits)}
