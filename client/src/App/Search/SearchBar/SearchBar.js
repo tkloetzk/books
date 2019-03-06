@@ -180,8 +180,9 @@ class SearchBar extends Component {
       amazonBooks.length &&
       googleBooks.length &&
       goodreadsBooks.length &&
-      (amazonBooks.length && googleBooks.length && goodreadsBooks.length) ===
-        searchIsbns.length &&
+      amazonBooks.length === searchIsbns.length &&
+      googleBooks.length === searchIsbns.length &&
+      goodreadsBooks.length === searchIsbns.length &&
       !refreshedBookshelf &&
       loading
     ) {

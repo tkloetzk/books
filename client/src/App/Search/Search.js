@@ -41,7 +41,7 @@ export class Search extends React.Component {
     const { open } = this.state;
     const books = modifiedBooklist.concat(booklist);
     return (
-      <React.Fragment>
+      <div style={{ height: '74vh' }}>
         <SearchBar />
         <Results
           booklist={books}
@@ -54,7 +54,7 @@ export class Search extends React.Component {
           message={saveStatus.message}
           type={saveStatus.status}
         />
-      </React.Fragment>
+      </div>
     );
   }
 }
