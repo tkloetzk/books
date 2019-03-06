@@ -5,7 +5,8 @@ const { ObjectId } = require('mongodb');
 const Book = require('../../models/Book');
 
 bookRoutes.route('/').post((req, res) => {
-  Book.find({ categories: { $nin: req.body } }, function(err, books) {
+  const param = req.body.length ? { categories: { $in: req.body } } : {};
+  Book.find(param, function(err, books) {
     var bookshelf = [];
 
     books.forEach(function(book) {

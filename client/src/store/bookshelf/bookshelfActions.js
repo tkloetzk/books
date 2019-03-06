@@ -65,20 +65,28 @@ export function insertModifiedBook(book) {
     dispatch(insertModifiedBookSuccess(book));
   };
 }
-export function getBookshelf(excludeGenre = []) {
+export function getBookshelf(includedGenres = []) {
   return dispatch => {
     dispatch(getBookshelfIsLoading(true));
-    return getBookshelfService(excludeGenre)
-      .then(bookshelf => {
-        dispatch(getBookshelfIsLoading(false));
-        dispatch(getBookshelfSuccess(bookshelf));
-        return bookshelf;
-      })
-      .catch(error => {
-        dispatch(getBookshelfIsLoading(false));
-        dispatch(getBookshelfFailure(true));
-        console.error('bookshelf error', error);
-      });
+
+    // If false, means no genres are selected so return nothing
+    if (includedGenres === false) {
+      dispatch(getBookshelfIsLoading(false));
+      dispatch(getBookshelfSuccess([]));
+      return [];
+    } else {
+      return getBookshelfService(includedGenres)
+        .then(bookshelf => {
+          dispatch(getBookshelfIsLoading(false));
+          dispatch(getBookshelfSuccess(bookshelf));
+          return bookshelf;
+        })
+        .catch(error => {
+          dispatch(getBookshelfIsLoading(false));
+          dispatch(getBookshelfFailure(true));
+          console.error('bookshelf error', error);
+        });
+    }
   };
 }
 

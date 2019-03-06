@@ -2,9 +2,9 @@ import apiConfig from '../config/apiConfig';
 import axios from 'axios';
 import sortBooklist from '../util/calculator';
 
-export function getBookshelfService(excludedGenres) {
+export function getBookshelfService(includedGenres) {
   return axios
-    .post(apiConfig.bookshelf, excludedGenres)
+    .post(apiConfig.bookshelf, includedGenres)
     .then(res => sortBooklist(res.data))
     .catch(error => {
       throw error;
