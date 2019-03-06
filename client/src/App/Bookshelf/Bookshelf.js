@@ -16,9 +16,9 @@ class Bookshelf extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { booklist, getBookshelf } = this.props;
-
     // TODO: Not quite right, running after a search
     if (booklist && booklist !== prevProps.booklist) {
+      console.log('getting');
       getBookshelf();
     }
   }
@@ -36,14 +36,16 @@ class Bookshelf extends Component {
 
   // TODO: This is being rendered twice
   render() {
-    const { bookshelf } = this.props;
+    const { bookshelf, active } = this.props;
     return (
       <React.Fragment>
         <GenreSelector />
-        <Results
-          booklist={bookshelf}
-          handleSave={(book, edits) => this.handleSave(book, edits)}
-        />
+        {active && (
+          <Results
+            booklist={bookshelf}
+            handleSave={(book, edits) => this.handleSave(book, edits)}
+          />
+        )}
       </React.Fragment>
     );
   }

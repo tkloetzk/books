@@ -7,9 +7,7 @@ import Bookshelf from './Bookshelf/Bookshelf';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
-import Notification from './Notification/Notification';
 import { connect } from 'react-redux';
-import { LOADING_STATUSES } from '../util/constants';
 import { withStyles } from '@material-ui/core';
 import forEach from 'lodash/forEach';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -47,15 +45,13 @@ const styles = {
     width: 'unset',
   },
 };
-class App extends React.Component {
+export class App extends React.Component {
   state = {
     value: 0,
-    open: true,
   };
 
   componentDidUpdate(prevProps) {
     const {
-      saveStatus,
       updateBookOnBookshelf,
       bookshelf,
       refreshed,
@@ -64,9 +60,6 @@ class App extends React.Component {
       goodreadsBooks,
       getBookshelf,
     } = this.props;
-    if (saveStatus === LOADING_STATUSES.success) {
-      this.setState({ open: true });
-    }
     if (
       amazonBooks !== prevProps.amazonBooks &&
       amazonBooks.length &&
@@ -134,8 +127,8 @@ class App extends React.Component {
     Promise.all(serviceCalls);
   };
   render() {
-    const { value, open } = this.state;
-    const { saveStatus, classes } = this.props;
+    const { value } = this.state;
+    const { classes } = this.props;
     return (
       <div className="App">
         <Header>Book Review Aggregator</Header>
@@ -170,15 +163,8 @@ class App extends React.Component {
             style={{ maxHeight: '78vh' }}
           >
             <Search />
-            <Bookshelf />
+            <Bookshelf active={value === 1} />
           </SwipeableViews>
-          <Notification
-            open={open}
-            handleClose={this.handleClose}
-            autoHideDuration={4000}
-            message={saveStatus.message}
-            type={saveStatus.status}
-          />
         </section>
       </div>
     );
@@ -187,7 +173,6 @@ class App extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    saveStatus: state.bookshelf.saveStatus,
     bookshelf: state.bookshelf.bookshelf,
     refreshed: state.bookshelf.refreshed,
     amazonBooks: state.amazon.books,

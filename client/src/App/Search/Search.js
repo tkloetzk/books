@@ -3,10 +3,14 @@ import SearchBar from './SearchBar/SearchBar';
 import Results from '../Results/Results';
 import { connect } from 'react-redux';
 import find from 'lodash/find';
-import extend from 'lodash/extend';
+import { LOADING_STATUSES } from '../../util/constants';
 import { insertModifiedBook } from '../../store/bookshelf/bookshelfActions';
+import Notification from '../Notification/Notification';
 
-class Search extends React.Component {
+export class Search extends React.Component {
+  state = {
+    open: true,
+  };
   handleSave = (book, edits) => {
     const { modifiedBooklist, insertModifiedBook } = this.props;
 
@@ -15,8 +19,7 @@ class Search extends React.Component {
       modifiedBook => modifiedBook.isbn === book.isbn
     );
     if (exisitingBook) {
-      const newDiff = [];
-      var newDiff = book.differences
+      const newDiff = book.differences
         .filter(diff => !edits.find(edit => diff['key'] === edit['key']))
         .concat(edits);
       exisitingBook.differences = newDiff;
@@ -26,8 +29,16 @@ class Search extends React.Component {
     }
     // if it's exisiting, or new
   };
+
+  componentDidUpdate() {
+    const { saveStatus } = this.props;
+    if (saveStatus === LOADING_STATUSES.success) {
+      this.setState({ open: true });
+    }
+  }
   render() {
-    const { modifiedBooklist, booklist } = this.props;
+    const { modifiedBooklist, booklist, saveStatus } = this.props;
+    const { open } = this.state;
     const books = modifiedBooklist.concat(booklist);
     return (
       <React.Fragment>
@@ -36,15 +47,30 @@ class Search extends React.Component {
           booklist={books}
           handleSave={(book, edits) => this.handleSave(book, edits)}
         />
+        <Notification
+          open={open}
+          handleClose={this.handleClose}
+          autoHideDuration={4000}
+          message={saveStatus.message}
+          type={saveStatus.status}
+        />
       </React.Fragment>
     );
   }
 }
 
+Search.defaultProps = {
+  saveStatus: {
+    message: '',
+    type: '',
+  },
+};
+
 const mapStateToProps = state => {
   return {
     booklist: state.bookshelf.booklist,
     modifiedBooklist: state.bookshelf.modifiedBooklist,
+    saveStatus: state.bookshelf.saveStatus,
   };
 };
 
