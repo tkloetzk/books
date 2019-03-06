@@ -11,8 +11,17 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// DB Config
-const db = require('./config/keys').mongoURI;
+var env = process.env.NODE_ENV || 'prod';
+
+// db
+let db;
+if (env === 'dev') {
+  db = require('./config/keys').mongoURITest;
+} else {
+  db = require('./config/keys').mongoURI;
+}
+
+console.log(db);
 
 // Connect to MongoDB
 mongoose
