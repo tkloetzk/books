@@ -24,10 +24,10 @@ bookRoutes.route('/add').post((req, res) => {
   });
   Book.insertMany(books, (err, books) => {
     if (err) {
-      console.log('error mongo', err);
+      console.error('error mongo', err);
       res.send(err);
     } else {
-      console.log('mongo saved', books);
+      console.info('mongo saved', books);
       res.send(books);
     }
   });
@@ -39,10 +39,10 @@ bookRoutes.route('/update/:id').put((req, res) => {
     { $set: req.body },
     (err, books) => {
       if (err) {
-        console.log('error mongo', err);
+        console.error('error mongo', err);
         res.send(err);
       } else {
-        console.log('mongo saved', books);
+        console.info('mongo saved', books);
         res.send(books);
       }
     }

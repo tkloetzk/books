@@ -63,3 +63,15 @@ export function getAmazonSingleBook(isbn) {
       });
   };
 }
+
+export function clearAmazonBooksSuccess() {
+  return {
+    type: types.CLEAR_AMAZON_BOOKS_SUCCESS,
+  };
+}
+
+export function clearAmazonBooks() {
+  return dispatch => {
+    return dispatch(clearAmazonBooksSuccess());
+  };
+}

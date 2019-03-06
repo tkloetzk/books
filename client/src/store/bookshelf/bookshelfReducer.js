@@ -27,6 +27,7 @@ export default function bookshelf(state = initialState, action) {
       return Object.assign({}, state, {
         booklist: [...action.booklist], // TODO: Do i need to array and deconstructing?
       });
+    //TODO: Could save and insert be combined?
     case types.SAVE_MODIFIED_BOOKS_SUCCESS:
       return Object.assign({}, state, {
         modifiedBooklist: action.modifiedBooklist,
@@ -46,14 +47,13 @@ export default function bookshelf(state = initialState, action) {
             return Object.assign({}, book, modifiedBook);
           return book;
         });
-        console.log(newModifiedBooklist);
         return Object.assign({}, state, {
           modifiedBooklist: newModifiedBooklist,
         });
       }
-      remove(state.booklist, book => book.isbn === modifiedBook.isbn);
+      remove(state.booklist, book => book.isbn === modifiedBook.isbn); // TODO: What is this doing?
       return Object.assign({}, state, {
-        booklist: [...state.booklist, modifiedBook],
+        modifiedBooklist: [...state.modifiedBooklist, ...modifiedBook],
       });
     case types.ADD_BOOK_TO_BOOKSHELF_SUCCESS: {
       return Object.assign({}, state, {

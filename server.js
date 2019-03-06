@@ -17,8 +17,8 @@ const db = require('./config/keys').mongoURI;
 // Connect to MongoDB
 mongoose
   .connect(db, { useNewUrlParser: true })
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log('server', err));
+  .then(() => console.info('MongoDB Connected'))
+  .catch(err => console.error('server', err));
 
 app.use('/api/amazon', amazon);
 
@@ -29,4 +29,4 @@ app.use('/api/bookshelf', bookshelf);
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, () => console.info(`Server running on port ${port}`));

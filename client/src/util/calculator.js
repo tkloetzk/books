@@ -11,7 +11,6 @@ export default function sortBooklist(booklist) {
       ? -1
       : 0
   );
-  console.log('sorted', booklist);
   return booklist;
 }
 

@@ -62,3 +62,14 @@ export function getGoodreadsBook(isbn) {
       });
   };
 }
+
+export function clearGoodreadsBooksSuccess() {
+  return {
+    type: types.CLEAR_GOODREADS_BOOKS_SUCCESS,
+  };
+}
+export function clearGoodreadsBooks() {
+  return dispatch => {
+    dispatch(clearGoodreadsBooksSuccess());
+  };
+}

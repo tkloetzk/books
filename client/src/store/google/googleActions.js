@@ -37,3 +37,15 @@ export function getGoogleBook(isbn) {
       });
   };
 }
+
+export function clearGoogleBooksSuccess() {
+  return {
+    type: types.CLEAR_GOOGLE_BOOKS_SUCCESS,
+  };
+}
+
+export function clearGoogleBooks() {
+  return dispatch => {
+    dispatch(clearGoogleBooksSuccess());
+  };
+}

@@ -9,6 +9,8 @@ import {
   saveModifiedBooks,
   addBookToBookshelf,
   updateBookOnBookshelf,
+  clearBooks,
+  insertModifiedBook,
 } from '../../../store/bookshelf/bookshelfActions';
 import { getGoogleBook } from '../../../store/google/googleActions';
 import { connect } from 'react-redux';
@@ -123,12 +125,15 @@ class SearchBar extends Component {
       googleBooks,
       booklist,
       bookshelf,
+      modifiedBooklist,
       saveModifiedBooks,
       saveCombinedBooks,
       refreshedBookshelf,
       amazonBookErrored,
       goodreadsBooksErrored,
       googleBooksErrored,
+      clearBooks,
+      insertModifiedBook,
     } = this.props;
     const { searchIsbns, loading } = this.state;
 
@@ -144,10 +149,10 @@ class SearchBar extends Component {
         goodreadsBookLoading: LOADING_STATUSES.errored,
       });
     }
-    if (goodreadsBooksErrored) {
+    if (googleBooksErrored) {
       this.setState({
         loading: false,
-        goodreadsBookLoading: LOADING_STATUSES.errored,
+        googleBookLoading: LOADING_STATUSES.errored,
       });
     }
     if (searchIsbns.length) {
@@ -180,7 +185,6 @@ class SearchBar extends Component {
       !refreshedBookshelf &&
       loading
     ) {
-      console.log(booklist, prevProps.booklist);
       // TODO: This all probably could be better
       const { combinedBooks, duplicates, duplicatedISBNs } = util.combineBooks(
         amazonBooks,
@@ -194,9 +198,18 @@ class SearchBar extends Component {
         )
       );
 
-      saveModifiedBooks(duplicates);
-      saveCombinedBooks(combinedBooks);
-      this.setState({ success: true, loading: false });
+      if (duplicates.length) {
+        if (prevProps.modifiedBooklist.length) {
+          insertModifiedBook(duplicates);
+        } else {
+          saveModifiedBooks(duplicates);
+        }
+      }
+      if (combinedBooks.length) {
+        saveCombinedBooks(combinedBooks);
+      }
+      clearBooks();
+      this.setState({ success: true, loading: false, multiline: '' });
     }
   }
   handleChange = name => event => {
@@ -350,6 +363,8 @@ const mapDispatchToProps = {
   saveModifiedBooks,
   addBookToBookshelf,
   updateBookOnBookshelf,
+  clearBooks,
+  insertModifiedBook,
 };
 
 export default connect(

@@ -25,6 +25,8 @@ export default function amazonBookSearch(state = initialState, action) {
       return Object.assign({}, state, {
         isLoading: action.isLoading,
       });
+    case types.CLEAR_AMAZON_BOOKS_SUCCESS:
+      return { books: initialState.books };
     default:
       return state;
   }

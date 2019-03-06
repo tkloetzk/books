@@ -5,6 +5,9 @@ import {
 } from '../../services/bookshelfService';
 import * as types from './bookshelfActionTypes';
 import remove from 'lodash/remove';
+import { clearAmazonBooks } from '../amazon/amazonActions';
+import { clearGoodreadsBooks } from '../goodreads/goodreadsActions';
+import { clearGoogleBooks } from '../google/googleActions';
 
 export function getBookshelfIsLoading(bool) {
   return {
@@ -115,7 +118,7 @@ export function addBookToBookshelf(booklist) {
       })
       .catch(error => {
         dispatch(addBookToBookshelfFailure(error));
-        console.log('error', error);
+        console.error('error', error);
       });
   };
 }
@@ -141,7 +144,7 @@ export function updateBookOnBookshelf(id, fields) {
       })
       .catch(error => {
         dispatch(updateBookOnBookshelfFailure(error));
-        console.log('error', error);
+        console.error('error', error);
       });
   };
 }
@@ -156,5 +159,13 @@ export function refreshBookshelfSuccess(refreshed) {
 export function refreshBookshelf(refreshed) {
   return dispatch => {
     dispatch(refreshBookshelfSuccess(refreshed));
+  };
+}
+
+export function clearBooks() {
+  return dispatch => {
+    dispatch(clearAmazonBooks());
+    dispatch(clearGoodreadsBooks());
+    dispatch(clearGoogleBooks());
   };
 }

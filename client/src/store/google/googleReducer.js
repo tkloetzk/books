@@ -21,6 +21,8 @@ export default function google(state = initialState, action) {
       return Object.assign({}, state, {
         isLoading: action.isLoading,
       });
+    case types.CLEAR_GOOGLE_BOOKS_SUCCESS:
+      return { books: initialState.books };
     default:
       return state;
   }

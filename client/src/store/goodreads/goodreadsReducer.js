@@ -26,6 +26,8 @@ export default function goodreadsBookSearch(state = initialState, action) {
       return Object.assign({}, state, {
         isLoading: action.isLoading,
       });
+    case types.CLEAR_GOODREADS_BOOKS_SUCCESS:
+      return { books: initialState.books };
     default:
       return state;
   }
