@@ -60,7 +60,7 @@ const styles = theme => ({
   },
 });
 
-class SearchBar extends Component {
+export class SearchBar extends Component {
   state = {
     searchIsbns: [],
     duplicatedISBNs: [],
@@ -72,21 +72,14 @@ class SearchBar extends Component {
     googleBookLoading: LOADING_STATUSES.initial,
   };
 
-  componentWillUnmount() {
-    clearTimeout(this.timer);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const {
       amazonBooks,
       goodreadsBooks,
       googleBooks,
-      booklist,
       bookshelf,
-      modifiedBooklist,
       saveModifiedBooks,
       saveCombinedBooks,
-      refreshedBookshelf,
       amazonBookErrored,
       goodreadsBooksErrored,
       googleBooksErrored,
@@ -95,24 +88,6 @@ class SearchBar extends Component {
     } = this.props;
     const { searchIsbns, loading } = this.state;
 
-    if (amazonBookErrored) {
-      this.setState({
-        loading: false,
-        amazonBookLoading: LOADING_STATUSES.errored,
-      });
-    }
-    if (goodreadsBooksErrored) {
-      this.setState({
-        loading: false,
-        goodreadsBookLoading: LOADING_STATUSES.errored,
-      });
-    }
-    if (googleBooksErrored) {
-      this.setState({
-        loading: false,
-        googleBookLoading: LOADING_STATUSES.errored,
-      });
-    }
     if (searchIsbns.length) {
       if (
         amazonBooks.length === searchIsbns.length &&
@@ -134,14 +109,29 @@ class SearchBar extends Component {
       }
     }
 
+    if (amazonBookErrored) {
+      this.setState({
+        loading: false,
+        amazonBookLoading: LOADING_STATUSES.errored,
+      });
+    }
+    if (goodreadsBooksErrored) {
+      this.setState({
+        loading: false,
+        goodreadsBookLoading: LOADING_STATUSES.errored,
+      });
+    }
+    if (googleBooksErrored) {
+      this.setState({
+        loading: false,
+        googleBookLoading: LOADING_STATUSES.errored,
+      });
+    }
+
     if (
-      amazonBooks.length &&
-      googleBooks.length &&
-      goodreadsBooks.length &&
       amazonBooks.length === searchIsbns.length &&
       googleBooks.length === searchIsbns.length &&
       goodreadsBooks.length === searchIsbns.length &&
-      !refreshedBookshelf &&
       loading
     ) {
       // TODO: This all probably could be better
@@ -171,7 +161,7 @@ class SearchBar extends Component {
       this.setState({ success: true, loading: false, multiline: '' });
     }
   }
-  handleChange = name => event => {
+  handleChange = event => {
     this.setState({
       multiline: event.target.value,
     });
@@ -180,7 +170,7 @@ class SearchBar extends Component {
   search = () => {
     const { getAmazonSingleBook, getGoogleBook, getGoodreadsBook } = this.props;
     const { multiline, loading } = this.state;
-    const isbns = multiline.split(/[\n, ]/).filter(v => v != '');
+    const isbns = multiline.split(/[\n, ]/).filter(v => v !== '');
     if (!loading) {
       this.setState({
         success: false,
@@ -235,6 +225,7 @@ class SearchBar extends Component {
       amazonBookLoading,
       goodreadsBookLoading,
       googleBookLoading,
+      multiline,
     } = this.state;
     const tooltipObj = [
       { label: 'Amazon', loading: amazonBookLoading },
@@ -248,7 +239,7 @@ class SearchBar extends Component {
           multiline
           style={{ width: '700px' }}
           value={this.state.multiline}
-          onChange={this.handleChange()}
+          onChange={event => this.handleChange(event)}
           className={classes.textField}
           margin="normal"
           variant="outlined"
@@ -263,7 +254,7 @@ class SearchBar extends Component {
             color="primary"
             className={classes.button}
             onClick={this.search}
-            disabled={loading}
+            disabled={loading || !multiline.length}
           >
             Search
           </Button>
@@ -296,6 +287,15 @@ class SearchBar extends Component {
     );
   }
 }
+
+SearchBar.defaultProps = {
+  classes: {},
+  booklist: [],
+  amazonBooks: [],
+  googleBooks: [],
+  goodreadsBooks: [],
+};
+
 SearchBar.propTypes = {
   classes: PropTypes.object.isRequired,
   amazonBooks: PropTypes.array,
@@ -313,7 +313,6 @@ const mapStateToProps = state => {
     booklist: state.bookshelf.booklist,
     bookshelf: state.bookshelf.bookshelf,
     modifiedBooklist: state.bookshelf.modifiedBooklist,
-    refreshedBookshelf: state.bookshelf.refreshed,
   };
 };
 const mapDispatchToProps = {
