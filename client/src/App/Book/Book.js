@@ -98,7 +98,7 @@ function RatingDisplay(props) {
   }
   return null;
 }
-class Book extends Component {
+export class Book extends Component {
   state = {
     anchorEl: null,
     expanded: false,

@@ -9,7 +9,7 @@ exports[`Search Notification opens notification on save 1`] = `
   }
 >
   <Connect(WithStyles(SearchBar)) />
-  <WithStyles(Results)
+  <Results
     booklist={
       Array [
         Object {
@@ -101,7 +101,7 @@ exports[`Search rendering renders with booklist and modifiedBooklist 1`] = `
   }
 >
   <Connect(WithStyles(SearchBar)) />
-  <WithStyles(Results)
+  <Results
     booklist={
       Array [
         Object {
@@ -192,7 +192,7 @@ exports[`Search rendering renders with booklist but no modifiedBooklist 1`] = `
   }
 >
   <Connect(WithStyles(SearchBar)) />
-  <WithStyles(Results)
+  <Results
     booklist={
       Array [
         Object {
@@ -250,7 +250,7 @@ exports[`Search rendering renders with no props 1`] = `
   }
 >
   <Connect(WithStyles(SearchBar)) />
-  <WithStyles(Results)
+  <Results
     booklist={Array []}
     handleSave={[Function]}
   />
