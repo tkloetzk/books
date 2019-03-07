@@ -158,12 +158,15 @@ export class SearchBar extends Component {
 
       if (duplicates.length) {
         if (prevProps.modifiedBooklist.length) {
+          console.log('yes');
           insertModifiedBook(duplicates);
         } else {
+          console.log('no');
           saveModifiedBooks(duplicates);
         }
       }
       if (combinedBooks.length) {
+        console.log('no', combinedBooks);
         saveCombinedBooks(combinedBooks);
       }
       clearBooks();
