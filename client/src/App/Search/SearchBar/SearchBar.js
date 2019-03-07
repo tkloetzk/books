@@ -158,15 +158,12 @@ export class SearchBar extends Component {
 
       if (duplicates.length) {
         if (prevProps.modifiedBooklist.length) {
-          console.log('yes');
           insertModifiedBook(duplicates);
         } else {
-          console.log('no');
           saveModifiedBooks(duplicates);
         }
       }
       if (combinedBooks.length) {
-        console.log('no', combinedBooks);
         saveCombinedBooks(combinedBooks);
       }
       clearBooks();
@@ -223,14 +220,16 @@ export class SearchBar extends Component {
         })
       );
     }
-    addBookToBookshelf(booklist).then(res => window.scrollTo(0, 0));
+    if (booklist.length) {
+      addBookToBookshelf(booklist).then(res => window.scrollTo(0, 0));
+    }
   };
 
   onClose = () => {
     this.setState({ duplicatedISBNs: [] });
   };
   render() {
-    const { classes, booklist } = this.props;
+    const { classes, booklist, modifiedBooklist } = this.props;
     const {
       loading,
       duplicatedISBNs,
@@ -244,6 +243,8 @@ export class SearchBar extends Component {
       { label: 'Goodreads', loading: goodreadsBookLoading },
       { label: 'Google', loading: googleBookLoading },
     ];
+    const showSaveIcon =
+      booklist.length > 0 || modifiedBooklist.length > 0 ? true : false;
     return (
       <form className={classes.container} noValidate autoComplete="off">
         <TextField
@@ -271,7 +272,7 @@ export class SearchBar extends Component {
             Search
           </Button>
         </span>
-        {booklist.length > 0 && (
+        {showSaveIcon && (
           <Fab color="primary" aria-label="Save" className={classes.fab}>
             <SaveIcon onClick={this.handleSave} />
           </Fab>

@@ -9,29 +9,18 @@ import Results from '../Results/Results';
 import map from 'lodash/map';
 import assign from 'lodash/assign';
 
-class Bookshelf extends Component {
+export class Bookshelf extends Component {
   componentDidMount() {
     this.props.getBookshelf();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { booklist, getBookshelf } = this.props;
-    // TODO: Not quite right, running after a search
-    if (booklist && booklist !== prevProps.booklist) {
-      console.log('getting');
-      getBookshelf();
-    }
-  }
-
   handleSave = (book, edits) => {
-    const { updateBookOnBookshelf, getBookshelf } = this.props;
+    const { updateBookOnBookshelf } = this.props;
 
     const fields = map(edits, diff => {
       return { [diff.key]: diff.newValue };
     });
-    updateBookOnBookshelf(book._id, assign(...fields)).then(
-      () => getBookshelf(this.state.genres) //Not refreshing
-    );
+    updateBookOnBookshelf(book._id, assign(...fields));
   };
 
   // TODO: This is being rendered twice
@@ -53,8 +42,7 @@ class Bookshelf extends Component {
 
 const mapStateToProps = state => {
   return {
-    bookshelf: state.bookshelf.bookshelf, // TODO: huh?
-    booklist: state.bookshelf.booklist,
+    bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
   };
 };
 

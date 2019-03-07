@@ -115,6 +115,7 @@ export function addBookToBookshelf(booklist) {
           booklist.includes(obj.isbn)
         );
         dispatch(addBookToBookshelfSuccess(remainingbooklist));
+        dispatch(getBookshelf());
         return true;
       })
       .catch(error => {
@@ -141,25 +142,12 @@ export function updateBookOnBookshelf(id, fields) {
     return updateBookOnBookshelfService(id, fields)
       .then(saved => {
         dispatch(updateBookOnBookshelfSuccess([]));
-        dispatch(refreshBookshelf(false));
+        dispatch(getBookshelf());
       })
       .catch(error => {
         dispatch(updateBookOnBookshelfFailure(error));
         console.error('error', error);
       });
-  };
-}
-
-export function refreshBookshelfSuccess(refreshed) {
-  return {
-    type: types.REFRESHED_BOOKSHELF,
-    refreshed,
-  };
-}
-
-export function refreshBookshelf(refreshed) {
-  return dispatch => {
-    dispatch(refreshBookshelfSuccess(refreshed));
   };
 }
 

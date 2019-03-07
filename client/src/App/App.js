@@ -50,7 +50,7 @@ export class App extends React.Component {
                 label="Bookshelf"
                 // icon={
                 //   <RefreshIcon
-                //     onClick={this.refreshBookshelf}
+                //     onClick={}
                 //     data-tip
                 //     data-for="bookshelfRefreshTooltip"
                 //   />
