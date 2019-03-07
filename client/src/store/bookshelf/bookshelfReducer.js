@@ -53,7 +53,7 @@ export default function bookshelf(state = initialState, action) {
       }
       remove(state.booklist, book => book.isbn === modifiedBook.isbn); // TODO: What is this doing?
       return Object.assign({}, state, {
-        modifiedBooklist: [...state.modifiedBooklist, modifiedBook],
+        modifiedBooklist: [...state.modifiedBooklist, ...modifiedBook],
       });
     case types.ADD_BOOK_TO_BOOKSHELF_SUCCESS: {
       return Object.assign({}, state, {

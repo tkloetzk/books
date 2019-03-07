@@ -48,9 +48,9 @@ export class Search extends React.Component {
         .filter(diff => !edits.find(edit => diff['key'] === edit['key']))
         .concat(edits);
       exisitingBook.differences = newDiff;
-      insertModifiedBook(exisitingBook);
+      insertModifiedBook([exisitingBook]);
     } else {
-      insertModifiedBook(book);
+      insertModifiedBook([book]);
     }
   };
 

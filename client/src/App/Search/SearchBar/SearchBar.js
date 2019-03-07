@@ -29,7 +29,7 @@ import util from '../../../util/combineBooks';
 import Tooltip from '../../Tooltip/Tooltip';
 
 // TODO: This file is getting huge
-const styles = theme => ({
+const styles = {
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -58,7 +58,7 @@ const styles = theme => ({
     alignSelf: 'center',
     marginLeft: '10px',
   },
-});
+};
 
 export class SearchBar extends Component {
   state = {
@@ -86,7 +86,13 @@ export class SearchBar extends Component {
       clearBooks,
       insertModifiedBook,
     } = this.props;
-    const { searchIsbns, loading } = this.state;
+    const {
+      searchIsbns,
+      loading,
+      amazonBookLoading,
+      goodreadsBookLoading,
+      googleBookLoading,
+    } = this.state;
 
     if (searchIsbns.length) {
       if (
@@ -108,20 +114,22 @@ export class SearchBar extends Component {
         this.setState({ googleBookLoading: LOADING_STATUSES.success });
       }
     }
-
-    if (amazonBookErrored) {
+    if (amazonBookErrored && amazonBookLoading !== LOADING_STATUSES.errored) {
       this.setState({
         loading: false,
         amazonBookLoading: LOADING_STATUSES.errored,
       });
     }
-    if (goodreadsBooksErrored) {
+    if (
+      goodreadsBooksErrored &&
+      goodreadsBookLoading !== LOADING_STATUSES.errored
+    ) {
       this.setState({
         loading: false,
         goodreadsBookLoading: LOADING_STATUSES.errored,
       });
     }
-    if (googleBooksErrored) {
+    if (googleBooksErrored && googleBookLoading !== LOADING_STATUSES.errored) {
       this.setState({
         loading: false,
         googleBookLoading: LOADING_STATUSES.errored,
@@ -141,6 +149,7 @@ export class SearchBar extends Component {
         goodreadsBooks,
         bookshelf
       );
+      // TODO: What's this doing again?
       forEach([...duplicates, ...duplicatedISBNs], duplicate =>
         forEach([...combinedBooks], obj =>
           obj.isbn === duplicate.isbn ? remove(combinedBooks, obj) : null
@@ -167,7 +176,7 @@ export class SearchBar extends Component {
     });
   };
 
-  search = () => {
+  handleSearch = () => {
     const { getAmazonSingleBook, getGoogleBook, getGoodreadsBook } = this.props;
     const { multiline, loading } = this.state;
     const isbns = multiline.split(/[\n, ]/).filter(v => v !== '');
@@ -238,7 +247,7 @@ export class SearchBar extends Component {
           id="outlined-full-width"
           multiline
           style={{ width: '700px' }}
-          value={this.state.multiline}
+          value={multiline}
           onChange={event => this.handleChange(event)}
           className={classes.textField}
           margin="normal"
@@ -253,7 +262,7 @@ export class SearchBar extends Component {
             variant="outlined"
             color="primary"
             className={classes.button}
-            onClick={this.search}
+            onClick={this.handleSearch}
             disabled={loading || !multiline.length}
           >
             Search
@@ -294,6 +303,7 @@ SearchBar.defaultProps = {
   amazonBooks: [],
   googleBooks: [],
   goodreadsBooks: [],
+  amazonBookErrored: false,
 };
 
 SearchBar.propTypes = {
