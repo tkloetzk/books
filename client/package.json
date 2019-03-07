@@ -26,9 +26,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --verbose=false",
     "eject": "react-scripts eject",
-    "test:watch": "react-scripts test --watch",
+    "test:watch": "react-scripts test --watch --verbose=false",
     "test:coverage": "react-scripts test --coverage"
   },
   "eslintConfig": {
@@ -55,6 +55,7 @@
       "src/**/*.{js,jsx,ts,tsx}",
       "!<rootDir>/node_modules/",
       "!<rootDir>/src/setupTests.js",
+      "!<rootDir>/src/setupProxy.js",
       "!<rootDir>/src/index.js",
       "!<rootDir>/src/serviceWorker.js"
     ]

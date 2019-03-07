@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`App Switching Tab functionality handleChangeIndex changes tabs 1`] = `
+exports[`App Switching Tab functionality handleChange changes tabs 1`] = `
 <div
   className="App"
 >
@@ -33,17 +33,6 @@ exports[`App Switching Tab functionality handleChangeIndex changes tabs 1`] = `
           label="Search"
         />
         <WithStyles(Tab)
-          classes={
-            Object {
-              "labelContainer": undefined,
-              "wrapper": undefined,
-            }
-          }
-          icon={
-            <pure(RefreshIcon)
-              onClick={[Function]}
-            />
-          }
           label="Bookshelf"
         />
       </WithStyles(Tabs)>
@@ -58,7 +47,6 @@ exports[`App Switching Tab functionality handleChangeIndex changes tabs 1`] = `
       hysteresis={0.6}
       ignoreNativeScroll={false}
       index={1}
-      onChangeIndex={[Function]}
       resistance={false}
       springConfig={
         Object {
@@ -116,17 +104,6 @@ exports[`App renders 1`] = `
           label="Search"
         />
         <WithStyles(Tab)
-          classes={
-            Object {
-              "labelContainer": undefined,
-              "wrapper": undefined,
-            }
-          }
-          icon={
-            <pure(RefreshIcon)
-              onClick={[Function]}
-            />
-          }
           label="Bookshelf"
         />
       </WithStyles(Tabs)>
@@ -141,7 +118,6 @@ exports[`App renders 1`] = `
       hysteresis={0.6}
       ignoreNativeScroll={false}
       index={0}
-      onChangeIndex={[Function]}
       resistance={false}
       springConfig={
         Object {

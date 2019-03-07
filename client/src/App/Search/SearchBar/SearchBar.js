@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { Button, TextField, Typography } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import { getAmazonSingleBook } from '../../../store/amazon/amazonActions';
 import { getGoodreadsBook } from '../../../store/goodreads/goodreadsActions';
 import {
@@ -18,9 +19,6 @@ import ReactTooltip from 'react-tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { LOADING_STATUSES } from '../../../util/constants';
 import forEach from 'lodash/forEach';
-import InitialIcon from '@material-ui/icons/RadioButtonUnchecked';
-import DoneIcon from '@material-ui/icons/CheckCircle';
-import ErrorIcon from '@material-ui/icons/Error';
 import remove from 'lodash/remove';
 import SaveIcon from '@material-ui/icons/Save';
 import Fab from '@material-ui/core/Fab';
@@ -28,6 +26,7 @@ import map from 'lodash/map';
 import assign from 'lodash/assign';
 import Notification from '../../Notification/Notification';
 import util from '../../../util/combineBooks';
+import Tooltip from '../../Tooltip/Tooltip';
 
 // TODO: This file is getting huge
 const styles = theme => ({
@@ -56,51 +55,10 @@ const styles = theme => ({
     marginTop: -36,
   },
   fab: {
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
+    marginLeft: '10px',
   },
 });
-
-function TooltipProgress(props) {
-  const { progress } = props;
-  const green = { color: 'green' };
-  if (progress === LOADING_STATUSES.initial)
-    return <InitialIcon style={green} fontSize="small" />;
-
-  if (progress === LOADING_STATUSES.loading) {
-    return (
-      <CircularProgress
-        size={18}
-        style={{ color: 'yellow', marginTop: '1px' }}
-        thickness={4}
-      />
-    );
-  }
-  if (progress === LOADING_STATUSES.success) return <DoneIcon style={green} />;
-  if (progress === LOADING_STATUSES.errored)
-    return <ErrorIcon style={{ color: 'red' }} />;
-}
-function TooltipContent(props) {
-  if (!props.content) {
-    return null;
-  }
-  return (
-    <div style={{ width: 100 }}>
-      {props.content.map(tooltip => (
-        <span
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-          key={tooltip.label}
-        >
-          <Typography style={{ color: 'white' }}>{tooltip.label}</Typography>
-          <TooltipProgress progress={tooltip.loading} />
-        </span>
-      ))}
-    </div>
-  );
-}
 
 class SearchBar extends Component {
   state = {
@@ -270,7 +228,7 @@ class SearchBar extends Component {
     this.setState({ duplicatedISBNs: [] });
   };
   render() {
-    const { classes } = this.props;
+    const { classes, booklist } = this.props;
     const {
       loading,
       duplicatedISBNs,
@@ -310,9 +268,11 @@ class SearchBar extends Component {
             Search
           </Button>
         </span>
-        <Fab color="primary" aria-label="Save" className={classes.fab}>
-          <SaveIcon onClick={this.handleSave} />
-        </Fab>
+        {booklist.length > 0 && (
+          <Fab color="primary" aria-label="Save" className={classes.fab}>
+            <SaveIcon onClick={this.handleSave} />
+          </Fab>
+        )}
         {loading && (
           <CircularProgress size={24} className={classes.buttonProgress} />
         )}
@@ -320,7 +280,7 @@ class SearchBar extends Component {
           id="searchButtonWrapper"
           place="right"
           effect="solid"
-          getContent={() => <TooltipContent content={tooltipObj} />}
+          getContent={() => <Tooltip content={tooltipObj} />}
         />
         <Notification
           open={false}
@@ -330,7 +290,7 @@ class SearchBar extends Component {
           message={`${duplicatedISBNs.join(
             ', '
           )} already shelved with no differences`}
-          type="info"
+          type={LOADING_STATUSES.info}
         />
       </form>
     );

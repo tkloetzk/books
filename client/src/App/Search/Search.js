@@ -9,9 +9,34 @@ import Notification from '../Notification/Notification';
 
 export class Search extends React.Component {
   state = {
-    open: true,
+    open: false,
   };
-  handleSave = (book, edits) => {
+
+  componentDidUpdate(prevProps) {
+    const { saveStatus } = this.props;
+    if (
+      saveStatus !== prevProps.saveStatus &&
+      saveStatus.status !== LOADING_STATUSES.initial
+    ) {
+      this.setState({ open: true });
+    }
+    if (
+      saveStatus !== prevProps.saveStatus &&
+      saveStatus.status === LOADING_STATUSES.initial
+    ) {
+      this.setState({ open: false });
+    }
+  }
+
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ open: false });
+  };
+
+  handleSearchedBookEditSave = (book, edits) => {
     const { modifiedBooklist, insertModifiedBook } = this.props;
 
     const exisitingBook = find(
@@ -27,15 +52,8 @@ export class Search extends React.Component {
     } else {
       insertModifiedBook(book);
     }
-    // if it's exisiting, or new
   };
 
-  componentDidUpdate() {
-    const { saveStatus } = this.props;
-    if (saveStatus === LOADING_STATUSES.success) {
-      this.setState({ open: true });
-    }
-  }
   render() {
     const { modifiedBooklist, booklist, saveStatus } = this.props;
     const { open } = this.state;
@@ -45,7 +63,9 @@ export class Search extends React.Component {
         <SearchBar />
         <Results
           booklist={books}
-          handleSave={(book, edits) => this.handleSave(book, edits)}
+          handleSave={(book, edits) =>
+            this.handleSearchedBookEditSave(book, edits)
+          }
         />
         <Notification
           open={open}
@@ -60,9 +80,11 @@ export class Search extends React.Component {
 }
 
 Search.defaultProps = {
+  booklist: [],
+  modifiedBooklist: [],
   saveStatus: {
     message: '',
-    type: '',
+    type: LOADING_STATUSES.initial,
   },
 };
 

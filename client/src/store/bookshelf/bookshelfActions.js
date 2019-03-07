@@ -110,6 +110,7 @@ export function addBookToBookshelf(booklist) {
   return dispatch => {
     return addBookshelfService(booklist)
       .then(saved => {
+        console.log('save 113', saved);
         const remainingbooklist = remove(saved, obj =>
           booklist.includes(obj.isbn)
         );
@@ -118,7 +119,7 @@ export function addBookToBookshelf(booklist) {
       })
       .catch(error => {
         dispatch(addBookToBookshelfFailure(error));
-        console.error('error', error);
+        console.error('error 121', error);
       });
   };
 }

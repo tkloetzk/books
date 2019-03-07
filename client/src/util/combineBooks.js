@@ -44,7 +44,8 @@ export function compareDifferences(oldBook, newBook, difference) {
         key !== '__v' &&
         key !== '_id' &&
         key !== 'adjustedRating' &&
-        newBook[key] !== ''
+        newBook[key] !== '' &&
+        newBook[key] !== 0
       )
         difference.push({
           key,

@@ -25,7 +25,7 @@ bookRoutes.route('/add').post((req, res) => {
   Book.insertMany(books, (err, books) => {
     if (err) {
       console.error('error mongo', err);
-      res.send(err);
+      res.error(err);
     } else {
       console.info('mongo saved', books);
       res.send(books);
