@@ -180,7 +180,7 @@ describe('Search', () => {
         { key: 'title', currentValue: 'Interrupted', newValue: 'Interrupted1' },
       ];
       instance.handleSearchedBookEditSave(book, edits);
-      expect(props.insertModifiedBook).toBeCalledWith([book]);
+      expect(props.insertModifiedBook).toBeCalledWith(book);
     });
     it('saves an edited exisiting book', () => {
       const book = {
@@ -255,7 +255,7 @@ describe('Search', () => {
         _id: '5c801a9f4549aac8fe03f088',
       };
       instance.handleSearchedBookEditSave(book, edits);
-      expect(props.insertModifiedBook).toBeCalledWith([modifiedBook]);
+      expect(props.insertModifiedBook).toBeCalledWith(modifiedBook);
     });
   });
 });

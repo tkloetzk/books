@@ -16,7 +16,7 @@ import isEmpty from 'lodash/isEmpty';
 import EditableLabel from 'react-inline-editing';
 import util from '../../util/combineBooks';
 import SaveIcon from '@material-ui/icons/Save';
-import some from 'lodash/some';
+import remove from 'lodash/remove';
 
 const styles = {
   card: {
@@ -81,6 +81,7 @@ export class Book extends Component {
       subtitle: '',
       isbn: '',
       description: '',
+      differences: [],
       amazonAverageRating: null,
       amazonRatingsCount: null,
       goodreadsAverageRating: null,
@@ -98,12 +99,20 @@ export class Book extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { book } = this.state;
-    if (book !== prevState.book && !isEmpty(prevState.book.title)) {
+    // book !== prevState.book &&
+    if (
+      book !== prevProps.book &&
+      book !== prevState.book &&
+      !isEmpty(prevState.book.title)
+    ) {
       console.log('difference');
       this.setState({ saveIcon: true });
-      this.setState({
-        edits: util.compareDifferences(prevState.book, book, []),
-      });
+      this.setState(
+        {
+          edits: util.compareDifferences(prevProps.book, book, []),
+        },
+        () => console.log(this.state.edits)
+      );
     }
   }
 
@@ -152,6 +161,8 @@ export class Book extends Component {
     const amazonAverageRating =
       Math.round(book.amazonAverageRating * 1000) / 1000;
     const bookDifferences = get(book, 'differences', []);
+    remove(bookDifferences, diff => diff.key === 'categories');
+    book.differences = bookDifferences;
     const defaultStyle = {
       maxWidth: 200,
       margin: '6px',
@@ -163,7 +174,7 @@ export class Book extends Component {
 
     return (
       <Card
-        className={bookDifferences.length ? classes.different : null}
+        className={book.differences.length ? classes.different : null}
         style={expandStyle}
         key={book.isbn}
       >
@@ -197,7 +208,7 @@ export class Book extends Component {
               inputWidth="190px"
               inputHeight="25px"
               onFocus={() => {}}
-              onFocusOut={text => this._handleFocusOut(text, 'subheader')}
+              onFocusOut={text => this._handleFocusOut(text, 'subtitle')}
             />
           </Typography>
         </div>
@@ -238,7 +249,7 @@ export class Book extends Component {
         </CardContent>
 
         <div className={classes.actions}>
-          {bookDifferences.length ? (
+          {book.differences.length ? (
             <React.Fragment>
               <Icon
                 aria-label="Differences"
@@ -247,7 +258,7 @@ export class Book extends Component {
                 data-for="differencesIcon"
               />
               <ReactTooltip id="differencesIcon" type="info" effect="solid">
-                {bookDifferences.map(different => (
+                {book.differences.map(different => (
                   <span key={different.key}>
                     {different.key} {different.currentValue} ->{' '}
                     {different.newValue}
