@@ -10,7 +10,7 @@ import find from 'lodash/find';
 import forEach from 'lodash/forEach';
 import { getBookshelf } from '../../../store/bookshelf/bookshelfActions';
 
-class GenreSelector extends React.Component {
+export class GenreSelector extends React.Component {
   state = {
     genres: [],
     selectAll: true,
@@ -143,6 +143,9 @@ class GenreSelector extends React.Component {
   }
 }
 
+GenreSelector.defaultProps = {
+  classes: {},
+};
 const styles = {
   legend: {
     alignSelf: 'center',
