@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GenreSelector renders as expected with bookshelf after a save 1`] = `""`;
-
 exports[`GenreSelector renders as expected with bookshelf on initial load 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
@@ -102,6 +100,41 @@ exports[`GenreSelector renders no genres with no books 1`] = `
 </WithStyles(FormControl)>
 `;
 
-exports[`GenreSelector renders null with no books 1`] = `""`;
-
-exports[`GenreSelector renders null with no props 1`] = `""`;
+exports[`GenreSelector renders null with no props 1`] = `
+<WithStyles(FormControl)
+  component="fieldset"
+  fullWidth={true}
+>
+  <WithStyles(FormGroup)
+    row={true}
+  >
+    <WithStyles(WithFormControlContext(FormLabel))
+      component="label"
+    >
+      Genres:
+    </WithStyles(WithFormControlContext(FormLabel))>
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={true}
+          onChange={[Function]}
+          value="SELECT ALL"
+        />
+      }
+      key="SELECT ALL"
+      label="SELECT ALL"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="DESELECT ALL"
+        />
+      }
+      key="DESELECT ALL"
+      label="DESELECT ALL"
+    />
+  </WithStyles(FormGroup)>
+</WithStyles(FormControl)>
+`;
