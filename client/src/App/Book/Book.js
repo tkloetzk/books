@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
 // import ReadBook from './read-book.svg';
 import UnreadBook from '@material-ui/icons/BookOutlined';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, jssPreset } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/icons/AnnouncementOutlined';
 import ReactTooltip from 'react-tooltip';
@@ -15,9 +15,8 @@ import Collapse from '@material-ui/core/Collapse';
 import isEmpty from 'lodash/isEmpty';
 import EditableLabel from 'react-inline-editing';
 import util from '../../util/combineBooks';
-import { insertModifiedBook } from '../../store/bookshelf/bookshelfActions';
-import { connect } from 'react-redux';
 import SaveIcon from '@material-ui/icons/Save';
+import some from 'lodash/some';
 
 const styles = {
   card: {
@@ -93,7 +92,7 @@ export class Book extends Component {
   };
 
   componentDidMount() {
-    const book = { ...this.props.book };
+    const { book } = this.props;
     this.setState({ book });
   }
 
@@ -118,20 +117,21 @@ export class Book extends Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  // TODO: Create modal instead of redirecting
-  viewAmazonPage = href => {
-    var win = window.open(href, '_blank');
-    win.focus();
-    this.handleClose();
-  };
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
+  // viewAmazonPage = href => {
+  //   var win = window.open(href, '_blank');
+  //   win.focus();
+  //   this.handleClose();
+  // };
+
+  // handleClose = () => {
+  //   this.setState({ anchorEl: null });
+  // };
 
   render() {
     const { classes, handleSave } = this.props;
     const { book, expanded, saveIcon, edits } = this.state;
 
+    if (!book) return null;
     const title =
       get(book, 'title', '').length < 92
         ? book.title
@@ -227,7 +227,15 @@ export class Book extends Component {
             title={book.title}
           />
         )}
-        <CardContent className={classes.content}>{description}</CardContent>
+        <CardContent className={classes.content}>
+          <EditableLabel
+            text={description}
+            inputWidth="190px"
+            inputHeight="25px"
+            onFocus={() => {}}
+            onFocusOut={text => this._handleFocusOut(text, 'description')}
+          />
+        </CardContent>
 
         <div className={classes.actions}>
           {bookDifferences.length ? (
@@ -355,19 +363,7 @@ export class Book extends Component {
 }
 
 Book.defaultProps = {
-  book: {
-    title: '',
-    subtitle: '',
-    description: '',
-    differences: [],
-  },
+  classes: {},
 };
 
-const mapDispatchToProps = {
-  insertModifiedBook,
-};
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(withStyles(styles)(Book));
+export default withStyles(styles)(Book);
