@@ -13,7 +13,25 @@ exports[`Search Notification opens notification on save 1`] = `
     booklist={
       Array [
         Object {
+          "__v": 0,
+          "_id": "5c801a9f4549aac8fe03f089",
+          "adjustedRating": 3.918664638606106,
+          "amazonAverageRating": 4.6,
+          "amazonRatingsCount": 848,
+          "categories": Array [
+            "Parliamentary practice",
+          ],
+          "goodreadsAverageRating": 3.87,
+          "goodreadsRatingsCount": 1313,
+          "isbn": "9780306820205",
+          "price": "",
+          "subtitle": "",
+          "thumbnail": "http://books.google.com/books/content?id=QegaAAAAYAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+          "title": "Pocket Manual of Rules of Order for Deliberative Assemblies",
+        },
+        Object {
           "_id": "5c801a9f4549aac8fe03f088",
+          "adjustedRating": 3.639172059456242,
           "amazonAverageRating": 4.4,
           "amazonRatingsCount": 340,
           "categories": Array [
@@ -48,6 +66,7 @@ exports[`Search Notification opens notification on save 1`] = `
         Object {
           "__v": 0,
           "_id": "5c801a9f4549aac8fe03f088",
+          "adjustedRating": 3.3158024942388504,
           "amazonAverageRating": 0,
           "amazonRatingsCount": 0,
           "categories": Array [
@@ -61,22 +80,6 @@ exports[`Search Notification opens notification on save 1`] = `
           "subtitle": "A Guide to Putting Down the Phone, Burning the To-Do List, and Letting Go of Perfection to Grasp What Really Matters!",
           "thumbnail": "http://books.google.com/books/content?id=cYFKAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
           "title": "Hands Free Mama",
-        },
-        Object {
-          "__v": 0,
-          "_id": "5c801a9f4549aac8fe03f089",
-          "amazonAverageRating": 4.6,
-          "amazonRatingsCount": 848,
-          "categories": Array [
-            "Parliamentary practice",
-          ],
-          "goodreadsAverageRating": 3.87,
-          "goodreadsRatingsCount": 1313,
-          "isbn": "9780306820205",
-          "price": "",
-          "subtitle": "",
-          "thumbnail": "http://books.google.com/books/content?id=QegaAAAAYAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-          "title": "Pocket Manual of Rules of Order for Deliberative Assemblies",
         },
       ]
     }
@@ -105,7 +108,25 @@ exports[`Search rendering renders with booklist and modifiedBooklist 1`] = `
     booklist={
       Array [
         Object {
+          "__v": 0,
+          "_id": "5c801a9f4549aac8fe03f089",
+          "adjustedRating": 3.918664638606106,
+          "amazonAverageRating": 4.6,
+          "amazonRatingsCount": 848,
+          "categories": Array [
+            "Parliamentary practice",
+          ],
+          "goodreadsAverageRating": 3.87,
+          "goodreadsRatingsCount": 1313,
+          "isbn": "9780306820205",
+          "price": "",
+          "subtitle": "",
+          "thumbnail": "http://books.google.com/books/content?id=QegaAAAAYAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+          "title": "Pocket Manual of Rules of Order for Deliberative Assemblies",
+        },
+        Object {
           "_id": "5c801a9f4549aac8fe03f088",
+          "adjustedRating": 3.639172059456242,
           "amazonAverageRating": 4.4,
           "amazonRatingsCount": 340,
           "categories": Array [
@@ -140,6 +161,7 @@ exports[`Search rendering renders with booklist and modifiedBooklist 1`] = `
         Object {
           "__v": 0,
           "_id": "5c801a9f4549aac8fe03f088",
+          "adjustedRating": 3.3158024942388504,
           "amazonAverageRating": 0,
           "amazonRatingsCount": 0,
           "categories": Array [
@@ -153,22 +175,6 @@ exports[`Search rendering renders with booklist and modifiedBooklist 1`] = `
           "subtitle": "A Guide to Putting Down the Phone, Burning the To-Do List, and Letting Go of Perfection to Grasp What Really Matters!",
           "thumbnail": "http://books.google.com/books/content?id=cYFKAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
           "title": "Hands Free Mama",
-        },
-        Object {
-          "__v": 0,
-          "_id": "5c801a9f4549aac8fe03f089",
-          "amazonAverageRating": 4.6,
-          "amazonRatingsCount": 848,
-          "categories": Array [
-            "Parliamentary practice",
-          ],
-          "goodreadsAverageRating": 3.87,
-          "goodreadsRatingsCount": 1313,
-          "isbn": "9780306820205",
-          "price": "",
-          "subtitle": "",
-          "thumbnail": "http://books.google.com/books/content?id=QegaAAAAYAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-          "title": "Pocket Manual of Rules of Order for Deliberative Assemblies",
         },
       ]
     }
@@ -197,7 +203,25 @@ exports[`Search rendering renders with booklist but no modifiedBooklist 1`] = `
       Array [
         Object {
           "__v": 0,
+          "_id": "5c801a9f4549aac8fe03f089",
+          "adjustedRating": 3.807487708947886,
+          "amazonAverageRating": 4.6,
+          "amazonRatingsCount": 848,
+          "categories": Array [
+            "Parliamentary practice",
+          ],
+          "goodreadsAverageRating": 3.87,
+          "goodreadsRatingsCount": 1313,
+          "isbn": "9780306820205",
+          "price": "",
+          "subtitle": "",
+          "thumbnail": "http://books.google.com/books/content?id=QegaAAAAYAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+          "title": "Pocket Manual of Rules of Order for Deliberative Assemblies",
+        },
+        Object {
+          "__v": 0,
           "_id": "5c801a9f4549aac8fe03f088",
+          "adjustedRating": 2.9739790841242053,
           "amazonAverageRating": 0,
           "amazonRatingsCount": 0,
           "categories": Array [
@@ -211,22 +235,6 @@ exports[`Search rendering renders with booklist but no modifiedBooklist 1`] = `
           "subtitle": "A Guide to Putting Down the Phone, Burning the To-Do List, and Letting Go of Perfection to Grasp What Really Matters!",
           "thumbnail": "http://books.google.com/books/content?id=cYFKAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
           "title": "Hands Free Mama",
-        },
-        Object {
-          "__v": 0,
-          "_id": "5c801a9f4549aac8fe03f089",
-          "amazonAverageRating": 4.6,
-          "amazonRatingsCount": 848,
-          "categories": Array [
-            "Parliamentary practice",
-          ],
-          "goodreadsAverageRating": 3.87,
-          "goodreadsRatingsCount": 1313,
-          "isbn": "9780306820205",
-          "price": "",
-          "subtitle": "",
-          "thumbnail": "http://books.google.com/books/content?id=QegaAAAAYAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-          "title": "Pocket Manual of Rules of Order for Deliberative Assemblies",
         },
       ]
     }

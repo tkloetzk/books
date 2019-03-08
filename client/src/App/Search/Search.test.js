@@ -222,6 +222,7 @@ describe('Search', () => {
       const modifiedBook = {
         amazonAverageRating: 4.4,
         amazonRatingsCount: 340,
+        adjustedRating: 3.639172059456242,
         price: '',
         isbn: '9780310338130',
         title: 'Hands Free Mama',

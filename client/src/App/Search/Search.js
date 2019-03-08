@@ -6,6 +6,7 @@ import find from 'lodash/find';
 import { LOADING_STATUSES } from '../../util/constants';
 import { insertModifiedBook } from '../../store/bookshelf/bookshelfActions';
 import Notification from '../Notification/Notification';
+import sortBooklist from '../../util/calculator';
 
 export class Search extends React.Component {
   state = {
@@ -57,7 +58,7 @@ export class Search extends React.Component {
   render() {
     const { modifiedBooklist, booklist, saveStatus } = this.props;
     const { open } = this.state;
-    const books = modifiedBooklist.concat(booklist);
+    const books = sortBooklist(modifiedBooklist.concat(booklist));
     return (
       <div style={{ height: '74vh' }}>
         <SearchBar />

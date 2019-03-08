@@ -71,33 +71,6 @@ const styles = {
   },
 };
 
-function RatingDisplay(props) {
-  if (!props.book) {
-    return null;
-  }
-
-  if (props.book.adjustedRating) {
-    return (
-      <Typography>
-        {Math.round(props.book.adjustedRating * 1000) / 1000}
-      </Typography>
-    );
-  }
-
-  if (!props.expanded) {
-    return (
-      <React.Fragment>
-        <Typography style={{ textAlign: 'end' }}>
-          Amazon: {Math.round(props.book.amazonAverageRating * 1000) / 1000}
-          <br />
-          Goodreads:{' '}
-          {Math.round(props.book.goodreadsAverageRating * 1000) / 1000}
-        </Typography>
-      </React.Fragment>
-    );
-  }
-  return null;
-}
 export class Book extends Component {
   state = {
     anchorEl: null,
@@ -113,6 +86,7 @@ export class Book extends Component {
       amazonRatingsCount: null,
       goodreadsAverageRating: null,
       goodreadsRatingsCount: null,
+      adjustedRating: '',
       categories: [],
       thumbnail: '',
     },
@@ -287,7 +261,9 @@ export class Book extends Component {
           >
             <ExpandMoreIcon />
           </IconButton>
-          <RatingDisplay book={book} expanded={expanded} />
+          <Typography>
+            {Math.round(book.adjustedRating * 1000) / 1000}
+          </Typography>
         </div>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent style={{ textAlign: 'center' }}>
