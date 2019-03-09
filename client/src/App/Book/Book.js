@@ -110,7 +110,7 @@ export class Book extends Component {
         edits: util.compareDifferences(prevProps.book, book, []),
       });
     }
-    if (edits.length) {
+    if (edits.length && edits !== prevState.edits) {
       this.setState({ saveIcon: true });
     }
   }
