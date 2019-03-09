@@ -17,6 +17,7 @@ import EditableLabel from 'react-inline-editing';
 import util from '../../util/combineBooks';
 import SaveIcon from '@material-ui/icons/Save';
 import remove from 'lodash/remove';
+import isEqual from 'lodash/isEqual';
 
 const styles = {
   card: {
@@ -98,21 +99,20 @@ export class Book extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { book } = this.state;
+    const { book, edits } = this.state;
     // book !== prevState.book &&
+
     if (
-      book !== prevProps.book &&
-      book !== prevState.book &&
+      !isEqual(book, prevProps.book) &&
+      !isEqual(book, prevState.book) &&
       !isEmpty(prevState.book.title)
     ) {
-      console.log('difference');
+      this.setState({
+        edits: util.compareDifferences(prevProps.book, book, []),
+      });
+    }
+    if (edits.length) {
       this.setState({ saveIcon: true });
-      this.setState(
-        {
-          edits: util.compareDifferences(prevProps.book, book, []),
-        },
-        () => console.log(this.state.edits)
-      );
     }
   }
 
