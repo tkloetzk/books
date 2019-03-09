@@ -100,7 +100,6 @@ export class Book extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { book, edits } = this.state;
-    // book !== prevState.book &&
 
     if (
       !isEqual(book, prevProps.book) &&

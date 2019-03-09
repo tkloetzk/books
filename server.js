@@ -19,7 +19,7 @@ if (env === 'dev') {
   console.info('Using database Test');
   db = require('./config/keys').mongoURITest;
 } else {
-  console.log(info('Using database prod'));
+  console.info('Using database prod');
   db = require('./config/keys').mongoURI;
 }
 
