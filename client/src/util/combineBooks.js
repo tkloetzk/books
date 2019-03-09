@@ -71,7 +71,9 @@ export function compareDifferences(oldBook, newBook, difference) {
         });
     } else {
       if (isArray(oldBook[key])) {
-        if (!isArray(newBook[key])) newBook[key] = newBook[key].split(',');
+        if (!isArray(newBook[key]) && !isEmpty(newBook[key])) {
+          newBook[key] = newBook[key].split(',');
+        }
         if (!arraysEqual(oldBook[key], newBook[key])) {
           difference.push({
             key,
