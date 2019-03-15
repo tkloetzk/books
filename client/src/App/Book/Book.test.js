@@ -31,6 +31,7 @@ describe('Book', () => {
     };
     wrapper = shallow(<Book {...props} />);
     instance = wrapper.instance();
+    instance.state.expanded = false;
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -43,5 +44,11 @@ describe('Book', () => {
     it('with correct props', () => {
       expect(wrapper).toMatchSnapshot();
     });
+  });
+  describe('componentDidUpdate', () => {});
+  describe('_handleFocusOut', () => {});
+  describe('handleExpandClick', () => {
+    instance.handleExpandClick();
+    expect(instance.state.expanded).toBe(true);
   });
 });

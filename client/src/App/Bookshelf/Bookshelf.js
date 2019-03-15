@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import Results from '../Results/Results';
 import map from 'lodash/map';
 import assign from 'lodash/assign';
+import { CSVLink, CSVDownload } from 'react-csv';
 
 export class Bookshelf extends Component {
   componentDidMount() {
@@ -28,6 +29,7 @@ export class Bookshelf extends Component {
     const { bookshelf, active } = this.props;
     return (
       <React.Fragment>
+        <CSVLink data={bookshelf}>Download me</CSVLink>;
         <GenreSelector />
         {active && (
           <Results

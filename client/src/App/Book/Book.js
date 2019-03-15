@@ -31,6 +31,9 @@ const styles = {
     boxShadow:
       '0px 0px 3px 6px yellow, 0px 1px 1px 2px yellow, 0px 2px 1px 1px yellow',
   },
+  owned: {
+    backgroundColor: '#9bfaff',
+  },
   header: {
     '& span': {
       fontSize: '14px',
@@ -139,7 +142,6 @@ export class Book extends Component {
     const { classes, handleSave } = this.props;
     const { book, expanded, saveIcon, edits } = this.state;
 
-    if (!book) return null;
     const title =
       get(book, 'title', '').length < 92
         ? book.title
@@ -159,6 +161,9 @@ export class Book extends Component {
       Math.round(book.goodreadsAverageRating * 1000) / 1000;
     const amazonAverageRating =
       Math.round(book.amazonAverageRating * 1000) / 1000;
+
+    const owned = get(book, 'owned', false);
+
     const bookDifferences = get(book, 'differences', []);
     remove(bookDifferences, diff => diff.key === 'categories');
     book.differences = bookDifferences;
@@ -173,7 +178,10 @@ export class Book extends Component {
 
     return (
       <Card
-        className={book.differences.length ? classes.different : null}
+        className={[
+          book.differences.length ? classes.different : null,
+          owned ? classes.owned : null,
+        ]}
         style={expandStyle}
         key={book.isbn}
       >
@@ -238,13 +246,15 @@ export class Book extends Component {
           />
         )}
         <CardContent className={classes.content}>
-          <EditableLabel
-            text={description}
-            inputWidth="190px"
-            inputHeight="25px"
-            onFocus={() => {}}
-            onFocusOut={text => this._handleFocusOut(text, 'description')}
-          />
+          {!isEmpty(description) && (
+            <EditableLabel
+              text={description}
+              inputWidth="190px"
+              inputHeight="25px"
+              onFocus={() => {}}
+              onFocusOut={text => this._handleFocusOut(text, 'description')}
+            />
+          )}
         </CardContent>
 
         <div className={classes.actions}>
@@ -257,13 +267,14 @@ export class Book extends Component {
                 data-for="differencesIcon"
               />
               <ReactTooltip id="differencesIcon" type="info" effect="solid">
-                {book.differences.map(different => (
-                  <span key={different.key}>
-                    {different.key} {different.currentValue} ->{' '}
-                    {different.newValue}
-                    <br />
-                  </span>
-                ))}
+                {book.differences.length > 0 &&
+                  book.differences.map(different => (
+                    <span key={different.key}>
+                      {different.key} {different.currentValue} ->{' '}
+                      {different.newValue}
+                      <br />
+                    </span>
+                  ))}
               </ReactTooltip>
             </React.Fragment>
           ) : (
@@ -374,6 +385,11 @@ export class Book extends Component {
 
 Book.defaultProps = {
   classes: {},
+  book: {
+    differences: [],
+    title: '',
+    description: '',
+  },
 };
 
 export default withStyles(styles)(Book);

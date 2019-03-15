@@ -142,7 +142,7 @@ export function updateBookOnBookshelf(id, fields) {
     return updateBookOnBookshelfService(id, fields)
       .then(saved => {
         dispatch(updateBookOnBookshelfSuccess([]));
-        dispatch(getBookshelf());
+        // dispatch(getBookshelf());
       })
       .catch(error => {
         dispatch(updateBookOnBookshelfFailure(error));
