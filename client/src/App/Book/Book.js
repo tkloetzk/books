@@ -3,9 +3,9 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
-// import ReadBook from './read-book.svg';
-import UnreadBook from '@material-ui/icons/BookOutlined';
-import { withStyles, jssPreset } from '@material-ui/core/styles';
+import ReadBook from '@material-ui/icons/CheckCircle';
+import UnreadBook from '@material-ui/icons/CheckCircleOutline';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/icons/AnnouncementOutlined';
 import ReactTooltip from 'react-tooltip';
@@ -18,6 +18,8 @@ import util from '../../util/combineBooks';
 import SaveIcon from '@material-ui/icons/Save';
 import remove from 'lodash/remove';
 import isEqual from 'lodash/isEqual';
+import UnownedBook from '@material-ui/icons/HomeOutlined';
+import OwnedBook from '@material-ui/icons/Home';
 
 const styles = {
   card: {
@@ -56,11 +58,8 @@ const styles = {
   },
   actions: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-  },
-  icon: {
-    paddingLeft: '0px',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -85,6 +84,8 @@ export class Book extends Component {
       subtitle: '',
       isbn: '',
       description: '',
+      owned: false,
+      read: false,
       differences: [],
       amazonAverageRating: null,
       amazonRatingsCount: null,
@@ -98,11 +99,13 @@ export class Book extends Component {
 
   componentDidMount() {
     const { book } = this.props;
-    this.setState({ book });
+    const mergedBook = Object.assign({}, this.state.book, book);
+    this.setState({ book: mergedBook });
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { book, edits } = this.state;
+    const { handleSave } = this.props;
 
     if (
       !isEqual(book, prevProps.book) &&
@@ -116,7 +119,21 @@ export class Book extends Component {
     if (edits.length && edits !== prevState.edits) {
       this.setState({ saveIcon: true });
     }
+
+    if (prevState.book.owned !== book.owned) {
+      handleSave(book, [{ key: 'owned', newValue: book.owned }]);
+    }
+    if (prevState.book.read !== book.read) {
+      handleSave(book, [{ key: 'read', newValue: book.read }]);
+    }
   }
+
+  handleOwnedReadBook = key => {
+    const { book } = this.state;
+
+    const updatedBook = Object.assign({}, book, { [key]: !book[key] });
+    this.setState({ book: updatedBook });
+  };
 
   _handleFocusOut = (text, property) => {
     var book = { ...this.state.book };
@@ -153,9 +170,9 @@ export class Book extends Component {
         : book.subtitle.substring(0, 56) + '...';
 
     const description =
-      get(book, 'description', '').length < 285
+      get(book, 'description', '').length < 280
         ? book.description
-        : book.description.substring(0, 285) + '...';
+        : book.description.substring(0, 280) + '...';
 
     const goodreadsAverageRating =
       Math.round(book.goodreadsAverageRating * 1000) / 1000;
@@ -163,6 +180,7 @@ export class Book extends Component {
       Math.round(book.amazonAverageRating * 1000) / 1000;
 
     const owned = get(book, 'owned', false);
+    const read = get(book, 'read', false);
 
     const bookDifferences = get(book, 'differences', []);
     remove(bookDifferences, diff => diff.key === 'categories');
@@ -176,6 +194,20 @@ export class Book extends Component {
       ? defaultStyle
       : { ...defaultStyle, maxHeight: 461 };
 
+    let ownedRender;
+    let readRender;
+
+    //TODO: seems like there's an easier way
+    if (owned) {
+      ownedRender = <OwnedBook fontSize="large" />;
+    } else {
+      ownedRender = <UnownedBook fontSize="large" />;
+    }
+    if (read) {
+      readRender = <ReadBook fontSize="large" />;
+    } else {
+      readRender = <UnreadBook fontSize="large" />;
+    }
     return (
       <Card
         className={[
@@ -262,7 +294,6 @@ export class Book extends Component {
             <React.Fragment>
               <Icon
                 aria-label="Differences"
-                className={classes.icon}
                 data-tip
                 data-for="differencesIcon"
               />
@@ -278,9 +309,20 @@ export class Book extends Component {
               </ReactTooltip>
             </React.Fragment>
           ) : (
-            <IconButton aria-label="Unread" className={classes.icon}>
-              <UnreadBook fontSize="large" />
-            </IconButton>
+            <React.Fragment>
+              <IconButton
+                aria-label="Unread"
+                onClick={() => this.handleOwnedReadBook('read')}
+              >
+                {readRender}
+              </IconButton>
+              <IconButton
+                aria-label="Unread"
+                onClick={() => this.handleOwnedReadBook('owned')}
+              >
+                {ownedRender}
+              </IconButton>
+            </React.Fragment>
           )}
           <IconButton
             className={expanded ? classes.expandOpen : classes.expand}

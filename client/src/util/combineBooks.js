@@ -61,6 +61,8 @@ export function compareDifferences(oldBook, newBook, difference) {
         key !== '__v' &&
         key !== '_id' &&
         key !== 'adjustedRating' &&
+        key !== 'owned' &&
+        key !== 'read' &&
         newBook[key] !== '' &&
         newBook[key] !== 0
       )
