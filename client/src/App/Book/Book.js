@@ -46,6 +46,11 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'center',
   },
+  headerButton: {
+    marginTop: '-12px',
+    marginBottom: '-13px',
+    marginLeft: '157px',
+  },
   content: {
     fontSize: '12px',
     padding: '6px',
@@ -79,6 +84,7 @@ export class Book extends Component {
     expanded: false,
     saveIcon: false,
     edits: [],
+    originalBook: {},
     book: {
       title: '',
       subtitle: '',
@@ -100,11 +106,11 @@ export class Book extends Component {
   componentDidMount() {
     const { book } = this.props;
     const mergedBook = Object.assign({}, this.state.book, book);
-    this.setState({ book: mergedBook });
+    this.setState({ book: mergedBook, originalBook: mergedBook });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { book, edits } = this.state;
+    const { book, originalBook, edits } = this.state;
     const { handleSave } = this.props;
 
     if (
@@ -113,11 +119,15 @@ export class Book extends Component {
       !isEmpty(prevState.book.title)
     ) {
       this.setState({
-        edits: util.compareDifferences(prevProps.book, book, []),
+        edits: util.compareDifferences(originalBook, book, []),
       });
     }
     if (edits.length && edits !== prevState.edits) {
       this.setState({ saveIcon: true });
+    }
+
+    if (!edits.length && prevState.edits.length) {
+      this.setState({ saveIcon: false });
     }
 
     if (prevState.book.owned !== book.owned) {
@@ -165,14 +175,14 @@ export class Book extends Component {
         : book.title.substring(0, 92) + '...';
 
     const subheader =
-      get(book, 'subtitle', '').length < 56
+      get(book, 'subtitle', '').length < 51
         ? book.subtitle
-        : book.subtitle.substring(0, 56) + '...';
+        : book.subtitle.substring(0, 51) + '...';
 
     const description =
-      get(book, 'description', '').length < 280
+      get(book, 'description', '').length < 295
         ? book.description
-        : book.description.substring(0, 280) + '...';
+        : book.description.substring(0, 295) + '...';
 
     const goodreadsAverageRating =
       Math.round(book.goodreadsAverageRating * 1000) / 1000;
@@ -217,6 +227,14 @@ export class Book extends Component {
         style={expandStyle}
         key={book.isbn}
       >
+        {!saveIcon && (
+          <IconButton
+            aria-label="Unread"
+            onClick={() => this.handleOwnedReadBook('read')}
+            children={read ? <ReadBook /> : <UnreadBook />}
+            className={classes.headerButton}
+          />
+        )}
         {saveIcon && (
           <IconButton
             onClick={() => [
@@ -224,11 +242,7 @@ export class Book extends Component {
               this.setState({ saveIcon: false }),
             ]}
             children={<SaveIcon />}
-            style={{
-              marginTop: '-12px',
-              marginBottom: '-26px',
-              marginLeft: '157px',
-            }}
+            className={classes.headerButton}
           />
         )}
         <div className={classes.header}>
@@ -311,13 +325,7 @@ export class Book extends Component {
           ) : (
             <React.Fragment>
               <IconButton
-                aria-label="Unread"
-                onClick={() => this.handleOwnedReadBook('read')}
-              >
-                {readRender}
-              </IconButton>
-              <IconButton
-                aria-label="Unread"
+                aria-label="Onwed"
                 onClick={() => this.handleOwnedReadBook('owned')}
               >
                 {ownedRender}
