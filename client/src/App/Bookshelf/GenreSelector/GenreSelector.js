@@ -17,6 +17,7 @@ export class GenreSelector extends React.Component {
     deselectAll: false,
   };
 
+  // TODO: This is a mess. Also deleting book doesn't update genre
   componentDidUpdate(prevProps, prevState) {
     const { genres, deselectAll } = this.state;
     const { bookshelf, getBookshelf } = this.props;

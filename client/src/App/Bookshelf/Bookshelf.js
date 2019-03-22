@@ -3,12 +3,13 @@ import GenreSelector from './GenreSelector/GenreSelector';
 import {
   getBookshelf,
   updateBookOnBookshelf,
+  deleteBookOnBookshelf,
 } from '../../store/bookshelf/bookshelfActions';
 import { connect } from 'react-redux';
 import Results from '../Results/Results';
 import map from 'lodash/map';
 import assign from 'lodash/assign';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 
 export class Bookshelf extends Component {
   componentDidMount() {
@@ -26,7 +27,7 @@ export class Bookshelf extends Component {
 
   // TODO: This is being rendered twice
   render() {
-    const { bookshelf, active } = this.props;
+    const { bookshelf, active, deleteBookOnBookshelf } = this.props;
     return (
       <React.Fragment>
         <CSVLink data={bookshelf}>Download CSV</CSVLink>;
@@ -35,6 +36,7 @@ export class Bookshelf extends Component {
           <Results
             booklist={bookshelf}
             handleSave={(book, edits) => this.handleSave(book, edits)}
+            handleDelete={book => deleteBookOnBookshelf(book._id)}
           />
         )}
       </React.Fragment>
@@ -51,6 +53,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   getBookshelf,
   updateBookOnBookshelf,
+  deleteBookOnBookshelf,
 };
 
 Bookshelf.defaultProps = {

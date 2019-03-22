@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
 import ReadBook from '@material-ui/icons/CheckCircle';
 import UnreadBook from '@material-ui/icons/CheckCircleOutline';
+import Delete from '@material-ui/icons/DeleteForever';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/icons/AnnouncementOutlined';
@@ -40,20 +41,25 @@ const styles = {
     '& span': {
       fontSize: '14px',
     },
+    marginTop: '-18px',
     height: '73px',
     textAlign: 'center',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  headerButton: {
-    marginTop: '-12px',
+  topRightButton: {
+    marginTop: '-5px',
     marginBottom: '-13px',
     marginLeft: '157px',
   },
+  topLeftButton: {
+    marginTop: '-43px',
+    marginLeft: '-5px',
+  },
   content: {
     fontSize: '12px',
-    margin: '-12px',
+    margin: '-14px',
     height: '145px',
   },
   media: {
@@ -131,10 +137,13 @@ export class Book extends Component {
       this.setState({ saveIcon: false });
     }
 
-    if (prevState.book.owned !== book.owned) {
+    if (
+      originalBook.owned !== book.owned &&
+      book.owned !== prevState.book.owned
+    ) {
       handleSave(book, [{ key: 'owned', newValue: book.owned }]);
     }
-    if (prevState.book.read !== book.read) {
+    if (originalBook.read !== book.read && book.read !== prevState.book.read) {
       handleSave(book, [{ key: 'read', newValue: book.read }]);
     }
   }
@@ -167,7 +176,7 @@ export class Book extends Component {
   // };
 
   render() {
-    const { classes, handleSave } = this.props;
+    const { classes, handleSave, handleDelete } = this.props;
     const { book, expanded, saveIcon, edits } = this.state;
 
     const title =
@@ -219,9 +228,14 @@ export class Book extends Component {
             aria-label="Unread"
             onClick={() => this.handleOwnedReadBook('read')}
             children={read ? <ReadBook /> : <UnreadBook />}
-            className={classes.headerButton}
+            className={classes.topRightButton}
           />
         )}
+        <IconButton
+          className={classes.topLeftButton}
+          onClick={() => handleDelete(book)}
+          children={<Delete />}
+        />
         {saveIcon && (
           <IconButton
             onClick={() => [
@@ -229,7 +243,7 @@ export class Book extends Component {
               this.setState({ saveIcon: false }),
             ]}
             children={<SaveIcon />}
-            className={classes.headerButton}
+            className={classes.topRightButton}
           />
         )}
         <div className={classes.header}>

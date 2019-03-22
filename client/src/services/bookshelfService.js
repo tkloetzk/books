@@ -23,3 +23,9 @@ export function updateBookOnBookshelfService(id, fields) {
       throw error;
     });
 }
+
+export function deleteBookOnBookshelfService(id) {
+  return axios.delete(`${apiConfig.bookshelf}/delete/${id}`).catch(error => {
+    throw error;
+  });
+}

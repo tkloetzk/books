@@ -19,6 +19,11 @@ exports[`Book renders with correct props 1`] = `
   >
     <pure(CheckCircleOutlineIcon) />
   </WithStyles(IconButton)>
+  <WithStyles(IconButton)
+    onClick={[Function]}
+  >
+    <pure(DeleteForeverIcon) />
+  </WithStyles(IconButton)>
   <div>
     <WithStyles(Typography)
       component="span"
@@ -219,6 +224,11 @@ exports[`Book renders with no props 1`] = `
     onClick={[Function]}
   >
     <pure(CheckCircleOutlineIcon) />
+  </WithStyles(IconButton)>
+  <WithStyles(IconButton)
+    onClick={[Function]}
+  >
+    <pure(DeleteForeverIcon) />
   </WithStyles(IconButton)>
   <div>
     <WithStyles(Typography)

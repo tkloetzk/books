@@ -216,6 +216,7 @@ export class SearchBar extends Component {
           const fields = map(book.differences, diff => {
             return { [diff.key]: diff.newValue };
           });
+          console.log('update book 219');
           return updateBookOnBookshelf(book._id, assign(...fields));
         })
       );

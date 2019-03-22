@@ -1,6 +1,7 @@
 import {
   addBookshelfService,
   getBookshelfService,
+  deleteBookOnBookshelfService,
   updateBookOnBookshelfService,
 } from '../../services/bookshelfService';
 import * as types from './bookshelfActionTypes';
@@ -150,6 +151,45 @@ export function updateBookOnBookshelf(id, fields) {
   };
 }
 
+export function deleteBookOnBookshelfSuccess(deleteId) {
+  return {
+    type: types.DELETE_BOOK_ON_BOOKSHELF_SUCCESS,
+    deleteId,
+  };
+}
+export function deleteBookOnBookshelfFailure(error) {
+  return {
+    type: types.DELETE_BOOK_ON_BOOKSHELF_FAILURE,
+    error,
+  };
+}
+
+export function deleteBookOnBookshelf(id) {
+  return dispatch => {
+    return deleteBookOnBookshelfService(id)
+      .then(book => {
+        dispatch(deleteBookOnBookshelfSuccess(id));
+        dispatch(getBookshelf());
+      })
+      .catch(error => {
+        dispatch(deleteBookOnBookshelfFailure(error));
+        console.error('error', error);
+      });
+  };
+}
+
+export function deleteModifiedBookFromBooklist(deleteISBN) {
+  return {
+    type: types.DELETE_BOOK_FROM_BOOKLIST_SUCCESS,
+    deleteISBN,
+  };
+}
+
+export function deleteModifiedBook(isbn) {
+  return dispatch => {
+    return dispatch(deleteModifiedBookFromBooklist(isbn));
+  };
+}
 export function clearBooks() {
   return dispatch => {
     dispatch(clearAmazonBooks());

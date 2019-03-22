@@ -24,10 +24,10 @@ bookRoutes.route('/add').post((req, res) => {
   });
   Book.insertMany(books, (err, books) => {
     if (err) {
-      console.error('error mongo', err);
+      console.error('error mongo insert', err);
       res.error(err);
     } else {
-      console.info('mongo saved', books);
+      console.info('mongo inserted', books);
       res.send(books);
     }
   });
@@ -39,14 +39,27 @@ bookRoutes.route('/update/:id').put((req, res) => {
     { $set: req.body },
     (err, books) => {
       if (err) {
-        console.error('error mongo', err);
+        console.error('error mongo update', err);
         res.send(err);
       } else {
-        console.info('mongo saved', books);
+        console.info('mongo updated', books);
         res.send(books);
       }
     }
   );
+});
+
+bookRoutes.route('/delete/:id').delete((req, res) => {
+  console.log('deleting', req.params);
+  Book.findByIdAndDelete({ _id: ObjectId(req.params.id) }, (err, success) => {
+    if (err) {
+      console.error('error mongo delete', err);
+      res.send(err);
+    } else {
+      console.info('mongo deleted', success);
+      res.send(success);
+    }
+  });
 });
 
 module.exports = bookRoutes;

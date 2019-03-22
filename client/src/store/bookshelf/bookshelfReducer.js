@@ -81,6 +81,18 @@ export default function bookshelf(state = initialState, action) {
         },
       });
     }
+    case types.DELETE_BOOK_ON_BOOKSHELF_SUCCESS: {
+      remove(state.bookshelf, book => book._id === action.deleteId); // TODO: What is this doing?
+      return Object.assign({}, state, {
+        bookshelf: state.bookshelf,
+      });
+    }
+    case types.DELETE_BOOK_FROM_BOOKLIST_SUCCESS: {
+      remove(state.booklist, book => book.isbn === action.deleteISBN); // TODO: What is this doing?
+      return Object.assign({}, state, {
+        booklist: [...state.booklist],
+      });
+    }
     case types.REFRESHED_BOOKSHELF: {
       return Object.assign({}, state, {
         refreshed: action.refreshed,

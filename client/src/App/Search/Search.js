@@ -6,7 +6,7 @@ import find from 'lodash/find';
 import { LOADING_STATUSES } from '../../util/constants';
 import {
   insertModifiedBook,
-  saveCombinedBooks,
+  deleteModifiedBook,
 } from '../../store/bookshelf/bookshelfActions';
 import Notification from '../Notification/Notification';
 import sortBooklist from '../../util/calculator';
@@ -63,9 +63,15 @@ export class Search extends React.Component {
   };
 
   render() {
-    const { modifiedBooklist, booklist, saveStatus } = this.props;
+    const {
+      modifiedBooklist,
+      booklist,
+      saveStatus,
+      deleteModifiedBook,
+    } = this.props;
     const { open } = this.state;
     const books = sortBooklist(modifiedBooklist.concat(booklist));
+    console.log(books);
     return (
       <div style={{ height: '74vh' }}>
         <SearchBar />
@@ -74,6 +80,7 @@ export class Search extends React.Component {
           handleSave={(book, edits) =>
             this.handleSearchedBookEditSave(book, edits)
           }
+          handleDelete={book => deleteModifiedBook(book.isbn)}
         />
         <Notification
           open={open}
@@ -106,6 +113,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   insertModifiedBook,
+  deleteModifiedBook,
 };
 export default connect(
   mapStateToProps,
