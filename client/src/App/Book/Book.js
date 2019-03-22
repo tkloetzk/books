@@ -53,7 +53,7 @@ const styles = {
   },
   content: {
     fontSize: '12px',
-    padding: '6px',
+    margin: '-12px',
     height: '145px',
   },
   media: {
