@@ -10,7 +10,6 @@ import {
 } from '../../store/bookshelf/bookshelfActions';
 import Notification from '../Notification/Notification';
 import sortBooklist from '../../util/calculator';
-import remove from 'lodash/remove';
 
 export class Search extends React.Component {
   state = {
@@ -71,7 +70,6 @@ export class Search extends React.Component {
     } = this.props;
     const { open } = this.state;
     const books = sortBooklist(modifiedBooklist.concat(booklist));
-    console.log(books);
     return (
       <div style={{ height: '74vh' }}>
         <SearchBar />

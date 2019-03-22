@@ -9,6 +9,7 @@ describe('Results', () => {
   beforeEach(() => {
     props = {
       handleSave: jest.fn(),
+      handleDelete: jest.fn(),
       booklist: [
         {
           categories: ['Parenting'],
@@ -45,6 +46,11 @@ describe('Results', () => {
   });
   it('renders with no save function', () => {
     props = Object.assign({}, props, { handleSave: undefined });
+    wrapper = shallow(<Results {...props} />);
+    expect(wrapper).toMatchSnapshot();
+  });
+  it('renders with no delete function', () => {
+    props = Object.assign({}, props, { handleDelete: undefined });
     wrapper = shallow(<Results {...props} />);
     expect(wrapper).toMatchSnapshot();
   });

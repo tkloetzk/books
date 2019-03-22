@@ -83,6 +83,7 @@ exports[`Search Notification opens notification on save 1`] = `
         },
       ]
     }
+    handleDelete={[Function]}
     handleSave={[Function]}
   />
   <WithStyles(Notification)
@@ -178,6 +179,7 @@ exports[`Search rendering renders with booklist and modifiedBooklist 1`] = `
         },
       ]
     }
+    handleDelete={[Function]}
     handleSave={[Function]}
   />
   <WithStyles(Notification)
@@ -238,6 +240,7 @@ exports[`Search rendering renders with booklist but no modifiedBooklist 1`] = `
         },
       ]
     }
+    handleDelete={[Function]}
     handleSave={[Function]}
   />
   <WithStyles(Notification)
@@ -260,6 +263,7 @@ exports[`Search rendering renders with no props 1`] = `
   <Connect(WithStyles(SearchBar)) />
   <Results
     booklist={Array []}
+    handleDelete={[Function]}
     handleSave={[Function]}
   />
   <WithStyles(Notification)
