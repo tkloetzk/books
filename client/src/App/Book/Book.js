@@ -204,26 +204,12 @@ export class Book extends Component {
       ? defaultStyle
       : { ...defaultStyle, maxHeight: 461 };
 
-    let ownedRender;
-    let readRender;
-
-    //TODO: seems like there's an easier way
-    if (owned) {
-      ownedRender = <OwnedBook fontSize="large" />;
-    } else {
-      ownedRender = <UnownedBook fontSize="large" />;
-    }
-    if (read) {
-      readRender = <ReadBook fontSize="large" />;
-    } else {
-      readRender = <UnreadBook fontSize="large" />;
-    }
     return (
       <Card
         className={[
-          book.differences.length ? classes.different : null,
-          owned ? classes.owned : null,
-        ]}
+          book.differences.length && classes.different,
+          owned && classes.owned,
+        ].join(' ')}
         style={expandStyle}
         key={book.isbn}
       >
@@ -327,9 +313,8 @@ export class Book extends Component {
               <IconButton
                 aria-label="Onwed"
                 onClick={() => this.handleOwnedReadBook('owned')}
-              >
-                {ownedRender}
-              </IconButton>
+                children={owned ? <OwnedBook /> : <UnownedBook />}
+              />
             </React.Fragment>
           )}
           <IconButton
