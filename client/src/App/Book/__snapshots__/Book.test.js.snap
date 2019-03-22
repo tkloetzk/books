@@ -2,7 +2,7 @@
 
 exports[`Book renders with correct props 1`] = `
 <WithStyles(Card)
-  className={null}
+  className=" "
   key="9780736917728"
   style={
     Object {
@@ -13,6 +13,12 @@ exports[`Book renders with correct props 1`] = `
     }
   }
 >
+  <WithStyles(IconButton)
+    aria-label="Unread"
+    onClick={[Function]}
+  >
+    <pure(CheckCircleOutlineIcon) />
+  </WithStyles(IconButton)>
   <div>
     <WithStyles(Typography)
       component="span"
@@ -49,16 +55,15 @@ exports[`Book renders with correct props 1`] = `
       inputWidth="190px"
       onFocus={[Function]}
       onFocusOut={[Function]}
-      text="Elizabeth George, bestselling author and mother of two daughters, provides biblical insight and guidance for every mom who wants to lead their daughter to a godly life through example, study, and prayer. Elizabeth includes questions to draw moms and daughter closer as together they pu..."
+      text="Elizabeth George, bestselling author and mother of two daughters, provides biblical insight and guidance for every mom who wants to lead their daughter to a godly life through example, study, and prayer. Elizabeth includes questions to draw moms and daughter closer as together they pursue spiri..."
     />
   </WithStyles(CardContent)>
   <div>
     <WithStyles(IconButton)
-      aria-label="Unread"
+      aria-label="Onwed"
+      onClick={[Function]}
     >
-      <pure(BookOutlinedIcon)
-        fontSize="large"
-      />
+      <pure(HomeOutlinedIcon) />
     </WithStyles(IconButton)>
     <WithStyles(IconButton)
       aria-expanded={false}
@@ -196,4 +201,191 @@ exports[`Book renders with correct props 1`] = `
 </WithStyles(Card)>
 `;
 
-exports[`Book renders with no props 1`] = `""`;
+exports[`Book renders with no props 1`] = `
+<WithStyles(Card)
+  className=" "
+  key=""
+  style={
+    Object {
+      "margin": "6px",
+      "maxHeight": 461,
+      "maxWidth": 200,
+      "padding": "5px",
+    }
+  }
+>
+  <WithStyles(IconButton)
+    aria-label="Unread"
+    onClick={[Function]}
+  >
+    <pure(CheckCircleOutlineIcon) />
+  </WithStyles(IconButton)>
+  <div>
+    <WithStyles(Typography)
+      component="span"
+      variant="body1"
+    >
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="190px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text=""
+      />
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      component="span"
+      variant="caption"
+    >
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="190px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text=""
+      />
+    </WithStyles(Typography)>
+  </div>
+  <WithStyles(CardContent) />
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Onwed"
+      onClick={[Function]}
+    >
+      <pure(HomeOutlinedIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(IconButton)
+      aria-expanded={false}
+      aria-label="Show more"
+      onClick={[Function]}
+    >
+      <pure(ExpandMoreIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)>
+      0
+    </WithStyles(Typography)>
+  </div>
+  <WithStyles(Collapse)
+    in={false}
+    timeout="auto"
+    unmountOnExit={true}
+  >
+    <WithStyles(CardContent)
+      style={
+        Object {
+          "textAlign": "center",
+        }
+      }
+    >
+      <WithStyles(Typography)
+        component="span"
+        style={
+          Object {
+            "display": "inline-flex",
+          }
+        }
+      >
+        ISBN:
+         
+        <EditableLabel
+          inputHeight="25px"
+          inputWidth="100px"
+          onFocus={[Function]}
+          onFocusOut={[Function]}
+          text=""
+        />
+      </WithStyles(Typography)>
+      <WithStyles(Typography)
+        component="span"
+        style={
+          Object {
+            "display": "inline-flex",
+          }
+        }
+      >
+        Amazon Rating:
+         
+        <EditableLabel
+          inputHeight="25px"
+          inputWidth="75px"
+          onFocus={[Function]}
+          onFocusOut={[Function]}
+          text="0"
+        />
+      </WithStyles(Typography)>
+      <WithStyles(Typography)
+        component="span"
+        style={
+          Object {
+            "display": "inline-flex",
+          }
+        }
+      >
+        Goodreads Rating:
+         
+        <EditableLabel
+          inputHeight="25px"
+          inputWidth="75px"
+          onFocus={[Function]}
+          onFocusOut={[Function]}
+          text="0"
+        />
+      </WithStyles(Typography)>
+      <WithStyles(Typography)
+        component="span"
+        style={
+          Object {
+            "display": "inline-flex",
+          }
+        }
+      >
+        Amazon Review:
+         
+        <EditableLabel
+          inputHeight="25px"
+          inputWidth="75px"
+          onFocus={[Function]}
+          onFocusOut={[Function]}
+          text="null"
+        />
+      </WithStyles(Typography)>
+      <WithStyles(Typography)
+        component="span"
+        style={
+          Object {
+            "display": "inline-flex",
+          }
+        }
+      >
+        Goodreads Review:
+         
+        <EditableLabel
+          inputHeight="25px"
+          inputWidth="75px"
+          onFocus={[Function]}
+          onFocusOut={[Function]}
+          text="null"
+        />
+      </WithStyles(Typography)>
+      <WithStyles(Typography)
+        component="span"
+        style={
+          Object {
+            "display": "inline-flex",
+          }
+        }
+      >
+        Category:
+         
+        <EditableLabel
+          inputHeight="25px"
+          inputWidth="75px"
+          onFocus={[Function]}
+          onFocusOut={[Function]}
+          text=""
+        />
+      </WithStyles(Typography)>
+    </WithStyles(CardContent)>
+  </WithStyles(Collapse)>
+</WithStyles(Card)>
+`;

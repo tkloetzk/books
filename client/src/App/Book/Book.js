@@ -105,6 +105,7 @@ export class Book extends Component {
 
   componentDidMount() {
     const { book } = this.props;
+
     const mergedBook = Object.assign({}, this.state.book, book);
     this.setState({ book: mergedBook, originalBook: mergedBook });
   }
@@ -207,8 +208,8 @@ export class Book extends Component {
     return (
       <Card
         className={[
-          book.differences.length && classes.different,
-          owned && classes.owned,
+          book.differences.length ? classes.different : null,
+          owned ? classes.owned : null,
         ].join(' ')}
         style={expandStyle}
         key={book.isbn}

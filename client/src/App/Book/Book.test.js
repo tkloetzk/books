@@ -47,8 +47,24 @@ describe('Book', () => {
   });
   describe('componentDidUpdate', () => {});
   describe('_handleFocusOut', () => {});
-  describe('handleExpandClick', () => {
-    instance.handleExpandClick();
-    expect(instance.state.expanded).toBe(true);
+  // describe('handleExpandClick', () => {
+  //   instance.handleExpandClick();
+  //   expect(instance.state.expanded).toBe(true);
+  // });
+  describe('handleOwnedReadBook', () => {
+    it('owned', () => {
+      instance.handleOwnedReadBook('owned');
+      expect(instance.state.book.owned).toBe(true);
+
+      instance.handleOwnedReadBook('owned');
+      expect(instance.state.book.owned).toBe(false);
+    });
+    it('read', () => {
+      instance.handleOwnedReadBook('read');
+      expect(instance.state.book.read).toBe(true);
+
+      instance.handleOwnedReadBook('read');
+      expect(instance.state.book.read).toBe(false);
+    });
   });
 });

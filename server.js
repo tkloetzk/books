@@ -25,7 +25,7 @@ if (env === 'dev') {
 }
 
 if (env === 'offline') {
-  console.log('using offline bookshelf');
+  console.info('using offline bookshelf');
   app.use('/api/bookshelf', bookshelfOffline);
 } else {
   mongoose

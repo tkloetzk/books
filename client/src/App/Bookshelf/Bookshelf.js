@@ -29,7 +29,7 @@ export class Bookshelf extends Component {
     const { bookshelf, active } = this.props;
     return (
       <React.Fragment>
-        <CSVLink data={bookshelf}>Download me</CSVLink>;
+        <CSVLink data={bookshelf}>Download CSV</CSVLink>;
         <GenreSelector />
         {active && (
           <Results

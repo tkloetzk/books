@@ -24,7 +24,6 @@ export default function bookshelf(state = initialState, action) {
         hasErrored: action.hasErrored,
       });
     case types.SAVE_COMBINED_BOOKS_SUCCESS:
-      console.log(action.booklist);
       return Object.assign({}, state, {
         booklist: action.booklist, // TODO: Do i need to array and deconstructing?
       });

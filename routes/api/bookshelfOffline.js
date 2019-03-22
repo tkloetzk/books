@@ -75,7 +75,6 @@ bookRoutes.route('/').post((req, res) => {
     },
   ];
 
-  console.log('sending offline bookshelf');
   res.send(bookshelf);
 });
 
