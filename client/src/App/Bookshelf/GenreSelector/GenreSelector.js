@@ -102,7 +102,7 @@ export class GenreSelector extends React.Component {
       },
     ];
     return (
-      <FormControl component="fieldset" fullWidth>
+      <FormControl component="fieldset">
         <FormGroup row className={classes.formGroup}>
           <FormLabel component="label" className={classes.legend}>
             Genres:

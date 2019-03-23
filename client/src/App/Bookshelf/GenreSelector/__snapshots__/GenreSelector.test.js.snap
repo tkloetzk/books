@@ -3,7 +3,6 @@
 exports[`GenreSelector renders as expected with bookshelf on initial load 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
-  fullWidth={true}
 >
   <WithStyles(FormGroup)
     row={true}
@@ -64,7 +63,6 @@ exports[`GenreSelector renders as expected with bookshelf on initial load 1`] = 
 exports[`GenreSelector renders no genres with no books 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
-  fullWidth={true}
 >
   <WithStyles(FormGroup)
     row={true}
@@ -103,7 +101,6 @@ exports[`GenreSelector renders no genres with no books 1`] = `
 exports[`GenreSelector renders null with no props 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
-  fullWidth={true}
 >
   <WithStyles(FormGroup)
     row={true}

@@ -36,7 +36,7 @@ export class App extends React.Component {
           <AppBar
             position="static"
             color="default"
-            style={{ marginTop: '-13px', marginBottom: '14px' }}
+            style={{ marginTop: '-13px' }}
           >
             <Tabs
               value={value}

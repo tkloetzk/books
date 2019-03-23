@@ -2,71 +2,189 @@
 
 exports[`Bookshelf renders does not with active false 1`] = `
 <Fragment>
-  <CSVLink
-    asyncOnClick={false}
-    data={
-      Array [
-        Object {
-          "amazonAverageRating": 4.6,
-          "amazonRatingsCount": 113,
-          "categories": Array [
-            "Family & Relationships",
-          ],
-          "description": "A complete guide to the concept of attachment parenting, which argues that parental responsiveness to a baby's needs leads to a well-adjusted child, offers tips on breastfeeding on demand, responding to a baby's cries, minimizing parent-child separation, and avoiding baby \\"gadgets.\\" Original.",
-          "goodreadsAverageRating": 4.22,
-          "goodreadsRatingsCount": 236,
-          "isbn": "9780988995819",
-          "price": "",
-          "subtitle": "Instinctive Care for Your Baby and Young Child",
-          "thumbnail": "http://books.google.com/books/content?id=daeq84DTC3IC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-          "title": "Attachment Parenting",
-        },
-      ]
-    }
-    filename="generatedBy_react-csv.csv"
-    separator=","
-    target="_blank"
-    uFEFF={true}
-  >
-    Download CSV
-  </CSVLink>
-  ;
-  <Connect(WithStyles(GenreSelector)) />
+  <div>
+    <Connect(WithStyles(GenreSelector)) />
+    <CSVLink
+      asyncOnClick={false}
+      data={
+        Array [
+          Object {
+            "amazonAverageRating": 4.6,
+            "amazonRatingsCount": 113,
+            "categories": Array [
+              "Family & Relationships",
+            ],
+            "description": "A complete guide to the concept of attachment parenting, which argues that parental responsiveness to a baby's needs leads to a well-adjusted child, offers tips on breastfeeding on demand, responding to a baby's cries, minimizing parent-child separation, and avoiding baby \\"gadgets.\\" Original.",
+            "goodreadsAverageRating": 4.22,
+            "goodreadsRatingsCount": 236,
+            "isbn": "9780988995819",
+            "price": "",
+            "subtitle": "Instinctive Care for Your Baby and Young Child",
+            "thumbnail": "http://books.google.com/books/content?id=daeq84DTC3IC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+            "title": "Attachment Parenting",
+          },
+        ]
+      }
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
+  </div>
 </Fragment>
 `;
 
 exports[`Bookshelf renders with books on bookshelf 1`] = `
 <Fragment>
-  <CSVLink
-    asyncOnClick={false}
-    data={
-      Array [
-        Object {
-          "amazonAverageRating": 4.6,
-          "amazonRatingsCount": 113,
-          "categories": Array [
-            "Family & Relationships",
-          ],
-          "description": "A complete guide to the concept of attachment parenting, which argues that parental responsiveness to a baby's needs leads to a well-adjusted child, offers tips on breastfeeding on demand, responding to a baby's cries, minimizing parent-child separation, and avoiding baby \\"gadgets.\\" Original.",
-          "goodreadsAverageRating": 4.22,
-          "goodreadsRatingsCount": 236,
-          "isbn": "9780988995819",
-          "price": "",
-          "subtitle": "Instinctive Care for Your Baby and Young Child",
-          "thumbnail": "http://books.google.com/books/content?id=daeq84DTC3IC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-          "title": "Attachment Parenting",
-        },
-      ]
-    }
-    filename="generatedBy_react-csv.csv"
-    separator=","
-    target="_blank"
-    uFEFF={true}
-  >
-    Download CSV
-  </CSVLink>
-  ;
-  <Connect(WithStyles(GenreSelector)) />
+  <div>
+    <Connect(WithStyles(GenreSelector)) />
+    <CSVLink
+      asyncOnClick={false}
+      data={
+        Array [
+          Object {
+            "amazonAverageRating": 4.6,
+            "amazonRatingsCount": 113,
+            "categories": Array [
+              "Family & Relationships",
+            ],
+            "description": "A complete guide to the concept of attachment parenting, which argues that parental responsiveness to a baby's needs leads to a well-adjusted child, offers tips on breastfeeding on demand, responding to a baby's cries, minimizing parent-child separation, and avoiding baby \\"gadgets.\\" Original.",
+            "goodreadsAverageRating": 4.22,
+            "goodreadsRatingsCount": 236,
+            "isbn": "9780988995819",
+            "price": "",
+            "subtitle": "Instinctive Care for Your Baby and Young Child",
+            "thumbnail": "http://books.google.com/books/content?id=daeq84DTC3IC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+            "title": "Attachment Parenting",
+          },
+        ]
+      }
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
+  </div>
   <Results
     booklist={
       Array [
@@ -95,18 +213,77 @@ exports[`Bookshelf renders with books on bookshelf 1`] = `
 
 exports[`Bookshelf renders with no books on bookshelf 1`] = `
 <Fragment>
-  <CSVLink
-    asyncOnClick={false}
-    data={Array []}
-    filename="generatedBy_react-csv.csv"
-    separator=","
-    target="_blank"
-    uFEFF={true}
-  >
-    Download CSV
-  </CSVLink>
-  ;
-  <Connect(WithStyles(GenreSelector)) />
+  <div>
+    <Connect(WithStyles(GenreSelector)) />
+    <CSVLink
+      asyncOnClick={false}
+      data={Array []}
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
+  </div>
   <Results
     booklist={Array []}
     handleDelete={[Function]}
