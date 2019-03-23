@@ -3,7 +3,7 @@ import { LOADING_STATUSES } from '../../util/constants';
 import some from 'lodash/some';
 import remove from 'lodash/remove';
 
-const initialState = {
+export const initialState = {
   hasErrored: null,
   bookshelf: [],
   booklist: [],
@@ -25,9 +25,8 @@ export default function bookshelf(state = initialState, action) {
       });
     case types.SAVE_COMBINED_BOOKS_SUCCESS:
       return Object.assign({}, state, {
-        booklist: action.booklist, // TODO: Do i need to array and deconstructing?
+        booklist: [...state.booklist, ...action.booklist], // TODO: Do i need to array and deconstructing?
       });
-    //TODO: Could save and insert be combined?
     case types.SAVE_MODIFIED_BOOKS_SUCCESS:
       return Object.assign({}, state, {
         modifiedBooklist: action.modifiedBooklist,
@@ -51,7 +50,8 @@ export default function bookshelf(state = initialState, action) {
           modifiedBooklist: newModifiedBooklist,
         });
       }
-      remove(state.booklist, book => book.isbn === modifiedBook.isbn); // TODO: What is this doing?
+
+      remove(state.booklist, book => book.isbn === modifiedBook.isbn);
       return Object.assign({}, state, {
         booklist: [...state.booklist, modifiedBook],
       });
@@ -84,7 +84,7 @@ export default function bookshelf(state = initialState, action) {
     case types.DELETE_BOOK_ON_BOOKSHELF_SUCCESS: {
       remove(state.bookshelf, book => book._id === action.deleteId); // TODO: What is this doing?
       return Object.assign({}, state, {
-        bookshelf: state.bookshelf,
+        bookshelf: [...state.bookshelf],
       });
     }
     case types.DELETE_BOOK_FROM_BOOKLIST_SUCCESS: {

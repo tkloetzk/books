@@ -5,7 +5,7 @@ import sortBooklist from '../util/calculator';
 export function getBookshelfService(includedGenres) {
   return axios
     .post(apiConfig.bookshelf, includedGenres)
-    .then(res => sortBooklist(res.data))
+    .then(res => sortBooklist(res.data)) // TODO: Not needed?
     .catch(error => {
       throw error;
     });
