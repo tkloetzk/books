@@ -21,6 +21,7 @@ export class GenreSelector extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { genres, deselectAll } = this.state;
     const { bookshelf, getBookshelf } = this.props;
+
     //Initial Load
     if (!prevState.genres.length && bookshelf.length && !genres.length) {
       bookshelf.forEach(book =>
