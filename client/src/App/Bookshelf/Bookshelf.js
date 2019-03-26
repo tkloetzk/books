@@ -9,10 +9,6 @@ import { connect } from 'react-redux';
 import Results from '../Results/Results';
 import map from 'lodash/map';
 import assign from 'lodash/assign';
-import { CSVLink } from 'react-csv';
-import forOwn from 'lodash/forOwn';
-import DownloadIcon from '@material-ui/icons/SaveAlt';
-import Fab from '@material-ui/core/Fab';
 import { withStyles } from '@material-ui/core/styles';
 
 export class Bookshelf extends Component {
@@ -33,29 +29,10 @@ export class Bookshelf extends Component {
   render() {
     const { classes, bookshelf, active, deleteBookOnBookshelf } = this.props;
 
-    let headers = [
-      { label: 'ISBN', key: 'isbn' },
-      { label: 'Title', key: 'title' },
-      { label: 'Subtitle', key: 'subtitle' },
-      { label: 'Categories', key: 'categories' },
-      { label: 'Description', key: 'description' },
-      { label: 'Amazon Average Rating', key: 'amazonAverageRating' },
-      { label: 'Amazon Ratings Count', key: 'amazonRatingsCount' },
-      { label: 'Goodreads Average Rating', key: 'goodreadsAverageRating' },
-      { label: 'Goodreads Ratings Count', key: 'goodreadsRatingsCount' },
-      { label: 'Adjusted Rating', key: 'adjustedRating' },
-      { label: 'Read', key: 'read' },
-      { label: 'Owned', key: 'owned' },
-    ];
     return (
       <React.Fragment>
         <div className={classes.genreBar}>
           <GenreSelector />
-          <CSVLink data={bookshelf} headers={headers}>
-            <Fab size="small">
-              <DownloadIcon fontSize="small" />
-            </Fab>
-          </CSVLink>
         </div>
         {active && (
           <Results
