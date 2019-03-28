@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`amazon actions can clear amazon books 1`] = `
+Array [
+  Array [
+    Object {
+      "type": "CLEAR_AMAZON_BOOKS_SUCCESS",
+    },
+  ],
+]
+`;

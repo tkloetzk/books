@@ -11,10 +11,6 @@ export default function amazonBookSearch(state = initialState, action) {
   switch (action.type) {
     case types.FETCH_AMAZON_BOOK_SUCCESS:
       return Object.assign({}, state, {
-        books: action.books,
-      });
-    case types.FETCH_SINGLE_AMAZON_BOOK_SUCCESS:
-      return Object.assign({}, state, {
         books: [...state.books, action.book],
       });
     case types.FETCH_AMAZON_BOOK_HAS_ERRORED:
@@ -26,7 +22,7 @@ export default function amazonBookSearch(state = initialState, action) {
         isLoading: action.isLoading,
       });
     case types.CLEAR_AMAZON_BOOKS_SUCCESS:
-      return { books: initialState.books };
+      return initialState;
     default:
       return state;
   }

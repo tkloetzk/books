@@ -28,28 +28,12 @@ export function getAmazonBookSuccess(books) {
 
 export function getSingleAmazonBookSuccess(book) {
   return {
-    type: types.FETCH_SINGLE_AMAZON_BOOK_SUCCESS,
+    type: types.FETCH_AMAZON_BOOK_SUCCESS,
     book,
   };
 }
 
-export function getAmazonBook(isbns) {
-  return dispatch => {
-    dispatch(getAmazonBookIsLoading(LOADING_STATUSES.loading));
-    return getAmazonBookService(isbns)
-      .then(resp => {
-        dispatch(getAmazonBookIsLoading(LOADING_STATUSES.success));
-        dispatch(getAmazonBookSuccess(resp.books));
-        return resp.books;
-      })
-      .catch(error => {
-        dispatch(getAmazonBookIsLoading(LOADING_STATUSES.errored));
-        dispatch(getAmazonBookFailure(true));
-      });
-  };
-}
-
-export function getAmazonSingleBook(isbn) {
+export function getAmazonBook(isbn) {
   return dispatch => {
     dispatch(getAmazonBookIsLoading(LOADING_STATUSES.loading));
     return getAmazonBookServiceSingle(isbn)
