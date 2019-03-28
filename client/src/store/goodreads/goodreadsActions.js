@@ -18,13 +18,6 @@ export function getGoodreadsBookIsLoading(status) {
   };
 }
 
-export function getGoodreadsBooksSuccess(booklist) {
-  return {
-    type: types.FETCH_GOODREADS_BOOKS_SUCCESS,
-    booklist,
-  };
-}
-
 export function getGoodreadsBookSuccess(book) {
   return {
     type: types.FETCH_GOODREADS_BOOK_SUCCESS,
