@@ -39,7 +39,6 @@ exports[`SearchBar renders 1`] = `
     </WithStyles(Button)>
   </span>
   <ReactTooltip
-    clickable={false}
     effect="solid"
     getContent={[Function]}
     id="searchButtonWrapper"

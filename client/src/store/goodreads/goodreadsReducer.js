@@ -1,19 +1,14 @@
 import * as types from './goodreadsActionTypes';
 import { LOADING_STATUSES } from '../../util/constants';
 
-const initialState = {
+export const initialState = {
   hasErrored: false,
   books: [],
-  booklist: [],
   isLoading: LOADING_STATUSES.initial,
 };
 
 export default function goodreadsBookSearch(state = initialState, action) {
   switch (action.type) {
-    case types.FETCH_GOODREADS_BOOKS_SUCCESS:
-      return Object.assign({}, state, {
-        booklist: action.booklist,
-      });
     case types.FETCH_GOODREADS_BOOK_SUCCESS:
       return Object.assign({}, state, {
         books: [...state.books, action.book],
@@ -27,7 +22,7 @@ export default function goodreadsBookSearch(state = initialState, action) {
         isLoading: action.isLoading,
       });
     case types.CLEAR_GOODREADS_BOOKS_SUCCESS:
-      return { books: initialState.books };
+      return initialState;
     default:
       return state;
   }
