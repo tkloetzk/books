@@ -1,7 +1,7 @@
 import * as types from './googleActionTypes';
 import { LOADING_STATUSES } from '../../util/constants';
 
-const initialState = {
+export const initialState = {
   hasErrored: false,
   books: [],
   isLoading: LOADING_STATUSES.initial,
@@ -22,7 +22,7 @@ export default function google(state = initialState, action) {
         isLoading: action.isLoading,
       });
     case types.CLEAR_GOOGLE_BOOKS_SUCCESS:
-      return { books: initialState.books };
+      return initialState;
     default:
       return state;
   }
