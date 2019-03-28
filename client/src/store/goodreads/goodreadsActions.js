@@ -1,6 +1,5 @@
 import * as types from './goodreadsActionTypes';
 import {
-  getGoodreadsBooksService,
   getGoodreadsSingleBooksService,
 } from '../../services/goodreadsService';
 import { LOADING_STATUSES } from '../../util/constants';
@@ -23,21 +22,6 @@ export function getGoodreadsBooksSuccess(booklist) {
   return {
     type: types.FETCH_GOODREADS_BOOKS_SUCCESS,
     booklist,
-  };
-}
-
-export function getGoodreadsBooks(booklist) {
-  return dispatch => {
-    dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.loading));
-    return getGoodreadsBooksService(booklist)
-      .then(resp => {
-        dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.success));
-        dispatch(getGoodreadsBooksSuccess(resp));
-      })
-      .catch(error => {
-        dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.errored));
-        dispatch(getGoodreadsBookFailure(true));
-      });
   };
 }
 
