@@ -8,15 +8,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
 
-const styles = {
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'row-reverse',
-  },
-  label: {
-    width: 'unset',
-  },
-};
 export class App extends React.Component {
   state = {
     value: 0,
@@ -28,7 +19,6 @@ export class App extends React.Component {
 
   render() {
     const { value } = this.state;
-    const { classes } = this.props;
     return (
       <div className="App">
         <Header>Book Review Aggregator</Header>
@@ -48,17 +38,6 @@ export class App extends React.Component {
               <Tab label="Search" />
               <Tab
                 label="Bookshelf"
-                // icon={
-                //   <RefreshIcon
-                //     onClick={}
-                //     data-tip
-                //     data-for="bookshelfRefreshTooltip"
-                //   />
-                //}
-                // classes={{
-                //   wrapper: classes.wrapper,
-                //   labelContainer: classes.label,
-                // }}
               />
             </Tabs>
           </AppBar>
@@ -66,12 +45,6 @@ export class App extends React.Component {
             <Search />
             <Bookshelf active={value === 1} />
           </SwipeableViews>
-          {/* <ReactTooltip
-            id="bookshelfRefreshTooltip"
-            place="right"
-            effect="solid"
-            getContent={() => <Tooltip content={tooltipObj} />}
-          /> */}
         </section>
       </div>
     );

@@ -172,6 +172,7 @@ export class GenreSelector extends React.Component {
 
 GenreSelector.defaultProps = {
   classes: {},
+  bookshelf: [],
 };
 const styles = {
   legend: {

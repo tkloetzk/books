@@ -283,6 +283,7 @@ exports[`GenreSelector renders null with no props 1`] = `
     />
     <CSVLink
       asyncOnClick={false}
+      data={Array []}
       filename="generatedBy_react-csv.csv"
       headers={
         Array [

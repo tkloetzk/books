@@ -165,16 +165,6 @@ export class Book extends Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  // viewAmazonPage = href => {
-  //   var win = window.open(href, '_blank');
-  //   win.focus();
-  //   this.handleClose();
-  // };
-
-  // handleClose = () => {
-  //   this.setState({ anchorEl: null });
-  // };
-
   render() {
     const { classes, handleSave, handleDelete } = this.props;
     const { book, expanded, saveIcon, edits } = this.state;
@@ -266,25 +256,6 @@ export class Book extends Component {
             />
           </Typography>
         </div>
-        {/* className={classes.header}
-          action={
-            <IconButton onClick={this.handleExpandClick}>
-              <EditIcon />
-            </IconButton>
-          }
-          title={title}
-          subheader={subheader}
-        /> */}
-        {/* <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
-          <MenuItem onClick={() => this.viewAmazonPage(book.href)}>
-            View on Amazon
-          </MenuItem>
-        </Menu> */}
         {!isEmpty(book.thumbnail) && (
           <CardMedia
             className={classes.media}
