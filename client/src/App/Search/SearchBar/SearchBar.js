@@ -223,13 +223,14 @@ export class SearchBar extends Component {
       );
     }
     if (booklist.length) {
-      addBookToBookshelf(booklist).then(res => window.scrollTo(0, 0));
+      addBookToBookshelf(booklist);
     }
   };
 
   onClose = () => {
     this.setState({ duplicatedISBNs: [] });
   };
+
   render() {
     const { classes, booklist, modifiedBooklist } = this.props;
     const {
@@ -275,8 +276,14 @@ export class SearchBar extends Component {
           </Button>
         </span>
         {showSaveIcon && (
-          <Fab color="primary" aria-label="Save" className={classes.fab}>
-            <SaveIcon onClick={this.handleSave} />
+          <Fab
+            color="primary"
+            aria-label="Save"
+            className={classes.fab}
+            id="SaveIcon"
+            onClick={this.handleSave}
+          >
+            <SaveIcon />
           </Fab>
         )}
         {loading && (

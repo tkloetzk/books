@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { Book } from './Book';
 
 describe('Book', () => {
@@ -45,8 +45,166 @@ describe('Book', () => {
       expect(wrapper).toMatchSnapshot();
     });
   });
-  describe('componentDidUpdate', () => {});
-  describe('_handleFocusOut', () => {});
+  describe('componentDidUpdate', () => {
+    let prevProps;
+    let prevState;
+
+    beforeEach(() => {
+      prevProps = {
+        book: props.book,
+        classes: {},
+      };
+
+      const book = Object.assign({}, props.book, { differences: [] });
+      prevState = {
+        anchorEl: null,
+        expanded: false,
+        saveIcon: false,
+        edits: [],
+        originalBook: book,
+        book,
+      };
+    });
+    // edited but made no changes
+    it('does not update the book edits if no edits were actually made', () => {
+      const book = Object.assign({}, props.book, { differences: [] });
+      instance.state.book = book;
+      instance.state.originalBook = book;
+      instance.state.edits = [];
+
+      instance.componentDidUpdate(prevProps, prevState);
+      expect(instance.state.edits).toEqual([]);
+    });
+    // edited initially
+    it('updates the book edits if an edit was made', () => {
+      let book = Object.assign({}, props.book, {
+        title: 'New Title',
+        differences: [],
+      });
+      instance.state.book = book;
+
+      book = Object.assign({}, props.book, { differences: [] });
+      instance.state.originalBook = book;
+      instance.state.edits = [];
+
+      instance.componentDidUpdate(prevProps, prevState);
+      expect(instance.state.edits).toEqual([
+        {
+          currentValue: props.book.title,
+          key: 'title',
+          newValue: instance.state.book.title,
+        },
+      ]);
+    });
+    // edited then edited again
+    it('updates the book edits without removing the previous edits', () => {
+      const edits = [
+        {
+          currentValue: "Raising a Daughter After God's Own Heart",
+          key: 'title',
+          newValue: 'New Title',
+        },
+      ];
+      let book = Object.assign({}, props.book, {
+        title: 'New Title',
+        goodreadsAverageRating: 3,
+        differences: [],
+      });
+      instance.state.book = book;
+      instance.state.edits = edits;
+      prevState.edits = edits;
+      prevState.book.title = 'New Title';
+
+      book = Object.assign({}, props.book, { differences: [] });
+      instance.state.originalBook = book;
+
+      instance.componentDidUpdate(prevProps, prevState);
+      expect(instance.state.edits).toEqual([
+        {
+          currentValue: props.book.title,
+          key: 'title',
+          newValue: instance.state.book.title,
+        },
+        {
+          currentValue: props.book.goodreadsAverageRating,
+          key: 'goodreadsAverageRating',
+          newValue: instance.state.book.goodreadsAverageRating,
+        },
+      ]);
+    });
+    // every field is edited
+    it('updates the book edits for every field', () => {
+      let book = Object.assign({}, props.book, {
+        title: 'New Title',
+        categories: 'New Category',
+        amazonAverageRating: 3,
+        amazonRatingsCount: 30,
+        description: 'New Descript',
+        goodreadsAverageRating: 3.1,
+        goodreadsRatingsCount: 18,
+        isbn: '123948192',
+        differences: [],
+      });
+      instance.state.book = book;
+
+      book = Object.assign({}, props.book, { differences: [] });
+      instance.state.originalBook = book;
+      instance.state.edits = [];
+
+      instance.componentDidUpdate(prevProps, prevState);
+      expect(instance.state.edits).toEqual([
+        {
+          currentValue: props.book.categories,
+          key: 'categories',
+          newValue: ['New Category'],
+        },
+        {
+          currentValue: props.book.amazonAverageRating,
+          key: 'amazonAverageRating',
+          newValue: instance.state.book.amazonAverageRating,
+        },
+        {
+          currentValue: props.book.amazonRatingsCount,
+          key: 'amazonRatingsCount',
+          newValue: instance.state.book.amazonRatingsCount,
+        },
+        {
+          currentValue: props.book.isbn,
+          key: 'isbn',
+          newValue: instance.state.book.isbn,
+        },
+        {
+          currentValue: props.book.title,
+          key: 'title',
+          newValue: instance.state.book.title,
+        },
+        {
+          currentValue: props.book.description,
+          key: 'description',
+          newValue: instance.state.book.description,
+        },
+        {
+          currentValue: props.book.goodreadsAverageRating,
+          key: 'goodreadsAverageRating',
+          newValue: instance.state.book.goodreadsAverageRating,
+        },
+        {
+          currentValue: props.book.goodreadsRatingsCount,
+          key: 'goodreadsRatingsCount',
+          newValue: instance.state.book.goodreadsRatingsCount,
+        },
+      ]);
+    });
+    // owned update
+    // read update
+  });
+  //saveIcon
+  describe('_handleFocusOut', () => {
+    it('updates state on _handleFocusOut()', () => {
+      instance._handleFocusOut('updated text', 'title');
+      expect(instance.state.book.title).toEqual('updated text');
+    });
+  });
   // describe('handleExpandClick', () => {
   //   instance.handleExpandClick();
   //   expect(instance.state.expanded).toBe(true);

@@ -25,7 +25,6 @@ export class Bookshelf extends Component {
     updateBookOnBookshelf(book._id, assign(...fields));
   };
 
-  // TODO: This is being rendered twice
   render() {
     const { classes, bookshelf, active, deleteBookOnBookshelf } = this.props;
 
