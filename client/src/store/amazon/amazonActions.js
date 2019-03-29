@@ -1,14 +1,12 @@
 import * as types from './amazonActionTypes';
 import { LOADING_STATUSES } from '../../util/constants';
-import {
-  getAmazonBookService,
-  getAmazonBookServiceSingle,
-} from '../../services/amazonService';
+import { getAmazonBookServiceSingle } from '../../services/amazonService';
 
-export function getAmazonBookFailure(bool) {
+export function getAmazonBookFailure(bool, error) {
   return {
     type: types.FETCH_AMAZON_BOOK_HAS_ERRORED,
     hasErrored: bool,
+    error,
   };
 }
 
@@ -40,10 +38,11 @@ export function getAmazonBook(isbn) {
       .then(resp => {
         dispatch(getAmazonBookIsLoading(LOADING_STATUSES.success));
         dispatch(getSingleAmazonBookSuccess(resp.book));
+        dispatch(getAmazonBookFailure(false, null));
       })
       .catch(error => {
         dispatch(getAmazonBookIsLoading(LOADING_STATUSES.errored));
-        dispatch(getAmazonBookFailure(true));
+        dispatch(getAmazonBookFailure(true, error));
       });
   };
 }

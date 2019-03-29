@@ -11,9 +11,12 @@ export function getBookshelfService(includedGenres) {
     });
 }
 export function addBookshelfService(booklist) {
-  return axios.post(`${apiConfig.bookshelf}/add`, booklist).catch(error => {
-    throw error;
-  });
+  return axios
+    .post(`${apiConfig.bookshelf}/add`, booklist)
+    .then(res => res.data)
+    .catch(error => {
+      throw error;
+    });
 }
 
 export function updateBookOnBookshelfService(id, fields) {

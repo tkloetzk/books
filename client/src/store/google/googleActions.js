@@ -6,7 +6,7 @@ export function getGoogleBookFailure(bool, error) {
   return {
     type: types.FETCH_GOOGLE_BOOK_HAS_ERRORED,
     hasErrored: bool,
-    error
+    error,
   };
 }
 
@@ -31,7 +31,7 @@ export function getGoogleBook(isbn) {
       .then(resp => {
         dispatch(getGoogleBookIsLoading(LOADING_STATUSES.success));
         dispatch(getGoogleBookSuccess(resp));
-        dispatch(getGoogleBookFailure(false));
+        dispatch(getGoogleBookFailure(false, null));
       })
       .catch(error => {
         dispatch(getGoogleBookIsLoading(LOADING_STATUSES.errored));

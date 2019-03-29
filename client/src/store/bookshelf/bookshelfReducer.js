@@ -22,6 +22,7 @@ export default function bookshelf(state = initialState, action) {
     case types.FETCH_BOOKSHELF_HAS_ERRORED:
       return Object.assign({}, state, {
         hasErrored: action.hasErrored,
+        error: action.error,
       });
     case types.SAVE_COMBINED_BOOKS_SUCCESS:
       return Object.assign({}, state, {
@@ -66,7 +67,7 @@ export default function bookshelf(state = initialState, action) {
     }
     case types.UPDATE_BOOK_ON_BOOKSHELF_SUCCESS: {
       return Object.assign({}, state, {
-        modifiedBooklist: action.modifiedBooklist,
+        modifiedBooklist: initialState.modifiedBooklist,
         saveStatus: {
           status: LOADING_STATUSES.success,
           message: 'Save Successful',

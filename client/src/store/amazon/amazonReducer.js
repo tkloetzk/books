@@ -3,6 +3,7 @@ import { LOADING_STATUSES } from '../../util/constants';
 
 const initialState = {
   hasErrored: null,
+  error: null,
   books: [],
   isLoading: LOADING_STATUSES.initial,
 };
@@ -16,6 +17,7 @@ export default function amazonBookSearch(state = initialState, action) {
     case types.FETCH_AMAZON_BOOK_HAS_ERRORED:
       return Object.assign({}, state, {
         hasErrored: action.hasErrored,
+        error: action.error,
       });
     case types.FETCH_AMAZON_BOOK_IS_LOADING:
       return Object.assign({}, state, {

@@ -1,13 +1,12 @@
 import * as types from './goodreadsActionTypes';
-import {
-  getGoodreadsSingleBooksService,
-} from '../../services/goodreadsService';
+import { getGoodreadsSingleBooksService } from '../../services/goodreadsService';
 import { LOADING_STATUSES } from '../../util/constants';
 
-export function getGoodreadsBookFailure(bool) {
+export function getGoodreadsBookFailure(bool, error) {
   return {
     type: types.FETCH_GOODREADS_BOOK_HAS_ERRORED,
     hasErrored: bool,
+    error,
   };
 }
 
@@ -32,10 +31,11 @@ export function getGoodreadsBook(isbn) {
       .then(resp => {
         dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.success));
         dispatch(getGoodreadsBookSuccess(resp));
+        dispatch(getGoodreadsBookFailure(false, null));
       })
       .catch(error => {
         dispatch(getGoodreadsBookIsLoading(LOADING_STATUSES.errored));
-        dispatch(getGoodreadsBookFailure(true));
+        dispatch(getGoodreadsBookFailure(true, error));
       });
   };
 }

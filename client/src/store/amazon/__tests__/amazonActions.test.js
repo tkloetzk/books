@@ -21,16 +21,18 @@ describe('amazon actions', () => {
     getAmazonBookServiceSingle.mockClear();
   });
   it('can set amazon book hasErrored', () => {
-    const actionTrue = actions.getAmazonBookFailure(true);
+    const actionTrue = actions.getAmazonBookFailure(true, 'err');
     expect(actionTrue).toEqual({
       type: types.FETCH_AMAZON_BOOK_HAS_ERRORED,
       hasErrored: true,
+      error: 'err',
     });
 
-    const actionFalse = actions.getAmazonBookFailure(false);
+    const actionFalse = actions.getAmazonBookFailure(false, null);
     expect(actionFalse).toEqual({
       type: types.FETCH_AMAZON_BOOK_HAS_ERRORED,
       hasErrored: false,
+      error: null,
     });
   });
   it('can set amazon book isLoading', () => {
@@ -80,6 +82,7 @@ describe('amazon actions', () => {
         },
         type: 'FETCH_AMAZON_BOOK_SUCCESS',
       },
+      { error: null, hasErrored: false, type: 'FETCH_AMAZON_BOOK_HAS_ERRORED' },
     ];
     getAmazonBookServiceSingle.mockResolvedValue(response);
 
@@ -89,11 +92,11 @@ describe('amazon actions', () => {
   });
   it('can throw error on get amazon book', () => {
     const store = createMockStore();
-    const response = null;
+    const response = 'err';
     const expectedResponse = [
       { isLoading: 'loading', type: 'FETCH_AMAZON_BOOK_IS_LOADING' },
       { isLoading: 'errored', type: 'FETCH_AMAZON_BOOK_IS_LOADING' },
-      { hasErrored: true, type: 'FETCH_AMAZON_BOOK_HAS_ERRORED' },
+      { error: 'err', hasErrored: true, type: 'FETCH_AMAZON_BOOK_HAS_ERRORED' },
     ];
     getAmazonBookServiceSingle.mockRejectedValue(response);
 

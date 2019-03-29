@@ -24,16 +24,18 @@ describe('google actions', () => {
     getGoogleBookService.mockClear();
   });
   it('can set google book hasErrored', () => {
-    const actionTrue = actions.getGoogleBookFailure(true);
+    const actionTrue = actions.getGoogleBookFailure(true, 'err');
     expect(actionTrue).toEqual({
       type: types.FETCH_GOOGLE_BOOK_HAS_ERRORED,
       hasErrored: true,
+      error: 'err',
     });
 
-    const actionFalse = actions.getGoogleBookFailure(false);
+    const actionFalse = actions.getGoogleBookFailure(false, null);
     expect(actionFalse).toEqual({
       type: types.FETCH_GOOGLE_BOOK_HAS_ERRORED,
       hasErrored: false,
+      error: null,
     });
   });
   it('can set google book isLoading', () => {
@@ -90,7 +92,7 @@ describe('google actions', () => {
         type: 'FETCH_GOOGLE_BOOK_SUCCESS',
       },
       {
-        error: undefined,
+        error: null,
         hasErrored: false,
         type: 'FETCH_GOOGLE_BOOK_HAS_ERRORED',
       },
@@ -103,11 +105,11 @@ describe('google actions', () => {
   });
   it('can throw error on get google book', () => {
     const store = createMockStore();
-    const response = null;
+    const response = 'err';
     const expectedResponse = [
       { isLoading: 'loading', type: 'FETCH_GOOGLE_BOOK_IS_LOADING' },
       { isLoading: 'errored', type: 'FETCH_GOOGLE_BOOK_IS_LOADING' },
-      { error: null, hasErrored: true, type: 'FETCH_GOOGLE_BOOK_HAS_ERRORED' },
+      { error: 'err', hasErrored: true, type: 'FETCH_GOOGLE_BOOK_HAS_ERRORED' },
     ];
     getGoogleBookService.mockRejectedValue(response);
 

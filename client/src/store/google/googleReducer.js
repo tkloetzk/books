@@ -4,6 +4,7 @@ import { LOADING_STATUSES } from '../../util/constants';
 export const initialState = {
   hasErrored: false,
   books: [],
+  error: null,
   isLoading: LOADING_STATUSES.initial,
 };
 
@@ -16,6 +17,7 @@ export default function google(state = initialState, action) {
     case types.FETCH_GOOGLE_BOOK_HAS_ERRORED:
       return Object.assign({}, state, {
         hasErrored: action.hasErrored,
+        error: action.error,
       });
     case types.FETCH_GOOGLE_BOOK_IS_LOADING:
       return Object.assign({}, state, {

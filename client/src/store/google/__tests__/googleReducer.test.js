@@ -61,9 +61,11 @@ describe('google reducer', () => {
         {
           type: types.FETCH_GOOGLE_BOOK_HAS_ERRORED,
           hasErrored: true,
+          error: 'err',
         }
       );
       expect(hasErroredState.hasErrored).toEqual(true);
+      expect(hasErroredState.error).toEqual('err');
     });
 
     it('can set hasErrored state to true', () => {
@@ -72,9 +74,11 @@ describe('google reducer', () => {
         {
           type: types.FETCH_GOOGLE_BOOK_HAS_ERRORED,
           hasErrored: false,
+          error: null,
         }
       );
       expect(hasErroredState.hasErrored).toEqual(false);
+      expect(hasErroredState.error).toEqual(null);
     });
   });
 

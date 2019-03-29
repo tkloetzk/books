@@ -20,16 +20,18 @@ describe('goodreads actions', () => {
     getGoodreadsSingleBooksService.mockClear();
   });
   it('can set goodreads book hasErrored', () => {
-    const actionTrue = actions.getGoodreadsBookFailure(true);
+    const actionTrue = actions.getGoodreadsBookFailure(true, 'err');
     expect(actionTrue).toEqual({
       type: types.FETCH_GOODREADS_BOOK_HAS_ERRORED,
       hasErrored: true,
+      error: 'err',
     });
 
-    const actionFalse = actions.getGoodreadsBookFailure(false);
+    const actionFalse = actions.getGoodreadsBookFailure(false, null);
     expect(actionFalse).toEqual({
       type: types.FETCH_GOODREADS_BOOK_HAS_ERRORED,
       hasErrored: false,
+      error: null,
     });
   });
   it('can set goodreads book isLoading', () => {
@@ -57,7 +59,7 @@ describe('goodreads actions', () => {
       type: types.CLEAR_GOODREADS_BOOKS_SUCCESS,
     });
   });
-  it('can get google book', () => {
+  it('can get goodreads book', () => {
     const store = createMockStore();
     const expectedResponse = [
       { isLoading: 'loading', type: 'FETCH_GOODREADS_BOOK_IS_LOADING' },
@@ -69,6 +71,11 @@ describe('goodreads actions', () => {
           isbn: '9781400079094',
         },
         type: 'FETCH_GOODREADS_BOOK_SUCCESS',
+      },
+      {
+        error: null,
+        hasErrored: false,
+        type: 'FETCH_GOODREADS_BOOK_HAS_ERRORED',
       },
     ];
     getGoodreadsSingleBooksService.mockResolvedValue(book);
@@ -82,9 +89,13 @@ describe('goodreads actions', () => {
     const expectedResponse = [
       { isLoading: 'loading', type: 'FETCH_GOODREADS_BOOK_IS_LOADING' },
       { isLoading: 'errored', type: 'FETCH_GOODREADS_BOOK_IS_LOADING' },
-      { hasErrored: true, type: 'FETCH_GOODREADS_BOOK_HAS_ERRORED' },
+      {
+        error: 'err',
+        hasErrored: true,
+        type: 'FETCH_GOODREADS_BOOK_HAS_ERRORED',
+      },
     ];
-    getGoodreadsSingleBooksService.mockRejectedValue(null);
+    getGoodreadsSingleBooksService.mockRejectedValue('err');
 
     return store.dispatch(actions.getGoodreadsBook(book.isbn)).then(() => {
       expect(store.getActions()).toEqual(expectedResponse);
