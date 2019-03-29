@@ -110,15 +110,16 @@ export class Book extends Component {
   };
 
   componentDidMount() {
-    const { book } = this.props;
-
-    const mergedBook = Object.assign({}, this.state.book, book);
-    this.setState({ book: mergedBook, originalBook: mergedBook });
+    this.updateOriginalBook();
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { book, originalBook, edits } = this.state;
-    const { handleSave } = this.props;
+    const { handleSave, book: propBook } = this.props;
+
+    if (!isEqual(originalBook.adjustedRating, propBook.adjustedRating)) {
+      this.updateOriginalBook();
+    }
 
     if (
       !isEqual(book, prevProps.book) &&
@@ -148,6 +149,12 @@ export class Book extends Component {
     }
   }
 
+  updateOriginalBook = () => {
+    const { book } = this.props;
+
+    const mergedBook = Object.assign({}, this.state.book, book);
+    this.setState({ book: mergedBook, originalBook: mergedBook });
+  };
   handleOwnedReadBook = key => {
     const { book } = this.state;
 

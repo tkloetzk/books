@@ -66,7 +66,8 @@ export class Search extends React.Component {
       deleteModifiedBook,
     } = this.props;
     const { open } = this.state;
-    const books = sortBooklist(modifiedBooklist.concat(booklist)); // TODO: Not needed?
+    const books = sortBooklist(modifiedBooklist.concat(booklist));
+
     return (
       <div style={{ height: '74vh' }}>
         <SearchBar />
