@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { SearchBar } from './SearchBar';
 import Button from '@material-ui/core/Button';
 import { LOADING_STATUSES } from '../../../util/constants';
@@ -67,6 +67,12 @@ describe('SearchBar', () => {
         instance.handleChange({ target: { value: 'update state' } });
         expect(instance.state.multiline).toEqual('update state');
       });
+      it('TextField change updates state', () => {
+        const textfield = wrapper.find('TextField');
+        textfield.simulate('change', { target: { value: 'update state' } });
+
+        expect(instance.state.multiline).toEqual('update state');
+      });
     });
     describe('isbn array', () => {
       it('one long string with comma separator', () => {
@@ -96,6 +102,16 @@ describe('SearchBar', () => {
           '9780800731915',
           '9780375700002',
         ]);
+      });
+      it('calls handleSearch on button click', () => {
+        wrapper.setState({
+          multiline: '12345',
+          loading: false,
+        });
+        const button = wrapper.find('span').childAt(0);
+        button.simulate('click');
+
+        expect(instance.state.searchIsbns).toEqual(['12345']);
       });
     });
     describe('promise array', () => {
