@@ -8,10 +8,6 @@ const BookSchema = new Schema(
       required: true,
       unique: true,
     },
-    id: {
-      type: String,
-      unique: true,
-    },
     title: {
       type: String,
     },
@@ -45,9 +41,19 @@ const BookSchema = new Schema(
     goodreadsRatingsCount: {
       type: Number,
     },
+    read: {
+      type: Boolean,
+      default: false,
+    },
+    owned: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     collection: 'bookshelf',
+    unique: true,
+    sparse: true,
   }
 );
 

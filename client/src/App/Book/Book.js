@@ -3,38 +3,63 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
-// import ReadBook from './read-book.svg';
-import UnreadBook from '@material-ui/icons/BookOutlined';
+import ReadBook from '@material-ui/icons/CheckCircle';
+import UnreadBook from '@material-ui/icons/CheckCircleOutline';
+import Delete from '@material-ui/icons/DeleteForever';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/icons/AnnouncementOutlined';
 import ReactTooltip from 'react-tooltip';
 import get from 'lodash/get';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
+import isEmpty from 'lodash/isEmpty';
+import EditableLabel from 'react-inline-editing';
+import util from '../../util/combineBooks';
+import SaveIcon from '@material-ui/icons/Save';
+import remove from 'lodash/remove';
+import isEqual from 'lodash/isEqual';
+import UnownedBook from '@material-ui/icons/HomeOutlined';
+import OwnedBook from '@material-ui/icons/Home';
 
 const styles = {
   card: {
     maxWidth: 200,
     margin: '6px',
     padding: '5px',
+    maxHeight: 465,
   },
   different: {
     cursor: 'pointer',
     boxShadow:
       '0px 0px 3px 6px yellow, 0px 1px 1px 2px yellow, 0px 2px 1px 1px yellow',
   },
+  owned: {
+    backgroundColor: '#9bfaff',
+  },
   header: {
     '& span': {
       fontSize: '14px',
     },
+    marginTop: '-18px',
     height: '73px',
     textAlign: 'center',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
   },
+  topRightButton: {
+    marginTop: '-5px',
+    marginBottom: '-13px',
+    marginLeft: '157px',
+  },
+  topLeftButton: {
+    marginTop: '-43px',
+    marginLeft: '-5px',
+  },
   content: {
     fontSize: '12px',
-    padding: '6px',
+    margin: '-14px',
     height: '145px',
   },
   media: {
@@ -44,150 +69,348 @@ const styles = {
   },
   actions: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
   },
-  icon: {
-    paddingLeft: '0px',
+  expand: {
+    transform: 'rotate(0deg)',
+    // transition: theme.transitions.create('transform', {
+    //   duration: theme.transitions.duration.shortest,
+    // }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+    margin: 'auto',
   },
 };
-function RatingDisplay(props) {
-  if (!props.book) {
-    return null;
-  }
 
-  if (props.book.adjustedRating) {
-    return (
-      <Typography>
-        {Math.round(props.book.adjustedRating * 1000) / 1000}
-      </Typography>
-    );
-  }
-
-  return (
-    <React.Fragment>
-      <Typography style={{ textAlign: 'end' }}>
-        Amazon Rating:{' '}
-        {Math.round(props.book.amazonAverageRating * 1000) / 1000}
-        <br />
-        Goodreads Rating:{' '}
-        {Math.round(props.book.goodreadsAverageRating * 1000) / 1000}
-      </Typography>
-    </React.Fragment>
-  );
-}
-class Book extends Component {
+export class Book extends Component {
   state = {
     anchorEl: null,
-  };
-  handleExpandClick = event => {
-    console.log('clicked');
-    this.setState({
-      anchorEl: event.currentTarget,
-    });
+    expanded: false,
+    saveIcon: false,
+    edits: [],
+    originalBook: {},
+    book: {
+      title: '',
+      subtitle: '',
+      isbn: '',
+      description: '',
+      owned: false,
+      read: false,
+      differences: [],
+      amazonAverageRating: null,
+      amazonRatingsCount: null,
+      goodreadsAverageRating: null,
+      goodreadsRatingsCount: null,
+      adjustedRating: '',
+      categories: [],
+      thumbnail: '',
+    },
   };
 
-  // TODO: Create modal instead of redirecting
-  viewAmazonPage = href => {
-    var win = window.open(href, '_blank');
-    win.focus();
-    this.handleClose();
+  componentDidMount() {
+    const { book } = this.props;
+
+    const mergedBook = Object.assign({}, this.state.book, book);
+    this.setState({ book: mergedBook, originalBook: mergedBook });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { book, originalBook, edits } = this.state;
+    const { handleSave } = this.props;
+
+    if (
+      !isEqual(book, prevProps.book) &&
+      !isEqual(book, prevState.book) &&
+      !isEmpty(prevState.book.title)
+    ) {
+      this.setState({
+        edits: util.compareDifferences(originalBook, book, []),
+      });
+    }
+    if (edits.length && edits !== prevState.edits) {
+      this.setState({ saveIcon: true });
+    }
+
+    if (!edits.length && prevState.edits.length) {
+      this.setState({ saveIcon: false });
+    }
+
+    if (
+      originalBook.owned !== book.owned &&
+      book.owned !== prevState.book.owned
+    ) {
+      handleSave(book, [{ key: 'owned', newValue: book.owned }]);
+    }
+    if (originalBook.read !== book.read && book.read !== prevState.book.read) {
+      handleSave(book, [{ key: 'read', newValue: book.read }]);
+    }
+  }
+
+  handleOwnedReadBook = key => {
+    const { book } = this.state;
+
+    const updatedBook = Object.assign({}, book, { [key]: !book[key] });
+    this.setState({ book: updatedBook });
   };
-  handleClose = () => {
-    this.setState({ anchorEl: null });
+
+  _handleFocusOut = (text, property) => {
+    var book = { ...this.state.book };
+    book[property] = text;
+    this.setState({ book });
+  };
+
+  handleExpandClick = () => {
+    this.setState(state => ({ expanded: !state.expanded }));
   };
 
   render() {
-    const { book, classes } = this.props;
+    const { classes, handleSave, handleDelete } = this.props;
+    const { book, expanded, saveIcon, edits } = this.state;
 
     const title =
-      book.title.length < 92 ? book.title : book.title.substring(0, 92) + '...';
+      get(book, 'title', '').length < 92
+        ? book.title
+        : book.title.substring(0, 92) + '...';
 
     const subheader =
-      book.subtitle.length < 45
+      get(book, 'subtitle', '').length < 51
         ? book.subtitle
-        : book.subtitle.substring(0, 45) + '...';
+        : book.subtitle.substring(0, 51) + '...';
 
     const description =
-      book.description.length < 285
+      get(book, 'description', '').length < 295
         ? book.description
-        : book.description.substring(0, 285) + '...';
+        : book.description.substring(0, 295) + '...';
 
-    const differences = get(book, 'differences', []);
+    const goodreadsAverageRating =
+      Math.round(book.goodreadsAverageRating * 1000) / 1000;
+    const amazonAverageRating =
+      Math.round(book.amazonAverageRating * 1000) / 1000;
+
+    const owned = get(book, 'owned', false);
+    const read = get(book, 'read', false);
+
+    const bookDifferences = get(book, 'differences', []);
+    remove(bookDifferences, diff => diff.key === 'categories');
+    book.differences = bookDifferences;
+    const defaultStyle = {
+      maxWidth: 200,
+      margin: '6px',
+      padding: '5px',
+    };
+    const expandStyle = expanded
+      ? defaultStyle
+      : { ...defaultStyle, maxHeight: 461 };
 
     return (
       <Card
-        className={differences.length ? classes.different : null}
-        style={{ maxWidth: 200, margin: '6px', padding: '5px' }}
+        className={[
+          book.differences.length ? classes.different : null,
+          owned ? classes.owned : null,
+        ].join(' ')}
+        style={expandStyle}
         key={book.isbn}
       >
-        <div className={classes.header}>
-          <Typography variant="body1">{title}</Typography>
-          <Typography variant="caption">{subheader}</Typography>
-        </div>
-        {/* className={classes.header}
-          action={
-            <IconButton onClick={this.handleExpandClick}>
-              <EditIcon />
-            </IconButton>
-          }
-          title={title}
-          subheader={subheader}
-        /> */}
-        {/* <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
-          <MenuItem onClick={() => this.viewAmazonPage(book.href)}>
-            View on Amazon
-          </MenuItem>
-        </Menu> */}
-        <CardMedia
-          className={classes.media}
-          image={book.thumbnail}
-          title={book.title}
+        {!saveIcon && (
+          <IconButton
+            aria-label="Unread"
+            onClick={() => this.handleOwnedReadBook('read')}
+            children={read ? <ReadBook /> : <UnreadBook />}
+            className={classes.topRightButton}
+          />
+        )}
+        <IconButton
+          className={classes.topLeftButton}
+          onClick={() => handleDelete(book)}
+          children={<Delete />}
         />
-        <CardContent className={classes.content}>{description}</CardContent>
+        {saveIcon && (
+          <IconButton
+            onClick={() => [
+              handleSave(book, edits),
+              this.setState({ saveIcon: false }),
+            ]}
+            children={<SaveIcon />}
+            className={classes.topRightButton}
+          />
+        )}
+        <div className={classes.header}>
+          <Typography variant="body1" component="span">
+            <EditableLabel
+              text={title}
+              inputWidth="190px"
+              inputHeight="25px"
+              onFocus={() => {}}
+              onFocusOut={text => this._handleFocusOut(text, 'title')}
+            />
+          </Typography>
+          <Typography variant="caption" component="span">
+            <EditableLabel
+              text={subheader}
+              inputWidth="190px"
+              inputHeight="25px"
+              onFocus={() => {}}
+              onFocusOut={text => this._handleFocusOut(text, 'subtitle')}
+            />
+          </Typography>
+        </div>
+        {!isEmpty(book.thumbnail) && (
+          <CardMedia
+            className={classes.media}
+            image={book.thumbnail}
+            title={book.title}
+          />
+        )}
+        <CardContent className={classes.content}>
+          {!isEmpty(description) && (
+            <EditableLabel
+              text={description}
+              inputWidth="190px"
+              inputHeight="25px"
+              onFocus={() => {}}
+              onFocusOut={text => this._handleFocusOut(text, 'description')}
+            />
+          )}
+        </CardContent>
 
         <div className={classes.actions}>
-          {differences.length ? (
+          {book.differences.length ? (
             <React.Fragment>
               <Icon
                 aria-label="Differences"
-                className={classes.icon}
                 data-tip
                 data-for="differencesIcon"
               />
               <ReactTooltip id="differencesIcon" type="info" effect="solid">
-                {differences.map(different => (
-                  <span key={different.key}>
-                    {different.key} {different.currentValue} ->{' '}
-                    {different.newValue}
-                    <br />
-                  </span>
-                ))}
+                {book.differences.length > 0 &&
+                  book.differences.map(different => (
+                    <span key={different.key}>
+                      {different.key} {different.currentValue} ->{' '}
+                      {different.newValue}
+                      <br />
+                    </span>
+                  ))}
               </ReactTooltip>
             </React.Fragment>
           ) : (
-            <IconButton aria-label="Unread" className={classes.icon}>
-              <UnreadBook fontSize="large" />
-            </IconButton>
+            <React.Fragment>
+              <IconButton
+                aria-label="Onwed"
+                onClick={() => this.handleOwnedReadBook('owned')}
+                children={owned ? <OwnedBook /> : <UnownedBook />}
+              />
+            </React.Fragment>
           )}
-          <RatingDisplay book={book} />
+          <IconButton
+            className={expanded ? classes.expandOpen : classes.expand}
+            onClick={this.handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="Show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+          <Typography>
+            {Math.round(book.adjustedRating * 1000) / 1000}
+          </Typography>
         </div>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent style={{ textAlign: 'center' }}>
+            <Typography style={{ display: 'inline-flex' }} component="span">
+              ISBN:{' '}
+              <EditableLabel
+                text={book.isbn}
+                inputWidth="100px"
+                inputHeight="25px"
+                onFocus={() => {}}
+                onFocusOut={text => this._handleFocusOut(text, 'isbn')}
+              />
+            </Typography>
+            {!isEmpty(book.price) && (
+              <Typography style={{ display: 'inline-flex' }} component="span">
+                Price:{' '}
+                <EditableLabel
+                  text={book.price}
+                  inputWidth="75px"
+                  inputHeight="25px"
+                  onFocus={() => {}}
+                  onFocusOut={text => this._handleFocusOut(text, 'price')}
+                />
+              </Typography>
+            )}
+            <Typography style={{ display: 'inline-flex' }} component="span">
+              Amazon Rating:{' '}
+              <EditableLabel
+                text={`${amazonAverageRating}`}
+                inputWidth="75px"
+                inputHeight="25px"
+                onFocus={() => {}}
+                onFocusOut={text =>
+                  this._handleFocusOut(text, 'amazonAverageRating')
+                }
+              />
+            </Typography>
+            <Typography style={{ display: 'inline-flex' }} component="span">
+              Goodreads Rating:{' '}
+              <EditableLabel
+                text={`${goodreadsAverageRating}`}
+                inputWidth="75px"
+                inputHeight="25px"
+                onFocus={() => {}}
+                onFocusOut={text =>
+                  this._handleFocusOut(text, 'goodreadsAverageRating')
+                }
+              />
+            </Typography>
+            <Typography style={{ display: 'inline-flex' }} component="span">
+              Amazon Review:{' '}
+              <EditableLabel
+                text={`${book.amazonRatingsCount}`}
+                inputWidth="75px"
+                inputHeight="25px"
+                onFocus={() => {}}
+                onFocusOut={text =>
+                  this._handleFocusOut(text, 'amazonRatingsCount')
+                }
+              />
+            </Typography>
+            <Typography style={{ display: 'inline-flex' }} component="span">
+              Goodreads Review:{' '}
+              <EditableLabel
+                text={`${book.goodreadsRatingsCount}`}
+                inputWidth="75px"
+                inputHeight="25px"
+                onFocus={() => {}}
+                onFocusOut={text =>
+                  this._handleFocusOut(text, 'goodreadsRatingsCount')
+                }
+              />
+            </Typography>
+            <Typography style={{ display: 'inline-flex' }} component="span">
+              Category:{' '}
+              <EditableLabel
+                text={`${book.categories}`}
+                inputWidth="75px"
+                inputHeight="25px"
+                onFocus={() => {}}
+                onFocusOut={text => this._handleFocusOut(text, 'categories')}
+              />
+            </Typography>
+          </CardContent>
+        </Collapse>
       </Card>
     );
   }
 }
 
 Book.defaultProps = {
+  classes: {},
   book: {
-    title: '',
-    subtitle: '',
-    description: '',
     differences: [],
+    title: '',
+    description: '',
   },
 };
+
 export default withStyles(styles)(Book);

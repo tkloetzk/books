@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders with correct props 1`] = `
+<header
+  className="header"
+  style={
+    Object {
+      "height": undefined,
+      "zIndex": 1,
+    }
+  }
+>
+  <div
+    className="header-content display-4"
+  >
+    Book Review Aggregator
+  </div>
+</header>
+`;
+
+exports[`Header renders with no props 1`] = `
+<header
+  className="header"
+  style={
+    Object {
+      "height": undefined,
+      "zIndex": 1,
+    }
+  }
+>
+  <div
+    className="header-content display-4"
+  />
+</header>
+`;

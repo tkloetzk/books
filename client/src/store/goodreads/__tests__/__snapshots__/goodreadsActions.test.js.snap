@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`goodreads actions can clear goodreads books 1`] = `
+Array [
+  Array [
+    Object {
+      "type": "CLEAR_GOODREADS_BOOKS_SUCCESS",
+    },
+  ],
+]
+`;

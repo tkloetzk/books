@@ -1,83 +1,69 @@
 import React, { Component } from 'react';
 import GenreSelector from './GenreSelector/GenreSelector';
-import { getBookshelf } from '../../store/bookshelf/bookshelfActions';
+import {
+  getBookshelf,
+  updateBookOnBookshelf,
+  deleteBookOnBookshelf,
+} from '../../store/bookshelf/bookshelfActions';
 import { connect } from 'react-redux';
 import Results from '../Results/Results';
-import find from 'lodash/find';
-import forEach from 'lodash/forEach';
+import map from 'lodash/map';
+import assign from 'lodash/assign';
+import { withStyles } from '@material-ui/core/styles';
 
-class Bookshelf extends Component {
-  state = {
-    genres: [],
-  };
-
+export class Bookshelf extends Component {
   componentDidMount() {
     this.props.getBookshelf();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { booklist, getBookshelf, bookshelf } = this.props;
-    const { genres } = this.state;
+  handleSave = (book, edits) => {
+    const { updateBookOnBookshelf } = this.props;
 
-    if (!prevState.genres.length && bookshelf.length && !genres.length) {
-      const genres = [];
-      bookshelf.forEach(book =>
-        book.categories.forEach(category => {
-          if (!find(genres, { category })) {
-            genres.push({ category, checked: true });
-          }
-        })
-      );
-      this.setState({ genres });
-    }
-
-    // TODO: Not quite right, running after a search
-    if (booklist && booklist !== prevProps.booklist) {
-      getBookshelf();
-    }
-
-    if (genres !== prevState.genres && prevState.genres.length) {
-      const excludeGenre = [];
-      forEach(genres, genre => {
-        if (!genre.checked) {
-          excludeGenre.push(genre.category);
-        }
-      });
-      getBookshelf(excludeGenre);
-    }
-  }
-
-  handleChange = name => event => {
-    const { genres } = this.state;
-    this.setState({
-      genres: [
-        ...genres.filter(genre => name !== genre.category),
-        { category: name, checked: event.target.checked },
-      ],
+    const fields = map(edits, diff => {
+      return { [diff.key]: diff.newValue };
     });
+    updateBookOnBookshelf(book._id, assign(...fields));
   };
+
   // TODO: This is being rendered twice
   render() {
-    const { bookshelf } = this.props;
-    const { genres } = this.state;
+    const { classes, bookshelf, active, deleteBookOnBookshelf } = this.props;
+
     return (
       <React.Fragment>
-        <GenreSelector handleChange={this.handleChange} genres={genres} />
-        <Results booklist={bookshelf} />
+        <div className={classes.genreBar}>
+          <GenreSelector />
+        </div>
+        {active && (
+          <Results
+            booklist={bookshelf}
+            handleSave={(book, edits) => this.handleSave(book, edits)}
+            handleDelete={book => deleteBookOnBookshelf(book._id)}
+          />
+        )}
       </React.Fragment>
     );
   }
 }
 
+const styles = {
+  genreBar: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: '10px',
+  },
+};
 const mapStateToProps = state => {
   return {
-    bookshelf: state.bookshelf.bookshelf, // TODO: huh?
-    booklist: state.bookshelf.booklist,
+    bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
   };
 };
 
 const mapDispatchToProps = {
   getBookshelf,
+  updateBookOnBookshelf,
+  deleteBookOnBookshelf,
 };
 
 Bookshelf.defaultProps = {
@@ -87,4 +73,4 @@ Bookshelf.defaultProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Bookshelf);
+)(withStyles(styles)(Bookshelf));

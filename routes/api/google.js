@@ -6,7 +6,6 @@ const get = require('lodash').get;
 router.get('/v1/:isbn', (req, res) => {
   books.search(req.params.isbn, function(error, books) {
     if (!error) {
-      console.log('book', books[0]);
       // TODO: This needed? Use schema/model?
       const subtitle = get(books[0], 'subtitle', '');
       const book = {
@@ -19,7 +18,7 @@ router.get('/v1/:isbn', (req, res) => {
       };
       res.send(book);
     } else {
-      console.log(error);
+      console.error(error);
       res.error({ msg: error });
     }
   });

@@ -10,24 +10,25 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import { withStyles } from '@material-ui/core/styles';
+import { LOADING_STATUSES } from '../../util/constants';
 
 const variantIcon = {
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  error: ErrorIcon,
-  info: InfoIcon,
+  [LOADING_STATUSES.success]: CheckCircleIcon,
+  [LOADING_STATUSES.warning]: WarningIcon,
+  [LOADING_STATUSES.errored]: ErrorIcon,
+  [LOADING_STATUSES.info]: InfoIcon,
 };
 const styles = () => ({
-  success: {
+  [LOADING_STATUSES.success]: {
     backgroundColor: green[600],
   },
-  errored: {
+  [[LOADING_STATUSES.errored]]: {
     backgroundColor: 'red',
   },
-  info: {
+  [LOADING_STATUSES.info]: {
     backgroundColor: 'blue',
   },
-  warning: {
+  [LOADING_STATUSES.warning]: {
     backgroundColor: amber[700],
   },
   icon: {
@@ -42,7 +43,7 @@ const styles = () => ({
 
 const Notification = ({
   classes,
-  open,
+  open = false,
   handleClose,
   autoHideDuration,
   message,

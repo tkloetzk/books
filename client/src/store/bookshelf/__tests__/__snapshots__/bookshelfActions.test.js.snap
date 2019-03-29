@@ -1,0 +1,128 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bookshelf actions can clearBooks 1`] = `
+Array [
+  Array [
+    [Function],
+  ],
+  Array [
+    [Function],
+  ],
+  Array [
+    [Function],
+  ],
+]
+`;
+
+exports[`bookshelf actions can save combined books 1`] = `
+Array [
+  Array [
+    Object {
+      "booklist": Array [
+        Object {
+          "amazonAverageRating": 4.6,
+          "amazonRatingsCount": 29,
+          "categories": Array [
+            "Religion",
+          ],
+          "description": "Elizabeth George, bestselling author and mother of two daughters",
+          "goodreadsAverageRating": 4.25,
+          "goodreadsRatingsCount": 149,
+          "isbn": "9780736917728",
+          "price": "",
+          "subtitle": "",
+          "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover",
+          "title": "Raising a Daughter After God's Own Heart",
+        },
+      ],
+      "type": "SAVE_COMBINED_BOOKS_SUCCESS",
+    },
+  ],
+]
+`;
+
+exports[`bookshelf actions can saveModifiedBooks 1`] = `
+Array [
+  Array [
+    Object {
+      "modifiedBooklist": Array [
+        Object {
+          "amazonAverageRating": 4.6,
+          "amazonRatingsCount": 29,
+          "categories": Array [
+            "Religion",
+          ],
+          "description": "Elizabeth George, bestselling author and mother of two daughters",
+          "goodreadsAverageRating": 4.25,
+          "goodreadsRatingsCount": 149,
+          "isbn": "9780736917728",
+          "price": "",
+          "subtitle": "",
+          "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover",
+          "title": "Raising a Daughter After God's Own Heart",
+        },
+      ],
+      "type": "SAVE_MODIFIED_BOOKS_SUCCESS",
+    },
+  ],
+]
+`;
+
+exports[`bookshelf actions deleteModifiedBook 1`] = `
+Array [
+  Array [
+    Object {
+      "deleteISBN": "12345",
+      "type": "DELETE_BOOK_FROM_BOOKLIST_SUCCESS",
+    },
+  ],
+]
+`;
+
+exports[`bookshelf actions getBookshelf includedGenres = false, no genres selected 1`] = `
+Array [
+  Array [
+    Object {
+      "isLoading": true,
+      "type": "FETCH_BOOKSHELF_IS_LOADING",
+    },
+  ],
+  Array [
+    Object {
+      "isLoading": false,
+      "type": "FETCH_BOOKSHELF_IS_LOADING",
+    },
+  ],
+  Array [
+    Object {
+      "bookshelf": Array [],
+      "type": "FETCH_BOOKSHELF_SUCCESS",
+    },
+  ],
+]
+`;
+
+exports[`bookshelf actions insertModifiedBook 1`] = `
+Array [
+  Array [
+    Object {
+      "modifiedBook": Object {
+        "amazonAverageRating": 4.6,
+        "amazonRatingsCount": 29,
+        "categories": Array [
+          "Religion",
+        ],
+        "description": "Elizabeth George, bestselling author and mother of two daughters",
+        "goodreadsAverageRating": 4.25,
+        "goodreadsRatingsCount": 149,
+        "isbn": "9780736917728",
+        "price": "",
+        "subtitle": "",
+        "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover",
+        "title": "Raising a Daughter After God's Own Heart",
+      },
+      "type": "INSERT_MODIFIED_BOOK_SUCCESS",
+    },
+  ],
+]
+`;

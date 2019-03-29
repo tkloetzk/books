@@ -45,4 +45,5 @@ Header.propTypes = {
 };
 Header.defaultProps = {
   scrollAction: 250,
+  children: '',
 };

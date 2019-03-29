@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`google actions can clear google books 1`] = `
+Array [
+  Array [
+    Object {
+      "type": "CLEAR_GOOGLE_BOOKS_SUCCESS",
+    },
+  ],
+]
+`;

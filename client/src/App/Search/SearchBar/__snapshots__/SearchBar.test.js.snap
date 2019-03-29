@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchBar renders 1`] = `
+<form
+  autoComplete="off"
+  noValidate={true}
+>
+  <TextField
+    id="outlined-full-width"
+    margin="normal"
+    multiline={true}
+    onChange={[Function]}
+    required={false}
+    select={false}
+    style={
+      Object {
+        "width": "700px",
+      }
+    }
+    value=""
+    variant="outlined"
+  />
+  <span
+    data-for="searchButtonWrapper"
+    data-tip={true}
+    style={
+      Object {
+        "display": "flex",
+      }
+    }
+  >
+    <WithStyles(Button)
+      color="primary"
+      disabled={true}
+      onClick={[Function]}
+      variant="outlined"
+    >
+      Search
+    </WithStyles(Button)>
+  </span>
+  <ReactTooltip
+    effect="solid"
+    getContent={[Function]}
+    id="searchButtonWrapper"
+    insecure={true}
+    place="right"
+    resizeHide={true}
+    wrapper="div"
+  />
+  <WithStyles(Notification)
+    autoHideDuration={3500}
+    handleClose={[Function]}
+    message=" already shelved with no differences"
+    open={false}
+  />
+</form>
+`;

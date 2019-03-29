@@ -18,14 +18,16 @@ router.post('/v1', (req, res) => {
     })
     .catch(err => {
       // handle error
-      console.log('amazon err', err);
+      console.error('amazon err', err);
     });
 });
 
 router.post('/v2', (req, res) => {
+  // const api = '90d416faaa0849a3aac0e060f6faf854'
+  const api = 'ad7f80a474b68485cc2b6f22485fcd5f';
   const isbn = get(req.body, 'isbn');
   const url =
-    'http://api.scraperapi.com/?key=90d416faaa0849a3aac0e060f6faf854&url=' +
+    `http://api.scraperapi.com/?key=${api}&url=` +
     encodeURIComponent(
       `https://www.amazon.com/s/ref=sr_st_review-rank?keywords=${isbn}&rh=i%3Aaps%2Ck%3A${isbn}&sort=review-rank`
       // `https://www.amazon.com/s/ref=sr_nr_i_0?fst=as%3Aoff&rh=k%3A${isbn}%2Ci%3Astripbooks&keywords=${isbn}&ie=UTF8`
@@ -40,8 +42,8 @@ router.post('/v2', (req, res) => {
       },
     },
     function(error, response, html) {
-      console.log('Status:', response.statusCode);
-      console.log('Error:', error);
+      console.info('Status:', response.statusCode);
+      console.error('Error:', error);
 
       const keywordSelector = `a[href*="keywords=${isbn}"]`;
       const book = {

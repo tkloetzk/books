@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App Switching Tab functionality handleChange changes tabs 1`] = `
+<div
+  className="App"
+>
+  <Header
+    scrollAction={250}
+  >
+    Book Review Aggregator
+  </Header>
+  <section
+    className="container"
+  >
+    <WithStyles(AppBar)
+      color="default"
+      position="static"
+      style={
+        Object {
+          "marginTop": "-13px",
+        }
+      }
+    >
+      <WithStyles(Tabs)
+        indicatorColor="primary"
+        onChange={[Function]}
+        textColor="primary"
+        value={1}
+        variant="fullWidth"
+      >
+        <WithStyles(Tab)
+          label="Search"
+        />
+        <WithStyles(Tab)
+          label="Bookshelf"
+        />
+      </WithStyles(Tabs)>
+    </WithStyles(AppBar)>
+    <ReactSwipableView
+      animateHeight={false}
+      animateTransitions={true}
+      axis="x"
+      disableLazyLoading={false}
+      disabled={false}
+      enableMouseEvents={false}
+      hysteresis={0.6}
+      ignoreNativeScroll={false}
+      index={1}
+      resistance={false}
+      springConfig={
+        Object {
+          "delay": "0s",
+          "duration": "0.35s",
+          "easeFunction": "cubic-bezier(0.15, 0.3, 0.25, 1)",
+        }
+      }
+      style={
+        Object {
+          "maxHeight": "78vh",
+        }
+      }
+      threshold={5}
+    >
+      <Connect(Search) />
+      <Connect(WithStyles(Bookshelf))
+        active={true}
+      />
+    </ReactSwipableView>
+  </section>
+</div>
+`;
+
+exports[`App renders 1`] = `
+<div
+  className="App"
+>
+  <Header
+    scrollAction={250}
+  >
+    Book Review Aggregator
+  </Header>
+  <section
+    className="container"
+  >
+    <WithStyles(AppBar)
+      color="default"
+      position="static"
+      style={
+        Object {
+          "marginTop": "-13px",
+        }
+      }
+    >
+      <WithStyles(Tabs)
+        indicatorColor="primary"
+        onChange={[Function]}
+        textColor="primary"
+        value={0}
+        variant="fullWidth"
+      >
+        <WithStyles(Tab)
+          label="Search"
+        />
+        <WithStyles(Tab)
+          label="Bookshelf"
+        />
+      </WithStyles(Tabs)>
+    </WithStyles(AppBar)>
+    <ReactSwipableView
+      animateHeight={false}
+      animateTransitions={true}
+      axis="x"
+      disableLazyLoading={false}
+      disabled={false}
+      enableMouseEvents={false}
+      hysteresis={0.6}
+      ignoreNativeScroll={false}
+      index={0}
+      resistance={false}
+      springConfig={
+        Object {
+          "delay": "0s",
+          "duration": "0.35s",
+          "easeFunction": "cubic-bezier(0.15, 0.3, 0.25, 1)",
+        }
+      }
+      style={
+        Object {
+          "maxHeight": "78vh",
+        }
+      }
+      threshold={5}
+    >
+      <Connect(Search) />
+      <Connect(WithStyles(Bookshelf))
+        active={false}
+      />
+    </ReactSwipableView>
+  </section>
+</div>
+`;

@@ -2,7 +2,6 @@ const rp = require('request-promise');
 const $ = require('cheerio');
 
 const resultParse = isbn => {
-  console.log(isbn);
   const url =
     'http://api.scraperapi.com/?key=90d416faaa0849a3aac0e060f6faf854&url=' +
     encodeURIComponent(
@@ -35,7 +34,7 @@ const resultParse = isbn => {
       };
     })
     .catch(err => {
-      console.log('result parse err', err);
+      console.error('result parse err', err);
     });
 };
 
