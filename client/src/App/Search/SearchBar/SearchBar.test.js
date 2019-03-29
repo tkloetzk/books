@@ -14,6 +14,7 @@ describe('SearchBar', () => {
     props = {
       classes: {},
       modifiedBooklist: [],
+      booklist: [],
       clearBooks: jest.fn(),
       getAmazonBook: jest.fn(),
       getGoogleBook: jest.fn(),
@@ -23,6 +24,7 @@ describe('SearchBar', () => {
       saveCombinedBooks: jest.fn(),
       insertModifiedBook: jest.fn(),
       saveModifiedBooks: jest.fn(),
+      addBookToBookshelf: jest.fn(),
     };
     wrapper = shallow(<SearchBar {...props} />);
     instance = wrapper.instance();
@@ -123,6 +125,67 @@ describe('SearchBar', () => {
         expect(instance.props.getGoogleBook).toHaveBeenCalledTimes(3);
         expect(instance.props.getGoodreadsBook).toHaveBeenCalledTimes(3);
       });
+    });
+  });
+  describe('handleSave', () => {
+    let book = {};
+    beforeEach(() => {
+      book = {
+        amazonAverageRating: 4.7,
+        amazonRatingsCount: 1915,
+        price: '',
+        isbn: '9780064404990',
+        title: 'Year of the Griffin',
+        subtitle: '',
+        description:
+          "It is eight years after the tours from offworld have stopped. High Chancellor Querida has retired, leaving Wizard Corkoran in charge of the Wizards' University. Although Wizard Corkoran's obsession is to be the first man on the moon, and most of his time is devoted to this project, he decides he will teach the new first years himself in hopes of currying the favor of the new students' families—for surely they must all come from wealth, important families—and obtaining money for the University (which it so desperately needs). But Wizard Corkoran is dismayed to discover that one of those students—indeed, one he had such high hopes for, Wizard Derk's own daughter Elda—is a hugh golden griffin, and that none of the others has any money at all. Wizard Corkoran's money-making scheme backfires, and when Elda and her new friends start working magic on their own, the schemes go wronger still. And when, at length, Elda ropes in her brothers Kit and Blade to send Corkoran to the moon . . . well . . . life at the Wizards' University spins magically and magnificently out of control. This breathtakingly brilliant sequel to Dark Lord of Derkholm is all one would expect from this master of genre.",
+        thumbnail:
+          'http://books.google.com/books/content?id=zCe6gRHonZgC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+        categories: ['Juvenile Fiction'],
+        goodreadsAverageRating: 4.21,
+        goodreadsRatingsCount: 1860886,
+        adjustedRating: 4.455,
+      };
+    });
+    describe('Fab save', () => {
+      it('hides save button if there is no books in booklist', () => {
+        wrapper = mount(<SearchBar {...props} />);
+        const saveIcon = wrapper.find('button').at(1);
+        expect(saveIcon.length).toEqual(0);
+      });
+      it('shows save button if there are books in booklist and not in modifiedbooklist', () => {
+        props = Object.assign({}, props, { booklist: [book] });
+        wrapper = mount(<SearchBar {...props} />);
+
+        const saveIcon = wrapper.find('button').at(1);
+        expect(saveIcon).toMatchSnapshot();
+      });
+
+      it('shows save button if there are no books in booklist but in modifiedBooklist', () => {
+        props = Object.assign({}, props, { modifiedBooklist: [book] });
+        wrapper = mount(<SearchBar {...props} />);
+
+        const saveIcon = wrapper.find('button').at(1);
+        expect(saveIcon).toMatchSnapshot();
+      });
+    });
+    it('calls addBookToBookshelf with no modified books', () => {
+      props = Object.assign({}, props, { booklist: [book] });
+      wrapper = shallow(<SearchBar {...props} />);
+      instance = wrapper.instance();
+
+      instance.handleSave();
+
+      expect(instance.props.addBookToBookshelf).toHaveBeenCalledTimes(1);
+      expect(instance.props.addBookToBookshelf).toBeCalledWith(props.booklist);
+    });
+  });
+  describe('onClose', () => {
+    it('sets duplicatedISBNs to empty array', () => {
+      instance.state.duplicatedISBNs = ['9780805835595', '9780800731915'];
+      instance.onClose();
+
+      expect(instance.state.duplicatedISBNs).toEqual([]);
     });
   });
   describe('componentDidUpdate', () => {
