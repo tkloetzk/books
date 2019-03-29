@@ -60,7 +60,9 @@
       "!<rootDir>/src/setupTests.js",
       "!<rootDir>/src/setupProxy.js",
       "!<rootDir>/src/index.js",
-      "!<rootDir>/src/serviceWorker.js"
+      "!<rootDir>/src/serviceWorker.js",
+      "!<rootDir>/src/store/configureStore.js",
+      "!<rootDir>/src/store/index.js"
     ]
   }
 }
