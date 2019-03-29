@@ -1,30 +1,31 @@
-import goodreadsReducer from '../goodreadsReducer';
-import { initialState } from '../goodreadsReducer';
-import * as types from '../goodreadsActionTypes';
+import amazonReducer from '../amazonReducer';
+import { initialState } from '../amazonReducer';
+import * as types from '../amazonActionTypes';
 import { LOADING_STATUSES } from '../../../util/constants';
 
-describe('goodreads reducer', () => {
+describe('amazon reducer', () => {
   let book;
   beforeEach(() => {
     book = {
-      isbn: '9781400079094',
-      goodreadsAverageRating: 4.41,
-      goodreadsRatingsCount: 6440,
+      amazonAverageRating: 4.7,
+      amazonRatingsCount: 1916,
+      price: '',
+      isbn: '9780064404990',
     };
   });
   it('should return inital state if type is not found and no state passed in', () => {
-    const testState = goodreadsReducer(undefined, { type: 'FAKE' });
+    const testState = amazonReducer(undefined, { type: 'FAKE' });
     expect(testState).toEqual(initialState);
   });
   it('should return given state if type is not found', () => {
     const expectedState = 'example state';
-    const resultState = goodreadsReducer(expectedState, { type: 'FAKE' });
+    const resultState = amazonReducer(expectedState, { type: 'FAKE' });
     expect(resultState).toBe(expectedState);
   });
-  describe('FETCH_GOODREADS_BOOK_SUCCESS', () => {
+  describe('FETCH_AMAZON_BOOK_SUCCESS', () => {
     it('can save book to empty books array', () => {
-      const resultState = goodreadsReducer(initialState, {
-        type: types.FETCH_GOODREADS_BOOK_SUCCESS,
+      const resultState = amazonReducer(initialState, {
+        type: types.FETCH_AMAZON_BOOK_SUCCESS,
         book,
       });
       expect(resultState.books).toEqual([book]);
@@ -33,48 +34,49 @@ describe('goodreads reducer', () => {
     it('can save book to an exisiting books array', () => {
       const books = [
         {
-          isbn: '12341234',
-          goodreadsAverageRating: 3,
-          goodreadsRatingsCount: 1234,
+          amazonAverageRating: 3.7,
+          amazonRatingsCount: 16,
+          price: '',
+          isbn: '97800644043212',
         },
       ];
       const state = Object.assign({}, initialState, { books });
-      const resultState = goodreadsReducer(state, {
-        type: types.FETCH_GOODREADS_BOOK_SUCCESS,
+      const resultState = amazonReducer(state, {
+        type: types.FETCH_AMAZON_BOOK_SUCCESS,
         book,
       });
       expect(resultState.books).toEqual([...books, book]);
     });
   });
-  describe('FETCH_GOODREADS_BOOK_HAS_ERRORED', () => {
+  describe('FETCH_AMAZON_BOOK_HAS_ERRORED', () => {
     it('can set hasErrored state to true', () => {
-      const hasErroredState = goodreadsReducer(
+      const state = amazonReducer(
         {},
         {
-          type: types.FETCH_GOODREADS_BOOK_HAS_ERRORED,
+          type: types.FETCH_AMAZON_BOOK_HAS_ERRORED,
           hasErrored: true,
         }
       );
-      expect(hasErroredState.hasErrored).toEqual(true);
+      expect(state.hasErrored).toEqual(true);
     });
 
     it('can set hasErrored state to true', () => {
-      const hasErroredState = goodreadsReducer(
+      const state = amazonReducer(
         {},
         {
-          type: types.FETCH_GOODREADS_BOOK_HAS_ERRORED,
+          type: types.FETCH_AMAZON_BOOK_HAS_ERRORED,
           hasErrored: false,
         }
       );
-      expect(hasErroredState.hasErrored).toEqual(false);
+      expect(state.hasErrored).toEqual(false);
     });
   });
-  describe('FETCH_GOODREADS_BOOK_IS_LOADING', () => {
+  describe('FETCH_AMAZON_BOOK_IS_LOADING', () => {
     it('can set isLoading state to loading', () => {
-      const loadingState = goodreadsReducer(
+      const loadingState = amazonReducer(
         {},
         {
-          type: types.FETCH_GOODREADS_BOOK_IS_LOADING,
+          type: types.FETCH_AMAZON_BOOK_IS_LOADING,
           isLoading: LOADING_STATUSES.loading,
         }
       );
@@ -82,10 +84,10 @@ describe('goodreads reducer', () => {
     });
 
     it('can set isLoading state to success', () => {
-      const loadingState = goodreadsReducer(
+      const loadingState = amazonReducer(
         {},
         {
-          type: types.FETCH_GOODREADS_BOOK_IS_LOADING,
+          type: types.FETCH_AMAZON_BOOK_IS_LOADING,
           isLoading: LOADING_STATUSES.success,
         }
       );
@@ -93,20 +95,20 @@ describe('goodreads reducer', () => {
     });
 
     it('can set isLoading state to errored', () => {
-      const loadingState = goodreadsReducer(
+      const loadingState = amazonReducer(
         {},
         {
-          type: types.FETCH_GOODREADS_BOOK_IS_LOADING,
+          type: types.FETCH_AMAZON_BOOK_IS_LOADING,
           isLoading: LOADING_STATUSES.errored,
         }
       );
       expect(loadingState.isLoading).toEqual(LOADING_STATUSES.errored);
     });
   });
-  describe('CLEAR_GOODREADS_BOOKS_SUCCESS', () => {
+  describe('CLEAR_AMAZON_BOOKS_SUCCESS', () => {
     const state = Object.assign({}, initialState, { books: [book] });
-    const resultState = goodreadsReducer(state, {
-      type: types.CLEAR_GOODREADS_BOOKS_SUCCESS,
+    const resultState = amazonReducer(state, {
+      type: types.CLEAR_AMAZON_BOOKS_SUCCESS,
     });
     expect(resultState).toEqual(initialState);
   });

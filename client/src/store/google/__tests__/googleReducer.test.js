@@ -117,18 +117,7 @@ describe('google reducer', () => {
     });
   });
   describe('CLEAR_GOOGLE_BOOKS_SUCCESS', () => {
-    const books = [
-      {
-        title: 'Existing book',
-        isbn: '12341234',
-        subtitle: 'Subtitle',
-        description: 'Descritipn',
-        thumbnail:
-          'http://books.google.com/books/coover&img=1&zoom=1&edge=curl&source=gbs_api',
-        categories: ['Test Cat'],
-      },
-    ];
-    const state = Object.assign({}, initialState, { books });
+    const state = Object.assign({}, initialState, { books: [book] });
     const resultState = googleReducer(state, {
       type: types.CLEAR_GOOGLE_BOOKS_SUCCESS,
     });

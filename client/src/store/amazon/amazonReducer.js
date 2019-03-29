@@ -1,7 +1,7 @@
 import * as types from './amazonActionTypes';
 import { LOADING_STATUSES } from '../../util/constants';
 
-const initialState = {
+export const initialState = {
   hasErrored: null,
   error: null,
   books: [],
