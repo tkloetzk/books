@@ -107,6 +107,41 @@ describe('bookshelf reducer', () => {
       expect(resultState.modifiedBooklist).toEqual(modifiedBooklist);
     });
   });
+  describe('FETCH_BOOKSHELF', () => {
+    it('sets bookshelf on FETCH_BOOKSHELF_SUCCESS', () => {
+      const bookshelf = [
+        {
+          amazonAverageRating: 4.6,
+          amazonRatingsCount: 29,
+          price: '',
+          isbn: '9780736917728',
+          title: "Raising a Daughter After God's Own Heart",
+          subtitle: '',
+          description:
+            'Elizabeth George, bestselling author and mother of two daughters',
+          thumbnail:
+            'http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+          categories: ['Religion'],
+          goodreadsAverageRating: 4.25,
+          goodreadsRatingsCount: 149,
+        },
+      ];
+      const resultState = bookshelfReducer(initialState, {
+        type: types.FETCH_BOOKSHELF_SUCCESS,
+        bookshelf,
+      });
+      expect(resultState.bookshelf).toEqual(bookshelf);
+    });
+    it('sets saveStatus to failure on FETCH_BOOKSHELF_HAS_ERRORED', () => {
+      const resultState = bookshelfReducer(initialState, {
+        type: types.FETCH_BOOKSHELF_HAS_ERRORED,
+        hasErrored: true,
+        error: 'error',
+      });
+      expect(resultState.hasErrored).toEqual(true);
+      expect(resultState.error).toEqual('error');
+    });
+  });
   describe('INSERT_MODIFIED_BOOK_SUCCESS', () => {
     it('should return modifiedBooklist if existing book from bookshelf', () => {
       const modifiedBook = {
@@ -326,6 +361,17 @@ describe('bookshelf reducer', () => {
       expect(resultState.saveStatus).toEqual({
         status: LOADING_STATUSES.success,
         message: 'Save Successful',
+      });
+    });
+  });
+  describe('ADD_BOOK_TO_BOOKSHELF_FAILURE', () => {
+    it('add book to bookshelf failure', () => {
+      const resultState = bookshelfReducer(initialState, {
+        type: types.ADD_BOOK_TO_BOOKSHELF_FAILURE,
+      });
+      expect(resultState.saveStatus).toEqual({
+        status: LOADING_STATUSES.errored,
+        message: 'Save Failed',
       });
     });
   });

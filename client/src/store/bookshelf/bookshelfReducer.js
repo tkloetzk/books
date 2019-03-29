@@ -94,11 +94,6 @@ export default function bookshelf(state = initialState, action) {
         booklist: [...state.booklist],
       });
     }
-    case types.REFRESHED_BOOKSHELF: {
-      return Object.assign({}, state, {
-        refreshed: action.refreshed,
-      });
-    }
     default:
       return state;
   }
