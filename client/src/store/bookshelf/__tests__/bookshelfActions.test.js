@@ -117,14 +117,76 @@ describe('bookshelf actions', () => {
     });
   });
   it('insertModifiedBook', () => {
-    const action = actions.insertModifiedBookSuccess(booklist[0]);
-    expect(action).toEqual({
-      modifiedBook: booklist[0],
-      type: types.INSERT_MODIFIED_BOOK_SUCCESS,
+    const dispatch = jest.fn();
+    actions.insertModifiedBook(booklist[0])(dispatch);
+    expect(dispatch.mock.calls).toMatchSnapshot();
+  });
+  describe('getBookshelf', () => {
+    it('includedGenres = false, no genres selected', () => {
+      const dispatch = jest.fn();
+      actions.getBookshelf(false)(dispatch);
+      expect(dispatch.mock.calls).toMatchSnapshot();
+    });
+    it('bookshelf returned with includedGenres', () => {
+      const store = createMockStore();
+      const bookshelf = [
+        {
+          categories: ['Religion'],
+          read: false,
+          owned: false,
+          _id: '5c959505494f5dd029aeff74',
+          amazonAverageRating: 4.6,
+          amazonRatingsCount: 29,
+          price: '',
+          isbn: '9780736917728',
+          title: "Raising a Daughter After God's Own Heart",
+          subtitle: '',
+          description:
+            'Elizabeth George, bestselling author and mother of two daughters',
+          thumbnail: 'http://books.google.com/books/content?id=K_AhmQEACAAJ&pr',
+          goodreadsAverageRating: 4.25,
+          goodreadsRatingsCount: 149,
+          __v: 0,
+          adjustedRating: 4.425,
+        },
+      ];
+      const expectedResponse = [
+        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        {
+          bookshelf,
+          type: 'FETCH_BOOKSHELF_SUCCESS',
+        },
+        { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
+      ];
+      getBookshelfService.mockResolvedValue(bookshelf);
+
+      return store.dispatch(actions.getBookshelf(['Parenting'])).then(() => {
+        expect(store.getActions()).toEqual(expectedResponse);
+      });
+    });
+    it('getBookshelfService failed', () => {
+      const store = createMockStore();
+      const expectedResponse = [
+        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { error: 'err', hasErrored: true, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
+      ];
+      getBookshelfService.mockRejectedValue('err');
+
+      return store.dispatch(actions.getBookshelf(['Parenting'])).then(() => {
+        expect(store.getActions()).toEqual(expectedResponse);
+      });
     });
   });
-  // desribe('getBookshelf');
 
+  it('addBookToBookshelfFailure', () => {
+    const action = actions.addBookToBookshelfFailure('err');
+    expect(action).toEqual({
+      type: types.ADD_BOOK_TO_BOOKSHELF_FAILURE,
+      error: 'err',
+    });
+  });
   it('addBookToBookshelfSuccess', () => {
     const action = actions.addBookToBookshelfSuccess(booklist);
     expect(action).toEqual({
@@ -132,80 +194,75 @@ describe('bookshelf actions', () => {
       type: types.ADD_BOOK_TO_BOOKSHELF_SUCCESS,
     });
   });
-  it('addBookToBookshelf', () => {
-    const bookshelf = [
-      {
-        categories: ['Juvenile Fiction'],
-        read: false,
-        owned: false,
-        _id: '5c9d6b89f2ae7a3690d6fa42',
-        amazonAverageRating: 4.7,
-        amazonRatingsCount: 1916,
-        price: '',
-        isbn: '9780064404990',
-        title: 'Year of the Griffin',
-        subtitle: '',
-        description:
-          'It is eight years after the tours from offworld have stopped.',
-        thumbnail: 'http://books.google.com/books/content?id=zCe6gRHonZg',
-        goodreadsAverageRating: 4.21,
-        goodreadsRatingsCount: 1860678,
-        __v: 0,
-        adjustedRating: 4.449916512838346,
-      },
-      booklist[0],
-    ];
-    const store = createMockStore();
-    const expectedResponse = [
-      { booklist: [], type: 'ADD_BOOK_TO_BOOKSHELF_SUCCESS' },
-      { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
-      { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
-      {
-        bookshelf: [
-          {
-            __v: 0,
-            _id: '5c9d6b89f2ae7a3690d6fa42',
-            adjustedRating: 4.449916512838346,
-            amazonAverageRating: 4.7,
-            amazonRatingsCount: 1916,
-            categories: ['Juvenile Fiction'],
-            description:
-              'It is eight years after the tours from offworld have stopped.',
-            goodreadsAverageRating: 4.21,
-            goodreadsRatingsCount: 1860678,
-            isbn: '9780064404990',
-            owned: false,
-            price: '',
-            read: false,
-            subtitle: '',
-            thumbnail: 'http://books.google.com/books/content?id=zCe6gRHonZg',
-            title: 'Year of the Griffin',
-          },
-          {
-            amazonAverageRating: 4.6,
-            amazonRatingsCount: 29,
-            categories: ['Religion'],
-            description:
-              'Elizabeth George, bestselling author and mother of two daughters',
-            goodreadsAverageRating: 4.25,
-            goodreadsRatingsCount: 149,
-            isbn: '9780736917728',
-            price: '',
-            subtitle: '',
-            thumbnail:
-              'http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover',
-            title: "Raising a Daughter After God's Own Heart",
-          },
-        ],
-        type: 'FETCH_BOOKSHELF_SUCCESS',
-      },
-      { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
-    ];
-    addBookshelfService.mockResolvedValue(booklist);
-    getBookshelfService.mockResolvedValue(bookshelf);
+  describe('addBookToBookshelf', () => {
+    it('successful', () => {
+      const bookshelf = [
+        {
+          categories: ['Juvenile Fiction'],
+          read: false,
+          owned: false,
+          _id: '5c9d6b89f2ae7a3690d6fa42',
+          amazonAverageRating: 4.7,
+          amazonRatingsCount: 1916,
+          price: '',
+          isbn: '9780064404990',
+          title: 'Year of the Griffin',
+          subtitle: '',
+          description:
+            'It is eight years after the tours from offworld have stopped.',
+          thumbnail: 'http://books.google.com/books/content?id=zCe6gRHonZg',
+          goodreadsAverageRating: 4.21,
+          goodreadsRatingsCount: 1860678,
+          __v: 0,
+          adjustedRating: 4.449916512838346,
+        },
+        booklist[0],
+      ];
+      const store = createMockStore();
+      const expectedResponse = [
+        { booklist: [], type: 'ADD_BOOK_TO_BOOKSHELF_SUCCESS' },
+        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        {
+          bookshelf: [
+            bookshelf[0],
+            {
+              amazonAverageRating: 4.6,
+              amazonRatingsCount: 29,
+              categories: ['Religion'],
+              description:
+                'Elizabeth George, bestselling author and mother of two daughters',
+              goodreadsAverageRating: 4.25,
+              goodreadsRatingsCount: 149,
+              isbn: '9780736917728',
+              price: '',
+              subtitle: '',
+              thumbnail:
+                'http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover',
+              title: "Raising a Daughter After God's Own Heart",
+            },
+          ],
+          type: 'FETCH_BOOKSHELF_SUCCESS',
+        },
+        { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
+      ];
+      addBookshelfService.mockResolvedValue(booklist);
+      getBookshelfService.mockResolvedValue(bookshelf);
 
-    return store.dispatch(actions.addBookToBookshelf(booklist)).then(() => {
-      expect(store.getActions()).toEqual(expectedResponse);
+      return store.dispatch(actions.addBookToBookshelf(booklist)).then(() => {
+        expect(store.getActions()).toEqual(expectedResponse);
+      });
+    });
+    it('failed', () => {
+      const store = createMockStore();
+      const expectedResponse = [
+        { error: 'err', type: 'ADD_BOOK_TO_BOOKSHELF_FAILURE' },
+      ];
+      addBookshelfService.mockRejectedValue('err');
+
+      return store.dispatch(actions.addBookToBookshelf(booklist)).then(() => {
+        expect(store.getActions()).toEqual(expectedResponse);
+      });
     });
   });
   it('updateBookOnBookshelfSuccess', () => {
@@ -334,8 +391,18 @@ describe('bookshelf actions', () => {
         });
     });
   });
-  // it('deleteModifiedBookFromBooklist');
-  // it('deleteModifiedBook');
+  it('deleteModifiedBookFromBooklist', () => {
+    const action = actions.deleteModifiedBookFromBooklist('12345');
+    expect(action).toEqual({
+      type: types.DELETE_BOOK_FROM_BOOKLIST_SUCCESS,
+      deleteISBN: '12345',
+    });
+  });
+  it('deleteModifiedBook', () => {
+    const dispatch = jest.fn();
+    actions.deleteModifiedBook('12345')(dispatch);
+    expect(dispatch.mock.calls).toMatchSnapshot();
+  });
 
   it('can clearBooks', () => {
     const dispatch = jest.fn();
