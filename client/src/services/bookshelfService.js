@@ -1,11 +1,10 @@
 import apiConfig from '../config/apiConfig';
 import axios from 'axios';
-import sortBooklist from '../util/calculator';
 
-export function getBookshelfService(includedGenres) {
+export function getBookshelfService(includedGenres = []) {
   return axios
     .post(apiConfig.bookshelf, includedGenres)
-    .then(res => sortBooklist(res.data)) // TODO: Not needed?
+    .then(res => res.data)
     .catch(error => {
       throw error;
     });
