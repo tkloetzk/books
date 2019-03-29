@@ -15,7 +15,7 @@ describe('SearchBar', () => {
       classes: {},
       modifiedBooklist: [],
       clearBooks: jest.fn(),
-      getAmazonSingleBook: jest.fn(),
+      getAmazonBook: jest.fn(),
       getGoogleBook: jest.fn(),
       getGoodreadsBook: jest.fn(),
       saveCombinedBooks: jest.fn(),
@@ -103,7 +103,7 @@ describe('SearchBar', () => {
         instance.state.multiline = '9780805835595,9780800731915,9780375700002';
         instance.handleSearch();
 
-        expect(instance.props.getAmazonSingleBook).toHaveBeenCalledTimes(3);
+        expect(instance.props.getAmazonBook).toHaveBeenCalledTimes(3);
         expect(instance.props.getGoogleBook).toHaveBeenCalledTimes(3);
         expect(instance.props.getGoodreadsBook).toHaveBeenCalledTimes(3);
       });

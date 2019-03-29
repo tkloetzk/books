@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { getAmazonSingleBook } from '../../../store/amazon/amazonActions';
+import { getAmazonBook } from '../../../store/amazon/amazonActions';
 import { getGoodreadsBook } from '../../../store/goodreads/goodreadsActions';
 import {
   saveCombinedBooks,
@@ -177,7 +177,7 @@ export class SearchBar extends Component {
   };
 
   handleSearch = () => {
-    const { getAmazonSingleBook, getGoogleBook, getGoodreadsBook } = this.props;
+    const { getAmazonBook, getGoogleBook, getGoodreadsBook } = this.props;
     const { multiline, loading } = this.state;
     const isbns = multiline.split(/[\n, ]/).filter(v => v !== '');
     if (!loading) {
@@ -195,7 +195,7 @@ export class SearchBar extends Component {
       forEach(isbns, isbn => {
         const formattedIsbn = isbn.replace(/[- ]/g, '');
         return [
-          getAmazonSingleBook(formattedIsbn),
+          getAmazonBook(formattedIsbn),
           getGoogleBook(formattedIsbn),
           getGoodreadsBook(formattedIsbn),
         ];
@@ -331,7 +331,7 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = {
-  getAmazonSingleBook,
+  getAmazonBook,
   getGoodreadsBook,
   getGoogleBook,
   saveCombinedBooks,

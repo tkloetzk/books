@@ -54,9 +54,6 @@ export class Search extends React.Component {
       exisitingBook.differences = newDiff;
       insertModifiedBook(exisitingBook);
     } else {
-      // remove(booklist, obj => obj.isbn === book.isbn);
-      // const updatedBooklist = [...booklist, book];
-      // console.log(updatedBooklist);
       insertModifiedBook(book);
     }
   };
@@ -69,7 +66,7 @@ export class Search extends React.Component {
       deleteModifiedBook,
     } = this.props;
     const { open } = this.state;
-    const books = sortBooklist(modifiedBooklist.concat(booklist));
+    const books = sortBooklist(modifiedBooklist.concat(booklist)); // TODO: Not needed?
     return (
       <div style={{ height: '74vh' }}>
         <SearchBar />

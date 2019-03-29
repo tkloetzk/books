@@ -2,10 +2,11 @@ import * as types from './googleActionTypes';
 import { getGoogleBookService } from '../../services/googleService';
 import { LOADING_STATUSES } from '../../util/constants';
 
-export function getGoogleBookFailure(bool) {
+export function getGoogleBookFailure(bool, error) {
   return {
     type: types.FETCH_GOOGLE_BOOK_HAS_ERRORED,
     hasErrored: bool,
+    error,
   };
 }
 
@@ -30,10 +31,11 @@ export function getGoogleBook(isbn) {
       .then(resp => {
         dispatch(getGoogleBookIsLoading(LOADING_STATUSES.success));
         dispatch(getGoogleBookSuccess(resp));
+        dispatch(getGoogleBookFailure(false, null));
       })
       .catch(error => {
         dispatch(getGoogleBookIsLoading(LOADING_STATUSES.errored));
-        dispatch(getGoogleBookFailure(true));
+        dispatch(getGoogleBookFailure(true, error));
       });
   };
 }

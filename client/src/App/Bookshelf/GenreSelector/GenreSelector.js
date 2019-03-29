@@ -9,6 +9,10 @@ import { connect } from 'react-redux';
 import find from 'lodash/find';
 import forEach from 'lodash/forEach';
 import { getBookshelf } from '../../../store/bookshelf/bookshelfActions';
+import { CSVLink } from 'react-csv';
+import forOwn from 'lodash/forOwn';
+import DownloadIcon from '@material-ui/icons/SaveAlt';
+import Fab from '@material-ui/core/Fab';
 
 export class GenreSelector extends React.Component {
   state = {
@@ -21,6 +25,7 @@ export class GenreSelector extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { genres, deselectAll } = this.state;
     const { bookshelf, getBookshelf } = this.props;
+
     //Initial Load
     if (!prevState.genres.length && bookshelf.length && !genres.length) {
       bookshelf.forEach(book =>
@@ -86,8 +91,24 @@ export class GenreSelector extends React.Component {
     }
   };
   render() {
-    const { classes } = this.props;
+    const { classes, bookshelf } = this.props;
     const { genres, selectAll, deselectAll } = this.state;
+
+    let headers = [
+      { label: 'ISBN', key: 'isbn' },
+      { label: 'Title', key: 'title' },
+      { label: 'Subtitle', key: 'subtitle' },
+      { label: 'Categories', key: 'categories' },
+      { label: 'Description', key: 'description' },
+      { label: 'Amazon Average Rating', key: 'amazonAverageRating' },
+      { label: 'Amazon Ratings Count', key: 'amazonRatingsCount' },
+      { label: 'Goodreads Average Rating', key: 'goodreadsAverageRating' },
+      { label: 'Goodreads Ratings Count', key: 'goodreadsRatingsCount' },
+      { label: 'Adjusted Rating', key: 'adjustedRating' },
+      { label: 'Read', key: 'read' },
+      { label: 'Owned', key: 'owned' },
+    ];
+
     const selectionControls = [
       {
         handler: event => this.handleSelectAll(event),
@@ -101,7 +122,7 @@ export class GenreSelector extends React.Component {
       },
     ];
     return (
-      <FormControl component="fieldset" fullWidth>
+      <FormControl component="fieldset">
         <FormGroup row className={classes.formGroup}>
           <FormLabel component="label" className={classes.legend}>
             Genres:
@@ -138,6 +159,11 @@ export class GenreSelector extends React.Component {
               />
             );
           })}
+          <CSVLink data={bookshelf} headers={headers}>
+            <Fab size="small">
+              <DownloadIcon fontSize="small" />
+            </Fab>
+          </CSVLink>
         </FormGroup>
       </FormControl>
     );
@@ -146,6 +172,7 @@ export class GenreSelector extends React.Component {
 
 GenreSelector.defaultProps = {
   classes: {},
+  bookshelf: [],
 };
 const styles = {
   legend: {

@@ -24,10 +24,11 @@ export function getBookshelfSuccess(bookshelf) {
   };
 }
 
-export function getBookshelfFailure(bool) {
+export function getBookshelfFailure(bool, error) {
   return {
     type: types.FETCH_BOOKSHELF_HAS_ERRORED,
     hasErrored: bool,
+    error,
   };
 }
 
@@ -83,11 +84,12 @@ export function getBookshelf(includedGenres = []) {
         .then(bookshelf => {
           dispatch(getBookshelfIsLoading(false));
           dispatch(getBookshelfSuccess(bookshelf));
+          dispatch(getBookshelfFailure(false, null));
           return bookshelf;
         })
         .catch(error => {
           dispatch(getBookshelfIsLoading(false));
-          dispatch(getBookshelfFailure(true));
+          dispatch(getBookshelfFailure(true, error));
           console.error('bookshelf error', error);
         });
     }
@@ -125,10 +127,9 @@ export function addBookToBookshelf(booklist) {
   };
 }
 
-export function updateBookOnBookshelfSuccess(modifiedBooklist) {
+export function updateBookOnBookshelfSuccess() {
   return {
     type: types.UPDATE_BOOK_ON_BOOKSHELF_SUCCESS,
-    modifiedBooklist,
   };
 }
 export function updateBookOnBookshelfFailure(error) {
@@ -141,7 +142,7 @@ export function updateBookOnBookshelf(id, fields) {
   return dispatch => {
     return updateBookOnBookshelfService(id, fields)
       .then(saved => {
-        dispatch(updateBookOnBookshelfSuccess([]));
+        dispatch(updateBookOnBookshelfSuccess());
         // dispatch(getBookshelf());
       })
       .catch(error => {

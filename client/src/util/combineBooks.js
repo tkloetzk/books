@@ -2,7 +2,6 @@ import forEach from 'lodash/forEach';
 import mergeByKey from 'array-merge-by-key';
 import isEmpty from 'lodash/isEmpty';
 import isArray from 'lodash/isArray';
-import { isEqual } from 'date-fns';
 
 export function combineBooks(
   amazonBooks,

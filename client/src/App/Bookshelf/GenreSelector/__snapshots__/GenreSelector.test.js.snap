@@ -3,7 +3,6 @@
 exports[`GenreSelector renders as expected with bookshelf on initial load 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
-  fullWidth={true}
 >
   <WithStyles(FormGroup)
     row={true}
@@ -57,6 +56,87 @@ exports[`GenreSelector renders as expected with bookshelf on initial load 1`] = 
       key="DESELECT ALL"
       label="DESELECT ALL"
     />
+    <CSVLink
+      asyncOnClick={false}
+      data={
+        Array [
+          Object {
+            "categories": Array [
+              "Religion",
+            ],
+          },
+          Object {
+            "categories": Array [
+              "Fatherhood",
+            ],
+          },
+        ]
+      }
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
   </WithStyles(FormGroup)>
 </WithStyles(FormControl)>
 `;
@@ -64,7 +144,6 @@ exports[`GenreSelector renders as expected with bookshelf on initial load 1`] = 
 exports[`GenreSelector renders no genres with no books 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
-  fullWidth={true}
 >
   <WithStyles(FormGroup)
     row={true}
@@ -96,6 +175,74 @@ exports[`GenreSelector renders no genres with no books 1`] = `
       key="DESELECT ALL"
       label="DESELECT ALL"
     />
+    <CSVLink
+      asyncOnClick={false}
+      data={Array []}
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
   </WithStyles(FormGroup)>
 </WithStyles(FormControl)>
 `;
@@ -103,7 +250,6 @@ exports[`GenreSelector renders no genres with no books 1`] = `
 exports[`GenreSelector renders null with no props 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
-  fullWidth={true}
 >
   <WithStyles(FormGroup)
     row={true}
@@ -135,6 +281,74 @@ exports[`GenreSelector renders null with no props 1`] = `
       key="DESELECT ALL"
       label="DESELECT ALL"
     />
+    <CSVLink
+      asyncOnClick={false}
+      data={Array []}
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
   </WithStyles(FormGroup)>
 </WithStyles(FormControl)>
 `;

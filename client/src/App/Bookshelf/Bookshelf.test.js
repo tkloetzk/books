@@ -10,6 +10,7 @@ describe('Bookshelf', () => {
 
   beforeEach(() => {
     props = {
+      classes: {},
       getBookshelf: jest.fn(),
       updateBookOnBookshelf: jest.fn(),
       bookshelf: [],

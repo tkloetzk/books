@@ -12,10 +12,12 @@ describe('Results', () => {
       handleDelete: jest.fn(),
       booklist: [
         {
-          categories: ['Parenting'],
-          _id: '5c801a9f4549aac8fe03f088',
-          amazonAverageRating: 0,
-          amazonRatingsCount: 0,
+          categories: ['Family & Relationships'],
+          read: false,
+          owned: false,
+          _id: '5c959b90cc9ec5d1b4e96491',
+          amazonAverageRating: 4.4,
+          amazonRatingsCount: 340,
           price: '',
           isbn: '9780310338130',
           title: 'Hands Free Mama',
@@ -26,8 +28,9 @@ describe('Results', () => {
           thumbnail:
             'http://books.google.com/books/content?id=cYFKAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
           goodreadsAverageRating: 3.59,
-          goodreadsRatingsCount: 3180,
+          goodreadsRatingsCount: 3199,
           __v: 0,
+          adjustedRating: 4.0692698947939245,
         },
       ],
     };

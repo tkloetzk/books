@@ -1,14 +1,12 @@
 import * as types from './amazonActionTypes';
 import { LOADING_STATUSES } from '../../util/constants';
-import {
-  getAmazonBookService,
-  getAmazonBookServiceSingle,
-} from '../../services/amazonService';
+import { getAmazonBookService } from '../../services/amazonService';
 
-export function getAmazonBookFailure(bool) {
+export function getAmazonBookFailure(bool, error) {
   return {
     type: types.FETCH_AMAZON_BOOK_HAS_ERRORED,
     hasErrored: bool,
+    error,
   };
 }
 
@@ -28,38 +26,23 @@ export function getAmazonBookSuccess(books) {
 
 export function getSingleAmazonBookSuccess(book) {
   return {
-    type: types.FETCH_SINGLE_AMAZON_BOOK_SUCCESS,
+    type: types.FETCH_AMAZON_BOOK_SUCCESS,
     book,
   };
 }
 
-export function getAmazonBook(isbns) {
+export function getAmazonBook(isbn) {
   return dispatch => {
     dispatch(getAmazonBookIsLoading(LOADING_STATUSES.loading));
-    return getAmazonBookService(isbns)
-      .then(resp => {
-        dispatch(getAmazonBookIsLoading(LOADING_STATUSES.success));
-        dispatch(getAmazonBookSuccess(resp.books));
-        return resp.books;
-      })
-      .catch(error => {
-        dispatch(getAmazonBookIsLoading(LOADING_STATUSES.errored));
-        dispatch(getAmazonBookFailure(true));
-      });
-  };
-}
-
-export function getAmazonSingleBook(isbn) {
-  return dispatch => {
-    dispatch(getAmazonBookIsLoading(LOADING_STATUSES.loading));
-    return getAmazonBookServiceSingle(isbn)
+    return getAmazonBookService(isbn)
       .then(resp => {
         dispatch(getAmazonBookIsLoading(LOADING_STATUSES.success));
         dispatch(getSingleAmazonBookSuccess(resp.book));
+        dispatch(getAmazonBookFailure(false, null));
       })
       .catch(error => {
         dispatch(getAmazonBookIsLoading(LOADING_STATUSES.errored));
-        dispatch(getAmazonBookFailure(true));
+        dispatch(getAmazonBookFailure(true, error));
       });
   };
 }

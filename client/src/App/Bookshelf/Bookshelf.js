@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import Results from '../Results/Results';
 import map from 'lodash/map';
 import assign from 'lodash/assign';
-import { CSVLink } from 'react-csv';
+import { withStyles } from '@material-ui/core/styles';
 
 export class Bookshelf extends Component {
   componentDidMount() {
@@ -27,11 +27,13 @@ export class Bookshelf extends Component {
 
   // TODO: This is being rendered twice
   render() {
-    const { bookshelf, active, deleteBookOnBookshelf } = this.props;
+    const { classes, bookshelf, active, deleteBookOnBookshelf } = this.props;
+
     return (
       <React.Fragment>
-        <CSVLink data={bookshelf}>Download CSV</CSVLink>;
-        <GenreSelector />
+        <div className={classes.genreBar}>
+          <GenreSelector />
+        </div>
         {active && (
           <Results
             booklist={bookshelf}
@@ -44,6 +46,14 @@ export class Bookshelf extends Component {
   }
 }
 
+const styles = {
+  genreBar: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: '10px',
+  },
+};
 const mapStateToProps = state => {
   return {
     bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
@@ -63,4 +73,4 @@ Bookshelf.defaultProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Bookshelf);
+)(withStyles(styles)(Bookshelf));
