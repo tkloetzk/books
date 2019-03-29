@@ -1,6 +1,6 @@
 import * as types from './amazonActionTypes';
 import { LOADING_STATUSES } from '../../util/constants';
-import { getAmazonBookServiceSingle } from '../../services/amazonService';
+import { getAmazonBookService } from '../../services/amazonService';
 
 export function getAmazonBookFailure(bool, error) {
   return {
@@ -34,7 +34,7 @@ export function getSingleAmazonBookSuccess(book) {
 export function getAmazonBook(isbn) {
   return dispatch => {
     dispatch(getAmazonBookIsLoading(LOADING_STATUSES.loading));
-    return getAmazonBookServiceSingle(isbn)
+    return getAmazonBookService(isbn)
       .then(resp => {
         dispatch(getAmazonBookIsLoading(LOADING_STATUSES.success));
         dispatch(getSingleAmazonBookSuccess(resp.book));

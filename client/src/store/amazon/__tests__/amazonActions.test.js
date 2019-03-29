@@ -1,7 +1,7 @@
 import * as actions from '../amazonActions';
 import * as types from '../amazonActionTypes';
 import { LOADING_STATUSES } from '../../../util/constants';
-import { getAmazonBookServiceSingle } from '../../../services/amazonService';
+import { getAmazonBookService } from '../../../services/amazonService';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -18,7 +18,7 @@ describe('amazon actions', () => {
       price: '',
       isbn: '9780547564654',
     };
-    getAmazonBookServiceSingle.mockClear();
+    getAmazonBookService.mockClear();
   });
   it('can set amazon book hasErrored', () => {
     const actionTrue = actions.getAmazonBookFailure(true, 'err');
@@ -84,7 +84,7 @@ describe('amazon actions', () => {
       },
       { error: null, hasErrored: false, type: 'FETCH_AMAZON_BOOK_HAS_ERRORED' },
     ];
-    getAmazonBookServiceSingle.mockResolvedValue(response);
+    getAmazonBookService.mockResolvedValue(response);
 
     return store.dispatch(actions.getAmazonBook(book.isbn)).then(() => {
       expect(store.getActions()).toEqual(expectedResponse);
@@ -98,7 +98,7 @@ describe('amazon actions', () => {
       { isLoading: 'errored', type: 'FETCH_AMAZON_BOOK_IS_LOADING' },
       { error: 'err', hasErrored: true, type: 'FETCH_AMAZON_BOOK_HAS_ERRORED' },
     ];
-    getAmazonBookServiceSingle.mockRejectedValue(response);
+    getAmazonBookService.mockRejectedValue(response);
 
     return store.dispatch(actions.getAmazonBook(book.isbn)).then(() => {
       expect(store.getActions()).toEqual(expectedResponse);
