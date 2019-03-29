@@ -25,6 +25,7 @@ describe('SearchBar', () => {
       insertModifiedBook: jest.fn(),
       saveModifiedBooks: jest.fn(),
       addBookToBookshelf: jest.fn(),
+      updateBookOnBookshelf: jest.fn(),
     };
     wrapper = shallow(<SearchBar {...props} />);
     instance = wrapper.instance();
@@ -127,7 +128,7 @@ describe('SearchBar', () => {
       });
     });
   });
-  describe('handleSave', () => {
+  describe('Saving', () => {
     let book = {};
     beforeEach(() => {
       book = {
@@ -168,16 +169,99 @@ describe('SearchBar', () => {
         const saveIcon = wrapper.find('button').at(1);
         expect(saveIcon).toMatchSnapshot();
       });
+
+      it('calls handleSave on button click', () => {
+        props = Object.assign({}, props, { booklist: [book] });
+        wrapper = mount(<SearchBar {...props} />);
+
+        const saveIcon = wrapper.find('button').at(1);
+        saveIcon.simulate('click');
+
+        expect(wrapper.props().addBookToBookshelf).toHaveBeenCalledTimes(1);
+        expect(wrapper.props().addBookToBookshelf).toBeCalledWith(
+          props.booklist
+        );
+      });
     });
-    it('calls addBookToBookshelf with no modified books', () => {
-      props = Object.assign({}, props, { booklist: [book] });
-      wrapper = shallow(<SearchBar {...props} />);
-      instance = wrapper.instance();
+    describe('handleSave', () => {
+      it('calls addBookToBookshelf with no modified books', () => {
+        props = Object.assign({}, props, { booklist: [book] });
+        wrapper = shallow(<SearchBar {...props} />);
+        instance = wrapper.instance();
 
-      instance.handleSave();
+        instance.handleSave();
 
-      expect(instance.props.addBookToBookshelf).toHaveBeenCalledTimes(1);
-      expect(instance.props.addBookToBookshelf).toBeCalledWith(props.booklist);
+        expect(instance.props.addBookToBookshelf).toHaveBeenCalledTimes(1);
+        expect(instance.props.addBookToBookshelf).toBeCalledWith(
+          props.booklist
+        );
+      });
+      it('calls updateBookOnBookshelf with no books in booklist', () => {
+        book = Object.assign({}, book, {
+          _id: '12341346256243',
+          differences: [
+            {
+              key: 'goodreadsRatingsCount',
+              currentValue: book.goodreadsRatingsCount,
+              newValue: 1860898,
+            },
+            {
+              key: 'title',
+              currentValue: book.title,
+              newValue: 'new title',
+            },
+          ],
+        });
+        props = Object.assign({}, props, { modifiedBooklist: [book] });
+        wrapper = shallow(<SearchBar {...props} />);
+        instance = wrapper.instance();
+
+        instance.handleSave();
+
+        expect(instance.props.updateBookOnBookshelf).toHaveBeenCalledTimes(1);
+        expect(instance.props.updateBookOnBookshelf).toBeCalledWith(book._id, {
+          goodreadsRatingsCount: 1860898,
+          title: 'new title',
+        });
+      });
+      it('calls addBookToBookshelf and updateBookOnBookshelf', () => {
+        const modifiedBook = Object.assign({}, book, {
+          _id: '12341346256243',
+          differences: [
+            {
+              key: 'goodreadsRatingsCount',
+              currentValue: book.goodreadsRatingsCount,
+              newValue: 1860898,
+            },
+            {
+              key: 'title',
+              currentValue: book.title,
+              newValue: 'new title',
+            },
+          ],
+        });
+        props = Object.assign({}, props, {
+          booklist: [book],
+          modifiedBooklist: [modifiedBook],
+        });
+        wrapper = shallow(<SearchBar {...props} />);
+        instance = wrapper.instance();
+
+        instance.handleSave();
+
+        expect(instance.props.addBookToBookshelf).toHaveBeenCalledTimes(1);
+        expect(instance.props.addBookToBookshelf).toBeCalledWith(
+          props.booklist
+        );
+        expect(instance.props.updateBookOnBookshelf).toHaveBeenCalledTimes(1);
+        expect(instance.props.updateBookOnBookshelf).toBeCalledWith(
+          modifiedBook._id,
+          {
+            goodreadsRatingsCount: 1860898,
+            title: 'new title',
+          }
+        );
+      });
     });
   });
   describe('onClose', () => {

@@ -279,8 +279,9 @@ export class SearchBar extends Component {
             aria-label="Save"
             className={classes.fab}
             id="SaveIcon"
+            onClick={this.handleSave}
           >
-            <SaveIcon onClick={this.handleSave} />
+            <SaveIcon />
           </Fab>
         )}
         {loading && (

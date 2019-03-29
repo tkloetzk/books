@@ -1,12 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SearchBar handleSave Fab save shows save button if there are books in booklist and not in modifiedbooklist 1`] = `
+exports[`SearchBar Saving Fab save shows save button if there are books in booklist and not in modifiedbooklist 1`] = `
 <button
   aria-label="Save"
   className="MuiButtonBase-root-66 MuiFab-root-119 MuiFab-primary-121"
   disabled={false}
   id="SaveIcon"
   onBlur={[Function]}
+  onClick={[Function]}
   onContextMenu={[Function]}
   onFocus={[Function]}
   onKeyDown={[Function]}
@@ -23,15 +24,9 @@ exports[`SearchBar handleSave Fab save shows save button if there are books in b
   <span
     className="MuiFab-label-120"
   >
-    <pure(SaveIcon)
-      onClick={[Function]}
-    >
-      <SaveIcon
-        onClick={[Function]}
-      >
-        <WithStyles(SvgIcon)
-          onClick={[Function]}
-        >
+    <pure(SaveIcon)>
+      <SaveIcon>
+        <WithStyles(SvgIcon)>
           <SvgIcon
             classes={
               Object {
@@ -49,14 +44,12 @@ exports[`SearchBar handleSave Fab save shows save button if there are books in b
             color="inherit"
             component="svg"
             fontSize="default"
-            onClick={[Function]}
             viewBox="0 0 24 24"
           >
             <svg
               aria-hidden="true"
               className="MuiSvgIcon-root-105"
               focusable="false"
-              onClick={[Function]}
               role="presentation"
               viewBox="0 0 24 24"
             >
@@ -112,13 +105,14 @@ exports[`SearchBar handleSave Fab save shows save button if there are books in b
 </button>
 `;
 
-exports[`SearchBar handleSave Fab save shows save button if there are no books in booklist but in modifiedBooklist 1`] = `
+exports[`SearchBar Saving Fab save shows save button if there are no books in booklist but in modifiedBooklist 1`] = `
 <button
   aria-label="Save"
   className="MuiButtonBase-root-66 MuiFab-root-119 MuiFab-primary-121"
   disabled={false}
   id="SaveIcon"
   onBlur={[Function]}
+  onClick={[Function]}
   onContextMenu={[Function]}
   onFocus={[Function]}
   onKeyDown={[Function]}
@@ -135,15 +129,9 @@ exports[`SearchBar handleSave Fab save shows save button if there are no books i
   <span
     className="MuiFab-label-120"
   >
-    <pure(SaveIcon)
-      onClick={[Function]}
-    >
-      <SaveIcon
-        onClick={[Function]}
-      >
-        <WithStyles(SvgIcon)
-          onClick={[Function]}
-        >
+    <pure(SaveIcon)>
+      <SaveIcon>
+        <WithStyles(SvgIcon)>
           <SvgIcon
             classes={
               Object {
@@ -161,14 +149,12 @@ exports[`SearchBar handleSave Fab save shows save button if there are no books i
             color="inherit"
             component="svg"
             fontSize="default"
-            onClick={[Function]}
             viewBox="0 0 24 24"
           >
             <svg
               aria-hidden="true"
               className="MuiSvgIcon-root-105"
               focusable="false"
-              onClick={[Function]}
               role="presentation"
               viewBox="0 0 24 24"
             >
