@@ -10,7 +10,6 @@ import find from 'lodash/find';
 import forEach from 'lodash/forEach';
 import { getBookshelf } from '../../../store/bookshelf/bookshelfActions';
 import { CSVLink } from 'react-csv';
-import forOwn from 'lodash/forOwn';
 import DownloadIcon from '@material-ui/icons/SaveAlt';
 import Fab from '@material-ui/core/Fab';
 

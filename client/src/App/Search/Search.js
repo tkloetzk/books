@@ -41,7 +41,7 @@ export class Search extends React.Component {
   };
 
   handleSearchedBookEditSave = (book, edits) => {
-    const { modifiedBooklist, booklist, insertModifiedBook } = this.props;
+    const { modifiedBooklist, insertModifiedBook } = this.props;
 
     const exisitingBook = find(
       modifiedBooklist,
