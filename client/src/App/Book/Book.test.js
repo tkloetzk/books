@@ -37,10 +37,10 @@ describe('Book', () => {
     jest.clearAllMocks();
   });
   describe('renders', () => {
-    it('with no props', () => {
-      wrapper = shallow(<Book />);
-      expect(wrapper).toMatchSnapshot();
-    });
+    // it('with no props', () => {
+    //   wrapper = shallow(<Book />);
+    //   expect(wrapper).toMatchSnapshot();
+    // });
     it('with correct props', () => {
       expect(wrapper).toMatchSnapshot();
     });
@@ -64,6 +64,18 @@ describe('Book', () => {
         originalBook: book,
         book,
       };
+    });
+    // adjusted rating updated, should update original book
+    it('updates book when adjusted rating changes', () => {
+      const propBook = Object.assign({}, props.book, { adjustedRating: 3 });
+      props = Object.assign({}, props, { book: propBook });
+      wrapper = shallow(<Book {...props} />);
+      instance = wrapper.instance();
+      instance.state.originalBook.adjustedRating = 4.225772626931567;
+
+      instance.componentDidUpdate(prevProps, prevState);
+
+      expect(instance.state.originalBook.adjustedRating).toEqual(3);
     });
     // edited but made no changes
     it('does not update the book edits if no edits were actually made', () => {
