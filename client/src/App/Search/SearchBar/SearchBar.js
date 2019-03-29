@@ -170,6 +170,7 @@ export class SearchBar extends Component {
       this.setState({ success: true, loading: false, multiline: '' });
     }
   }
+
   handleChange = event => {
     this.setState({
       multiline: event.target.value,
