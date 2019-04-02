@@ -72,6 +72,17 @@ describe('bookshelf actions', () => {
     expect(dispatch.mock.calls).toMatchSnapshot();
   });
 
+  it('can set filters', () => {
+    const filters = [
+      { key: 'unread', value: true },
+      { key: 'owned', value: false },
+    ];
+    const actionTrue = actions.filterBookshelf(filters);
+    expect(actionTrue).toEqual({
+      type: types.FILTER_BOOKSHELF_SUCCESS,
+      filters,
+    });
+  });
   it('can set booklist hasErrored', () => {
     const actionTrue = actions.getBookshelfFailure(true, 'err');
     expect(actionTrue).toEqual({

@@ -2,6 +2,7 @@ import * as types from './bookshelfActionTypes';
 import { LOADING_STATUSES } from '../../util/constants';
 import some from 'lodash/some';
 import remove from 'lodash/remove';
+import { CardActions } from '@material-ui/core';
 
 export const initialState = {
   hasErrored: null,
@@ -11,6 +12,7 @@ export const initialState = {
   error: null,
   saveStatus: { status: LOADING_STATUSES.initial, message: '' },
   refreshed: false,
+  filters: [],
 };
 
 export default function bookshelf(state = initialState, action) {
@@ -23,6 +25,10 @@ export default function bookshelf(state = initialState, action) {
       return Object.assign({}, state, {
         hasErrored: action.hasErrored,
         error: action.error,
+      });
+    case types.FILTER_BOOKSHELF_SUCCESS:
+      return Object.assign({}, state, {
+        filters: action.filters,
       });
     case types.SAVE_COMBINED_BOOKS_SUCCESS:
       return Object.assign({}, state, {

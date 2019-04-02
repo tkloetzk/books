@@ -70,6 +70,13 @@ export function insertModifiedBook(book) {
     dispatch(insertModifiedBookSuccess(book));
   };
 }
+
+export function filterBookshelf(filters) {
+  return {
+    type: types.FILTER_BOOKSHELF_SUCCESS,
+    filters,
+  };
+}
 export function getBookshelf(includedGenres = []) {
   return dispatch => {
     dispatch(getBookshelfIsLoading(true));

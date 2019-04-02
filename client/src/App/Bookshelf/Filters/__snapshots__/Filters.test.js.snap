@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Filters renders with correct props 1`] = `
+<WithStyles(FormControl)
+  component="fieldset"
+>
+  <WithStyles(FormGroup)
+    row={true}
+  >
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Switch)
+          color="primary"
+          onChange={[Function]}
+          value="owned"
+        />
+      }
+      key="owned"
+      label="OWNED"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Switch)
+          color="primary"
+          onChange={[Function]}
+          value="unread"
+        />
+      }
+      key="unread"
+      label="UNREAD"
+    />
+  </WithStyles(FormGroup)>
+</WithStyles(FormControl)>
+`;
+
+exports[`Filters renders with no function passed in 1`] = `
+<WithStyles(FormControl)
+  component="fieldset"
+>
+  <WithStyles(FormGroup)
+    row={true}
+  >
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Switch)
+          color="primary"
+          onChange={[Function]}
+          value="owned"
+        />
+      }
+      key="owned"
+      label="OWNED"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Switch)
+          color="primary"
+          onChange={[Function]}
+          value="unread"
+        />
+      }
+      key="unread"
+      label="UNREAD"
+    />
+  </WithStyles(FormGroup)>
+</WithStyles(FormControl)>
+`;

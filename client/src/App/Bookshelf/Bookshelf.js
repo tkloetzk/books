@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import GenreSelector from './GenreSelector/GenreSelector';
+import Filters from './Filters/Filters';
 import {
   getBookshelf,
   updateBookOnBookshelf,
@@ -32,6 +33,7 @@ export class Bookshelf extends Component {
       <React.Fragment>
         <div className={classes.genreBar}>
           <GenreSelector />
+          <Filters />
         </div>
         {active && (
           <Results
@@ -51,6 +53,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: '10px',
+    flexDirection: 'column',
   },
 };
 const mapStateToProps = state => {

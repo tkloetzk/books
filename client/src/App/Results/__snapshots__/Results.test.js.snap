@@ -4,7 +4,7 @@ exports[`Results renders with correct props 1`] = `
 <WithStyles(Grid)
   container={true}
 >
-  <WithStyles(Book)
+  <Connect(WithStyles(Book))
     book={
       Object {
         "__v": 0,
@@ -38,7 +38,7 @@ exports[`Results renders with no delete function 1`] = `
 <WithStyles(Grid)
   container={true}
 >
-  <WithStyles(Book)
+  <Connect(WithStyles(Book))
     book={
       Object {
         "__v": 0,
@@ -78,7 +78,7 @@ exports[`Results renders with no save function 1`] = `
 <WithStyles(Grid)
   container={true}
 >
-  <WithStyles(Book)
+  <Connect(WithStyles(Book))
     book={
       Object {
         "__v": 0,

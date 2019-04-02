@@ -364,8 +364,21 @@ describe('bookshelf reducer', () => {
       });
     });
   });
+  describe('FILTER_BOOKSHELF_SUCCESS', () => {
+    it('can update filters', () => {
+      const filters = [
+        { key: 'unread', value: true },
+        { key: 'owned', value: false },
+      ];
+      const resultState = bookshelfReducer(initialState, {
+        type: types.FILTER_BOOKSHELF_SUCCESS,
+        filters,
+      });
+      expect(resultState.filters).toEqual(filters);
+    });
+  });
   describe('ADD_BOOK_TO_BOOKSHELF_FAILURE', () => {
-    it('add book to bookshelf failure', () => {
+    it('can add book to bookshelf failure', () => {
       const resultState = bookshelfReducer(initialState, {
         type: types.ADD_BOOK_TO_BOOKSHELF_FAILURE,
       });

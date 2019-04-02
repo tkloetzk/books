@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
+import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import ReadBook from '@material-ui/icons/CheckCircle';
 import UnreadBook from '@material-ui/icons/CheckCircleOutline';
@@ -21,6 +22,7 @@ import remove from 'lodash/remove';
 import isEqual from 'lodash/isEqual';
 import UnownedBook from '@material-ui/icons/HomeOutlined';
 import OwnedBook from '@material-ui/icons/Home';
+import forEach from 'lodash/forEach';
 
 const styles = {
   card: {
@@ -155,6 +157,7 @@ export class Book extends Component {
     const mergedBook = Object.assign({}, this.state.book, book);
     this.setState({ book: mergedBook, originalBook: mergedBook });
   };
+
   handleOwnedReadBook = key => {
     const { book } = this.state;
 
@@ -173,8 +176,27 @@ export class Book extends Component {
   };
 
   render() {
-    const { classes, handleSave, handleDelete } = this.props;
+    const { classes, handleSave, handleDelete, filters } = this.props;
     const { book, expanded, saveIcon, edits } = this.state;
+
+    const owned = get(book, 'owned', false);
+    const read = get(book, 'read', false);
+
+    let filteredBook = false;
+    forEach(filters, filter => {
+      if (filter.value) {
+        if (
+          (filter.key === 'unread' && read) ||
+          (filter.key === 'owned' && !owned)
+        ) {
+          filteredBook = true;
+        }
+      }
+    });
+
+    if (filteredBook) {
+      return null;
+    }
 
     const title =
       get(book, 'title', '').length < 92
@@ -195,9 +217,6 @@ export class Book extends Component {
       Math.round(book.goodreadsAverageRating * 1000) / 1000;
     const amazonAverageRating =
       Math.round(book.amazonAverageRating * 1000) / 1000;
-
-    const owned = get(book, 'owned', false);
-    const read = get(book, 'read', false);
 
     const bookDifferences = get(book, 'differences', []);
     remove(bookDifferences, diff => diff.key === 'categories');
@@ -420,4 +439,10 @@ Book.defaultProps = {
   },
 };
 
-export default withStyles(styles)(Book);
+const mapStateToProps = state => {
+  return {
+    filters: state.bookshelf.filters,
+  };
+};
+
+export default connect(mapStateToProps)(withStyles(styles)(Book));
