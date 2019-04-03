@@ -3,7 +3,6 @@ import { shallow, mount } from 'enzyme';
 import { SearchBar, mapStateToProps } from './SearchBar';
 import Button from '@material-ui/core/Button';
 import { LOADING_STATUSES } from '../../../util/constants';
-import cloneDeep from 'lodash/cloneDeep';
 
 describe('SearchBar', () => {
   let props;
@@ -21,7 +20,6 @@ describe('SearchBar', () => {
       getGoodreadsBook: jest.fn(),
       saveCombinedBooks: jest.fn(),
       amazonBookErrored: false,
-      saveCombinedBooks: jest.fn(),
       insertModifiedBook: jest.fn(),
       saveModifiedBooks: jest.fn(),
       addBookToBookshelf: jest.fn(),
@@ -41,24 +39,24 @@ describe('SearchBar', () => {
   it('mapStateToProps', () => {
     const mockedState = {
       amazon: {
-        books: [],
+        books: [{'title': 'amazonBook'}],
         hasErrored: false,
       },
       google: {
-        books: [],
+        books: [{'title': 'googleBook'}],
         hasErrored: false,
       },
       goodreads: {
-        books: [],
+        books: [{'title': 'goodreadsBook'}],
         hasErrored: false,
       },
       bookshelf: {
         booklist: [],
-        bookshelf: [],
+        bookshelf: [{'title': 'bookshelf'}],
       }
     }
     const state = mapStateToProps(mockedState)
-    expect(state).toEqual({"amazonBookErrored": false, "amazonBooks": [], "booklist": [], "bookshelf": [], "goodreadsBooks": [], "goodreadsBooksErrored": false, "googleBooks": [], "googleBooksErrored": false, "modifiedBooklist": undefined})
+    expect(state).toEqual({"amazonBookErrored": false, "amazonBooks": mockedState.amazon.books, "booklist": [], "bookshelf": mockedState.bookshelf.bookshelf, "goodreadsBooks": mockedState.goodreads.books, "goodreadsBooksErrored": false, "googleBooks": mockedState.google.books, "googleBooksErrored": false, "modifiedBooklist": undefined})
   })
   describe('search', () => {
     describe('button', () => {

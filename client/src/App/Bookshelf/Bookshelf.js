@@ -56,11 +56,10 @@ const styles = {
     flexDirection: 'column',
   },
 };
-const mapStateToProps = state => {
-  return {
-    bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
-  };
-};
+
+export const mapStateToProps = state => ({
+  bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
+});
 
 const mapDispatchToProps = {
   getBookshelf,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Bookshelf } from './Bookshelf';
+import { Bookshelf, mapStateToProps } from './Bookshelf';
 
 describe('Bookshelf', () => {
   let props;
@@ -63,6 +63,15 @@ describe('Bookshelf', () => {
       expect(wrapper).toMatchSnapshot();
     });
   });
+  it('mapStateToProps', () => {
+    const mockedState = {
+      bookshelf: {
+        bookshelf: [{title: 'title'}],
+      }
+    }
+    const state = mapStateToProps(mockedState)
+    expect(state).toEqual({"bookshelf": mockedState.bookshelf.bookshelf})
+  })
   describe('handleSave', () => {
     it('calls successfully', () => {
       bookshelf[0]._id = '1234';
