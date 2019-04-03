@@ -1,7 +1,13 @@
 import get from 'lodash/get';
+import forEach from 'lodash/forEach'
+import clone from 'lodash/clone'
 
-//TODO: probably shouldn't be modifying original booklist?
-export default function sortBooklist(booklist) {
+let meanGoodreadsVotes
+let meanAmazonVotes
+let totalMean
+
+export default function sortBooklist(originalBooklist) {
+  const booklist = clone(originalBooklist);
   calculateMeans(booklist);
   calculateAdjustedRating(booklist);
   booklist.sort((a, b) =>
@@ -18,19 +24,19 @@ function calculateMeans(booklist) {
   let goodreadsVotes = 0,
     amazonVotes = 0,
     total = 0;
-  for (var i = 0; i < booklist.length; i++) {
-    //TODO: Best for loop?
-    // for (Book book: booklist) { // TODO Iterator
-    goodreadsVotes += get(booklist[i], 'goodreadsAverageRating');
-    amazonVotes += get(booklist[i], 'amazonAverageRating');
-    total +=
-      get(booklist[i], 'goodreadsAverageRating') +
-      get(booklist[i], 'amazonAverageRating');
-  }
 
-  booklist.meanGoodreadsVotes = goodreadsVotes / booklist.length;
-  booklist.meanAmazonVotes = amazonVotes / booklist.length;
-  booklist.totalMean = total / 2 / booklist.length;
+  forEach(booklist, book => {
+    goodreadsVotes += get(book, 'goodreadsAverageRating')
+    amazonVotes += get(book, 'amazonAverageRating');
+    total +=
+      get(book, 'goodreadsAverageRating') +
+      get(book, 'amazonAverageRating');
+  })
+
+  meanGoodreadsVotes = goodreadsVotes / booklist.length;
+  meanAmazonVotes = amazonVotes / booklist.length;
+  totalMean = total / 2 / booklist.length;
+
   return booklist;
 }
 
@@ -41,13 +47,13 @@ function calculateAdjustedRating(booklist) {
       (getAdjustedRating(
         get(book, 'goodreadsRatingsCount'),
         get(book, 'goodreadsAverageRating'),
-        get(booklist, 'meanGoodreadsVotes'),
+        meanGoodreadsVotes,
         trimmean(getGoodreadsRatingsCountList(booklist))
       ) +
         getAdjustedRating(
           get(book, 'amazonRatingsCount'),
           get(book, 'amazonAverageRating'),
-          get(booklist, 'meanAmazonVotes'),
+          meanAmazonVotes,
           trimmean(getAmazonRatingsCountList(booklist))
         )) /
       2;

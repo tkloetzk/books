@@ -30,6 +30,7 @@ export function combineBooks(
           duplicatedBook._id = existingBook._id;
           duplicates.push(duplicatedBook);
         } else {
+          // TODO: When is this being hit?
           duplicatedISBNs.push({ isbn: duplicatedBook.isbn });
         }
       }
