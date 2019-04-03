@@ -324,19 +324,18 @@ SearchBar.propTypes = {
   booklist: PropTypes.array,
 };
 
-const mapStateToProps = state => {
-  return {
-    amazonBooks: state.amazon.books,
-    amazonBookErrored: state.amazon.hasErrored,
-    googleBooks: state.google.books,
-    googleBooksErrored: state.google.hasErrored,
-    goodreadsBooks: state.goodreads.books,
-    goodreadsBooksErrored: state.goodreads.hasErrored,
-    booklist: state.bookshelf.booklist,
-    bookshelf: state.bookshelf.bookshelf,
-    modifiedBooklist: state.bookshelf.modifiedBooklist,
-  };
-};
+export const mapStateToProps = state => ({
+  amazonBooks: state.amazon.books,
+  amazonBookErrored: state.amazon.hasErrored,
+  googleBooks: state.google.books,
+  googleBooksErrored: state.google.hasErrored,
+  goodreadsBooks: state.goodreads.books,
+  goodreadsBooksErrored: state.goodreads.hasErrored,
+  booklist: state.bookshelf.booklist,
+  bookshelf: state.bookshelf.bookshelf,
+  modifiedBooklist: state.bookshelf.modifiedBooklist,
+});
+
 const mapDispatchToProps = {
   getAmazonBook,
   getGoodreadsBook,

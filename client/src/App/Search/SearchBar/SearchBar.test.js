@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { SearchBar } from './SearchBar';
+import { SearchBar, mapStateToProps } from './SearchBar';
 import Button from '@material-ui/core/Button';
 import { LOADING_STATUSES } from '../../../util/constants';
 import cloneDeep from 'lodash/cloneDeep';
@@ -38,6 +38,28 @@ describe('SearchBar', () => {
   it('renders', () => {
     expect(wrapper).toMatchSnapshot();
   });
+  it('mapStateToProps', () => {
+    const mockedState = {
+      amazon: {
+        books: [],
+        hasErrored: false,
+      },
+      google: {
+        books: [],
+        hasErrored: false,
+      },
+      goodreads: {
+        books: [],
+        hasErrored: false,
+      },
+      bookshelf: {
+        booklist: [],
+        bookshelf: [],
+      }
+    }
+    const state = mapStateToProps(mockedState)
+    expect(state).toEqual({"amazonBookErrored": false, "amazonBooks": [], "booklist": [], "bookshelf": [], "goodreadsBooks": [], "goodreadsBooksErrored": false, "googleBooks": [], "googleBooksErrored": false, "modifiedBooklist": undefined})
+  })
   describe('search', () => {
     describe('button', () => {
       it('disabled if no text', () => {
@@ -116,6 +138,12 @@ describe('SearchBar', () => {
 
         expect(instance.state.searchIsbns).toEqual(['12345']);
       });
+      it('does not setState on handleSearch if loading', () => {
+        instance.state.loading = true
+        instance.state.multiline = '9780805835595'
+        instance.handleSearch()
+        expect(instance.state.searchIsbns).toEqual([])
+      })
     });
     describe('promise array', () => {
       it('function calls', () => {
