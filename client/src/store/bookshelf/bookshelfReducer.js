@@ -2,7 +2,6 @@ import * as types from './bookshelfActionTypes';
 import { LOADING_STATUSES } from '../../util/constants';
 import some from 'lodash/some';
 import remove from 'lodash/remove';
-import { CardActions } from '@material-ui/core';
 
 export const initialState = {
   hasErrored: null,

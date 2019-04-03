@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import BookActions from './BookActions'
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,7 +14,6 @@ import Icon from '@material-ui/icons/AnnouncementOutlined';
 import ReactTooltip from 'react-tooltip';
 import get from 'lodash/get';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Collapse from '@material-ui/core/Collapse';
 import isEmpty from 'lodash/isEmpty';
 import EditableLabel from 'react-inline-editing';
 import util from '../../util/combineBooks';
@@ -71,7 +71,7 @@ const styles = {
   },
   actions: {
     display: 'flex',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   expand: {
@@ -210,10 +210,6 @@ export class Book extends Component {
         ? book.description
         : book.description.substring(0, 295) + '...';
 
-    const goodreadsAverageRating =
-      Math.round(book.goodreadsAverageRating * 1000) / 1000;
-    const amazonAverageRating =
-      Math.round(book.amazonAverageRating * 1000) / 1000;
 
     const bookDifferences = get(book, 'differences', []);
     remove(bookDifferences, diff => diff.key === 'categories');
@@ -334,94 +330,11 @@ export class Book extends Component {
           >
             <ExpandMoreIcon />
           </IconButton>
-          <Typography>
+          <Typography style={{paddingLeft: '15px', paddingRight: '15px'}}>
             {Math.round(book.adjustedRating * 1000) / 1000}
           </Typography>
         </div>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent style={{ textAlign: 'center' }}>
-            <Typography style={{ display: 'inline-flex' }} component="span">
-              ISBN:{' '}
-              <EditableLabel
-                text={book.isbn}
-                inputWidth="100px"
-                inputHeight="25px"
-                onFocus={() => {}}
-                onFocusOut={text => this._handleFocusOut(text, 'isbn')}
-              />
-            </Typography>
-            {!isEmpty(book.price) && (
-              <Typography style={{ display: 'inline-flex' }} component="span">
-                Price:{' '}
-                <EditableLabel
-                  text={book.price}
-                  inputWidth="75px"
-                  inputHeight="25px"
-                  onFocus={() => {}}
-                  onFocusOut={text => this._handleFocusOut(text, 'price')}
-                />
-              </Typography>
-            )}
-            <Typography style={{ display: 'inline-flex' }} component="span">
-              Amazon Rating:{' '}
-              <EditableLabel
-                text={`${amazonAverageRating}`}
-                inputWidth="75px"
-                inputHeight="25px"
-                onFocus={() => {}}
-                onFocusOut={text =>
-                  this._handleFocusOut(text, 'amazonAverageRating')
-                }
-              />
-            </Typography>
-            <Typography style={{ display: 'inline-flex' }} component="span">
-              Goodreads Rating:{' '}
-              <EditableLabel
-                text={`${goodreadsAverageRating}`}
-                inputWidth="75px"
-                inputHeight="25px"
-                onFocus={() => {}}
-                onFocusOut={text =>
-                  this._handleFocusOut(text, 'goodreadsAverageRating')
-                }
-              />
-            </Typography>
-            <Typography style={{ display: 'inline-flex' }} component="span">
-              Amazon Review:{' '}
-              <EditableLabel
-                text={`${book.amazonRatingsCount}`}
-                inputWidth="75px"
-                inputHeight="25px"
-                onFocus={() => {}}
-                onFocusOut={text =>
-                  this._handleFocusOut(text, 'amazonRatingsCount')
-                }
-              />
-            </Typography>
-            <Typography style={{ display: 'inline-flex' }} component="span">
-              Goodreads Review:{' '}
-              <EditableLabel
-                text={`${book.goodreadsRatingsCount}`}
-                inputWidth="75px"
-                inputHeight="25px"
-                onFocus={() => {}}
-                onFocusOut={text =>
-                  this._handleFocusOut(text, 'goodreadsRatingsCount')
-                }
-              />
-            </Typography>
-            <Typography style={{ display: 'inline-flex' }} component="span">
-              Category:{' '}
-              <EditableLabel
-                text={`${book.categories}`}
-                inputWidth="75px"
-                inputHeight="25px"
-                onFocus={() => {}}
-                onFocusOut={text => this._handleFocusOut(text, 'categories')}
-              />
-            </Typography>
-          </CardContent>
-        </Collapse>
+        <BookActions expanded={expanded} book={book} handleFocusOut={this._handleFocusOut} />
       </Card>
     );
   }

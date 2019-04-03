@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BookActions renders renders correctly 1`] = `
+<WithStyles(Collapse)
+  in={true}
+  timeout="auto"
+  unmountOnExit={true}
+>
+  <WithStyles(CardContent)
+    style={
+      Object {
+        "textAlign": "center",
+      }
+    }
+  >
+    <WithStyles(Typography)
+      component="span"
+      style={
+        Object {
+          "display": "inline-flex",
+        }
+      }
+    >
+      ISBN:
+       
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="100px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text="9780736917728"
+      />
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      component="span"
+      style={
+        Object {
+          "display": "inline-flex",
+        }
+      }
+    >
+      Amazon Rating:
+       
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="75px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text="4.6"
+      />
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      component="span"
+      style={
+        Object {
+          "display": "inline-flex",
+        }
+      }
+    >
+      Goodreads Rating:
+       
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="75px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text="4.24"
+      />
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      component="span"
+      style={
+        Object {
+          "display": "inline-flex",
+        }
+      }
+    >
+      Amazon Review:
+       
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="75px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text="20"
+      />
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      component="span"
+      style={
+        Object {
+          "display": "inline-flex",
+        }
+      }
+    >
+      Goodreads Review:
+       
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="75px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text="148"
+      />
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      component="span"
+      style={
+        Object {
+          "display": "inline-flex",
+        }
+      }
+    >
+      Category:
+       
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="75px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text="Religion"
+      />
+    </WithStyles(Typography)>
+  </WithStyles(CardContent)>
+</WithStyles(Collapse)>
+`;
