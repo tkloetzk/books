@@ -184,7 +184,7 @@ const styles = {
 };
 const mapStateToProps = state => {
   return {
-    bookshelf: state.bookshelf.bookshelf, // TODO: huh?
+    bookshelf: state.bookshelf.bookshelf,
   };
 };
 
