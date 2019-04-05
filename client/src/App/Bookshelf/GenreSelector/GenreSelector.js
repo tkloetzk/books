@@ -8,11 +8,15 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { connect } from 'react-redux';
 import find from 'lodash/find';
 import forEach from 'lodash/forEach';
-import { getBookshelf, getBookshelfGenres } from '../../../store/bookshelf/bookshelfActions';
+import {
+  getBookshelf,
+  getBookshelfGenres,
+} from '../../../store/bookshelf/bookshelfActions';
 import { CSVLink } from 'react-csv';
 import DownloadIcon from '@material-ui/icons/SaveAlt';
 import Fab from '@material-ui/core/Fab';
-import isArray from 'lodash/isArray'
+import isArray from 'lodash/isArray';
+import isEqual from 'lodash/isEqual';
 
 export class GenreSelector extends React.Component {
   state = {
@@ -22,33 +26,35 @@ export class GenreSelector extends React.Component {
     deselectAll: false,
   };
 
-  componentDidMount () {
-    const { getBookshelfGenres } = this.props
-    this.props.getBookshelfGenres()
+  componentDidMount() {
+    const { getBookshelfGenres } = this.props;
+    this.props.getBookshelfGenres();
   }
 
   // TODO: This is a mess. Also deleting book doesn't update genre
   componentDidUpdate(prevProps, prevState) {
-    const { genres: propGenres } = this.props
-    const { genres } = this.state 
+    const { genres: propGenres } = this.props;
+    const { genres } = this.state;
 
-    if (prevProps.genres !== propGenres) {
-      const newGenres = []
+    if (!isEqual(prevProps.genres, propGenres)) {
+      const newGenres = [];
       forEach(propGenres, genre => {
         // console.log(category, isArray(category))
         if (!find(genres, { category: genre.category })) {
           newGenres.push({ category: genre, checked: false });
+        } else {
+          const exisitingGenre = find(genres, { category: genre.category });
+          newGenres.push({ category: genre, checked: exisitingGenre.checked });
         }
-      })
+      });
 
-
-      const initalGenres = []
-      forEach(genres, genre => {
-        initalGenres.push({category: genre, checked: false})
-      })
+      // const initalGenres = [];
+      // forEach(genres, genre => {
+      //   initalGenres.push({ category: genre, checked: false });
+      // });
       this.setState({
-        genres: initalGenres
-      })
+        genres: newGenres,
+      });
     }
     // const { genres, deselectAll, selectAll } = this.state;
     // const { bookshelf, getBookshelf, getBookshelfGenres } = this.props;
@@ -77,30 +83,40 @@ export class GenreSelector extends React.Component {
     // if (selectAll !== prevState.selectAll) {
     //   console.log('selected all difference 51')
     // }
-    // if (genres !== prevState.genres && prevState.genres.length) {
-    //   const selectedGenre = [];
-    //   forEach(genres, genre => {
-    //     if (genre.checked) {
-    //       selectedGenre.push(genre.category);
-    //     }
-    //   });
-    //   if (deselectAll) {
-    //     getBookshelf(false);
-    //   } else {
-    //     getBookshelf(selectedGenre);
-    //   }
-    // }
+    if (genres !== prevState.genres && prevState.genres.length) {
+      console.log('selection');
+      //   const selectedGenre = [];
+      //   forEach(genres, genre => {
+      //     if (genre.checked) {
+      //       selectedGenre.push(genre.category);
+      //     }
+      //   });
+      //   if (deselectAll) {
+      //     getBookshelf(false);
+      //   } else {
+      //     getBookshelf(selectedGenre);
+      //   }
+    }
   }
   handleChange = event => {
     const name = event.target.value;
     const { genres } = this.state;
     let updatedGenres = [...genres.filter(genre => name !== genre.category)];
     updatedGenres.unshift({ category: name, checked: event.target.checked });
+
+    const selectedGenre = [];
+    forEach(updatedGenres, genre => {
+      if (genre.checked) {
+        selectedGenre.push(genre.category);
+      }
+    });
     this.setState({
       genres: updatedGenres,
       deselectAll: false,
       selectAll: false,
     });
+    console.log(updatedGenres);
+    this.props.getBookshelf(selectedGenre);
   };
   handleSelectAll = event => {
     if (event.target.checked) {
@@ -232,7 +248,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   getBookshelf,
-  getBookshelfGenres
+  getBookshelfGenres,
 };
 export default connect(
   mapStateToProps,

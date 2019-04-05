@@ -92,6 +92,7 @@ export function getBookshelf(includedGenres = []) {
         .then(bookshelf => {
           dispatch(getBookshelfIsLoading(false));
           dispatch(getBookshelfSuccess(bookshelf));
+          dispatch(getBookshelfGenres());
           dispatch(getBookshelfFailure(false, null));
           return bookshelf;
         })
@@ -151,7 +152,7 @@ export function updateBookOnBookshelf(id, fields) {
     return updateBookOnBookshelfService(id, fields)
       .then(saved => {
         dispatch(updateBookOnBookshelfSuccess());
-        // dispatch(getBookshelf());
+        // dispatch(getBookshelf()); // TODO: Call when cateogry is updated
       })
       .catch(error => {
         dispatch(updateBookOnBookshelfFailure(error));
@@ -204,25 +205,25 @@ export function getBookshelfGenresSuccess(genres) {
   return {
     type: types.FETCH_BOOKSHELF_GENRES_SUCCESS,
     genres,
-  }
+  };
 }
 
 export function getBookshelfGenresFailure(error) {
   return {
-    types: types.FETCH_BOOKSHELF_GENRES_FAILURE,
+    type: types.FETCH_BOOKSHELF_GENRES_FAILURE,
     error,
-  }
+  };
 }
 export function getBookshelfGenres() {
   return dispatch => {
     return getGenresBookshelfService()
       .then(genres => {
-        dispatch(getBookshelfGenresSuccess(genres))
+        dispatch(getBookshelfGenresSuccess(genres));
       })
       .catch(error => {
-        dispatch(getBookshelfGenresFailure(error))
-      })
-  }
+        dispatch(getBookshelfGenresFailure(error));
+      });
+  };
 }
 export function clearBooks() {
   return dispatch => {
@@ -231,4 +232,3 @@ export function clearBooks() {
     dispatch(clearGoogleBooks());
   };
 }
-
