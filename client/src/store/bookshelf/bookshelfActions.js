@@ -3,6 +3,7 @@ import {
   getBookshelfService,
   deleteBookOnBookshelfService,
   updateBookOnBookshelfService,
+  getGenresBookshelfService,
 } from '../../services/bookshelfService';
 import * as types from './bookshelfActionTypes';
 import remove from 'lodash/remove';
@@ -198,6 +199,31 @@ export function deleteModifiedBook(isbn) {
     return dispatch(deleteModifiedBookFromBooklist(isbn));
   };
 }
+
+export function getBookshelfGenresSuccess(genres) {
+  return {
+    type: types.FETCH_BOOKSHELF_GENRES_SUCCESS,
+    genres,
+  }
+}
+
+export function getBookshelfGenresFailure(error) {
+  return {
+    types: types.FETCH_BOOKSHELF_GENRES_FAILURE,
+    error,
+  }
+}
+export function getBookshelfGenres() {
+  return dispatch => {
+    return getGenresBookshelfService()
+      .then(genres => {
+        dispatch(getBookshelfGenresSuccess(genres))
+      })
+      .catch(error => {
+        dispatch(getBookshelfGenresFailure(error))
+      })
+  }
+}
 export function clearBooks() {
   return dispatch => {
     dispatch(clearAmazonBooks());
@@ -205,3 +231,4 @@ export function clearBooks() {
     dispatch(clearGoogleBooks());
   };
 }
+

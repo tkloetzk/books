@@ -62,4 +62,15 @@ bookRoutes.route('/delete/:id').delete((req, res) => {
   });
 });
 
+bookRoutes.route('/genres').get((req, res) => {
+  Book.distinct('categories', (err, success) => {
+    if (err) {
+      console.error('error mongo delete', err);
+      res.send(err);
+    } else {
+      console.info('mongo genres', success);
+      res.send(success);
+    }
+  })
+})
 module.exports = bookRoutes;

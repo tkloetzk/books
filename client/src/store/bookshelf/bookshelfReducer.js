@@ -5,6 +5,7 @@ import remove from 'lodash/remove';
 
 export const initialState = {
   hasErrored: null,
+  deletion: false,
   bookshelf: [],
   booklist: [],
   modifiedBooklist: [],
@@ -12,6 +13,7 @@ export const initialState = {
   saveStatus: { status: LOADING_STATUSES.initial, message: '' },
   refreshed: false,
   filters: [],
+  genres: [],
 };
 
 export default function bookshelf(state = initialState, action) {
@@ -73,6 +75,7 @@ export default function bookshelf(state = initialState, action) {
     case types.UPDATE_BOOK_ON_BOOKSHELF_SUCCESS: {
       return Object.assign({}, state, {
         modifiedBooklist: initialState.modifiedBooklist,
+        deletion: false,
         saveStatus: {
           status: LOADING_STATUSES.success,
           message: 'Save Successful',
@@ -98,6 +101,16 @@ export default function bookshelf(state = initialState, action) {
       return Object.assign({}, state, {
         booklist: [...state.booklist],
       });
+    }
+    case types.FETCH_BOOKSHELF_GENRES_SUCCESS: {
+      return Object.assign({}, state, {
+        genres: action.genres
+      })
+    }
+    case types.FETCH_BOOKSHELF_GENRES_FAILURE: {
+      return Object.assign({}, state, {
+        error: action.error
+      })
     }
     default:
       return state;

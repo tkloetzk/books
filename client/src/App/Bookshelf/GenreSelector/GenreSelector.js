@@ -8,47 +8,88 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { connect } from 'react-redux';
 import find from 'lodash/find';
 import forEach from 'lodash/forEach';
-import { getBookshelf } from '../../../store/bookshelf/bookshelfActions';
+import { getBookshelf, getBookshelfGenres } from '../../../store/bookshelf/bookshelfActions';
 import { CSVLink } from 'react-csv';
 import DownloadIcon from '@material-ui/icons/SaveAlt';
 import Fab from '@material-ui/core/Fab';
+import isArray from 'lodash/isArray'
 
 export class GenreSelector extends React.Component {
   state = {
     genres: [],
+    updateGenres: false,
     selectAll: true,
     deselectAll: false,
   };
 
+  componentDidMount () {
+    const { getBookshelfGenres } = this.props
+    this.props.getBookshelfGenres()
+  }
+
   // TODO: This is a mess. Also deleting book doesn't update genre
   componentDidUpdate(prevProps, prevState) {
-    const { genres, deselectAll } = this.state;
-    const { bookshelf, getBookshelf } = this.props;
+    const { genres: propGenres } = this.props
+    const { genres } = this.state 
 
-    //Initial Load
-    if (!prevState.genres.length && bookshelf.length && !genres.length) {
-      bookshelf.forEach(book =>
-        book.categories.forEach(category => {
-          if (!find(genres, { category })) {
-            genres.push({ category, checked: false });
-          }
-        })
-      );
-      this.setState({ genres });
-    }
-    if (genres !== prevState.genres && prevState.genres.length) {
-      const selectedGenre = [];
-      forEach(genres, genre => {
-        if (genre.checked) {
-          selectedGenre.push(genre.category);
+    if (prevProps.genres !== propGenres) {
+      const newGenres = []
+      forEach(propGenres, genre => {
+        // console.log(category, isArray(category))
+        if (!find(genres, { category: genre.category })) {
+          newGenres.push({ category: genre, checked: false });
         }
-      });
-      if (deselectAll) {
-        getBookshelf(false);
-      } else {
-        getBookshelf(selectedGenre);
-      }
+      })
+
+
+      const initalGenres = []
+      forEach(genres, genre => {
+        initalGenres.push({category: genre, checked: false})
+      })
+      this.setState({
+        genres: initalGenres
+      })
     }
+    // const { genres, deselectAll, selectAll } = this.state;
+    // const { bookshelf, getBookshelf, getBookshelfGenres } = this.props;
+
+    // //console.log('bookshelf', bookshelf)
+    // //console.log('prevProps.bookshelf', prevProps.bookshelf)
+    // //Initial Load
+    // if ((!prevState.genres.length && bookshelf.length && !genres.length) ||
+    //   // If new book is added with a new genre, update genres
+    //   (bookshelf !== prevProps.bookshelf && bookshelf.length && prevProps.bookshelf.length) ||
+    //     //If book is removed from bookshelf, update genres
+    //     (deletion && prevProps.bookshelf.length && bookshelf.length < prevProps.bookshelf.length)) {
+    //    const newGenre = []
+    //   bookshelf.forEach(book =>
+    //     // Loop through each books categories
+    //     book.categories.forEach(category => {
+    //      // console.log(category, isArray(category))
+    //       if (!find(newGenre, { category })) {
+    //         newGenre.push({ category, checked: false });
+    //       }
+    //     })
+    //   );
+    //   this.setState({ genres: newGenre });
+    // }
+
+    // if (selectAll !== prevState.selectAll) {
+    //   console.log('selected all difference 51')
+    // }
+    // if (genres !== prevState.genres && prevState.genres.length) {
+    //   const selectedGenre = [];
+    //   forEach(genres, genre => {
+    //     if (genre.checked) {
+    //       selectedGenre.push(genre.category);
+    //     }
+    //   });
+    //   if (deselectAll) {
+    //     getBookshelf(false);
+    //   } else {
+    //     getBookshelf(selectedGenre);
+    //   }
+    // }
   }
   handleChange = event => {
     const name = event.target.value;
@@ -185,11 +226,13 @@ const styles = {
 const mapStateToProps = state => {
   return {
     bookshelf: state.bookshelf.bookshelf,
+    genres: state.bookshelf.genres,
   };
 };
 
 const mapDispatchToProps = {
   getBookshelf,
+  getBookshelfGenres
 };
 export default connect(
   mapStateToProps,

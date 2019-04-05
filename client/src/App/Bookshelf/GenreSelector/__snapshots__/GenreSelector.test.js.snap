@@ -61,14 +61,752 @@ exports[`GenreSelector renders as expected with bookshelf on initial load 1`] = 
       data={
         Array [
           Object {
+            "amazonAverageRating": 4.6,
+            "amazonRatingsCount": 29,
             "categories": Array [
               "Religion",
             ],
+            "description": "Elizabeth George, bestselling author and mother of two daughters",
+            "goodreadsAverageRating": 4.25,
+            "goodreadsRatingsCount": 149,
+            "isbn": "9780736917728",
+            "owned": false,
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ",
+            "title": "After God's Own Heart1",
           },
           Object {
+            "_id": "5c9e4509cad5d55ca38e6e4d",
+            "amazonAverageRating": 4.7,
+            "amazonRatingsCount": 1916,
             "categories": Array [
               "Fatherhood",
             ],
+            "description": "It is eight years after the tours",
+            "goodreadsAverageRating": 4.21,
+            "goodreadsRatingsCount": 1860898,
+            "isbn": "9780064404990",
+            "owned": false,
+            "price": "",
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content",
+            "title": "Year of the Griffin",
+          },
+        ]
+      }
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
+  </WithStyles(FormGroup)>
+</WithStyles(FormControl)>
+`;
+
+exports[`GenreSelector renders componentDidUpdate deletes removes category from state when the only book with that category is deleted 1`] = `
+<WithStyles(FormControl)
+  component="fieldset"
+>
+  <WithStyles(FormGroup)
+    row={true}
+  >
+    <WithStyles(WithFormControlContext(FormLabel))
+      component="label"
+    >
+      Genres:
+    </WithStyles(WithFormControlContext(FormLabel))>
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Religion"
+        />
+      }
+      key="Religion"
+      label="Religion"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={true}
+          onChange={[Function]}
+          value="SELECT ALL"
+        />
+      }
+      key="SELECT ALL"
+      label="SELECT ALL"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="DESELECT ALL"
+        />
+      }
+      key="DESELECT ALL"
+      label="DESELECT ALL"
+    />
+    <CSVLink
+      asyncOnClick={false}
+      data={
+        Array [
+          Object {
+            "amazonAverageRating": 4.6,
+            "amazonRatingsCount": 29,
+            "categories": Array [
+              "Religion",
+            ],
+            "description": "Elizabeth George, bestselling author and mother of two daughters",
+            "goodreadsAverageRating": 4.25,
+            "goodreadsRatingsCount": 149,
+            "isbn": "9780736917728",
+            "owned": false,
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ",
+            "title": "After God's Own Heart1",
+          },
+        ]
+      }
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
+  </WithStyles(FormGroup)>
+</WithStyles(FormControl)>
+`;
+
+exports[`GenreSelector renders componentDidUpdate inserts renders correctly and does not update state when a new book is inserted with an exisiting category 1`] = `
+<WithStyles(FormControl)
+  component="fieldset"
+>
+  <WithStyles(FormGroup)
+    row={true}
+  >
+    <WithStyles(WithFormControlContext(FormLabel))
+      component="label"
+    >
+      Genres:
+    </WithStyles(WithFormControlContext(FormLabel))>
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Religion"
+        />
+      }
+      key="Religion"
+      label="Religion"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Fatherhood"
+        />
+      }
+      key="Fatherhood"
+      label="Fatherhood"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={true}
+          onChange={[Function]}
+          value="SELECT ALL"
+        />
+      }
+      key="SELECT ALL"
+      label="SELECT ALL"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="DESELECT ALL"
+        />
+      }
+      key="DESELECT ALL"
+      label="DESELECT ALL"
+    />
+    <CSVLink
+      asyncOnClick={false}
+      data={
+        Array [
+          Object {
+            "amazonAverageRating": 4.6,
+            "amazonRatingsCount": 29,
+            "categories": Array [
+              "Religion",
+            ],
+            "description": "Elizabeth George, bestselling author and mother of two daughters",
+            "goodreadsAverageRating": 4.25,
+            "goodreadsRatingsCount": 149,
+            "isbn": "9780736917728",
+            "owned": false,
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ",
+            "title": "After God's Own Heart1",
+          },
+          Object {
+            "_id": "5c9e4509cad5d55ca38e6e4d",
+            "amazonAverageRating": 4.7,
+            "amazonRatingsCount": 1916,
+            "categories": Array [
+              "Fatherhood",
+            ],
+            "description": "It is eight years after the tours",
+            "goodreadsAverageRating": 4.21,
+            "goodreadsRatingsCount": 1860898,
+            "isbn": "9780064404990",
+            "owned": false,
+            "price": "",
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content",
+            "title": "Year of the Griffin",
+          },
+          Object {
+            "amazonAverageRating": 3.6,
+            "amazonRatingsCount": 39,
+            "categories": Array [
+              "Religion",
+            ],
+            "description": "Description",
+            "goodreadsAverageRating": 3.25,
+            "goodreadsRatingsCount": 339,
+            "isbn": "9780737281111",
+            "owned": false,
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content?id=K_SDFasdf",
+            "title": "Motherhood book",
+          },
+        ]
+      }
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
+  </WithStyles(FormGroup)>
+</WithStyles(FormControl)>
+`;
+
+exports[`GenreSelector renders componentDidUpdate inserts renders correctly and updates after a new book with new category is inserted 1`] = `
+<WithStyles(FormControl)
+  component="fieldset"
+>
+  <WithStyles(FormGroup)
+    row={true}
+  >
+    <WithStyles(WithFormControlContext(FormLabel))
+      component="label"
+    >
+      Genres:
+    </WithStyles(WithFormControlContext(FormLabel))>
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Religion"
+        />
+      }
+      key="Religion"
+      label="Religion"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Fatherhood"
+        />
+      }
+      key="Fatherhood"
+      label="Fatherhood"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Motherhood"
+        />
+      }
+      key="Motherhood"
+      label="Motherhood"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={true}
+          onChange={[Function]}
+          value="SELECT ALL"
+        />
+      }
+      key="SELECT ALL"
+      label="SELECT ALL"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="DESELECT ALL"
+        />
+      }
+      key="DESELECT ALL"
+      label="DESELECT ALL"
+    />
+    <CSVLink
+      asyncOnClick={false}
+      data={
+        Array [
+          Object {
+            "amazonAverageRating": 4.6,
+            "amazonRatingsCount": 29,
+            "categories": Array [
+              "Religion",
+            ],
+            "description": "Elizabeth George, bestselling author and mother of two daughters",
+            "goodreadsAverageRating": 4.25,
+            "goodreadsRatingsCount": 149,
+            "isbn": "9780736917728",
+            "owned": false,
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ",
+            "title": "After God's Own Heart1",
+          },
+          Object {
+            "_id": "5c9e4509cad5d55ca38e6e4d",
+            "amazonAverageRating": 4.7,
+            "amazonRatingsCount": 1916,
+            "categories": Array [
+              "Fatherhood",
+            ],
+            "description": "It is eight years after the tours",
+            "goodreadsAverageRating": 4.21,
+            "goodreadsRatingsCount": 1860898,
+            "isbn": "9780064404990",
+            "owned": false,
+            "price": "",
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content",
+            "title": "Year of the Griffin",
+          },
+          Object {
+            "amazonAverageRating": 3.6,
+            "amazonRatingsCount": 39,
+            "categories": Array [
+              "Motherhood",
+            ],
+            "description": "Description",
+            "goodreadsAverageRating": 3.25,
+            "goodreadsRatingsCount": 339,
+            "isbn": "9780737281111",
+            "owned": false,
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content?id=K_SDFasdf",
+            "title": "Motherhood book",
+          },
+        ]
+      }
+      filename="generatedBy_react-csv.csv"
+      headers={
+        Array [
+          Object {
+            "key": "isbn",
+            "label": "ISBN",
+          },
+          Object {
+            "key": "title",
+            "label": "Title",
+          },
+          Object {
+            "key": "subtitle",
+            "label": "Subtitle",
+          },
+          Object {
+            "key": "categories",
+            "label": "Categories",
+          },
+          Object {
+            "key": "description",
+            "label": "Description",
+          },
+          Object {
+            "key": "amazonAverageRating",
+            "label": "Amazon Average Rating",
+          },
+          Object {
+            "key": "amazonRatingsCount",
+            "label": "Amazon Ratings Count",
+          },
+          Object {
+            "key": "goodreadsAverageRating",
+            "label": "Goodreads Average Rating",
+          },
+          Object {
+            "key": "goodreadsRatingsCount",
+            "label": "Goodreads Ratings Count",
+          },
+          Object {
+            "key": "adjustedRating",
+            "label": "Adjusted Rating",
+          },
+          Object {
+            "key": "read",
+            "label": "Read",
+          },
+          Object {
+            "key": "owned",
+            "label": "Owned",
+          },
+        ]
+      }
+      separator=","
+      target="_blank"
+      uFEFF={true}
+    >
+      <WithStyles(Fab)
+        size="small"
+      >
+        <pure(SaveAltIcon)
+          fontSize="small"
+        />
+      </WithStyles(Fab)>
+    </CSVLink>
+  </WithStyles(FormGroup)>
+</WithStyles(FormControl)>
+`;
+
+exports[`GenreSelector renders componentDidUpdate inserts renders correctly and updates state with new categories when a new book is inserted with multiple categories 1`] = `
+<WithStyles(FormControl)
+  component="fieldset"
+>
+  <WithStyles(FormGroup)
+    row={true}
+  >
+    <WithStyles(WithFormControlContext(FormLabel))
+      component="label"
+    >
+      Genres:
+    </WithStyles(WithFormControlContext(FormLabel))>
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Religion"
+        />
+      }
+      key="Religion"
+      label="Religion"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Fatherhood"
+        />
+      }
+      key="Fatherhood"
+      label="Fatherhood"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Parenting"
+        />
+      }
+      key="Parenting"
+      label="Parenting"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="Dog"
+        />
+      }
+      key="Dog"
+      label="Dog"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={true}
+          onChange={[Function]}
+          value="SELECT ALL"
+        />
+      }
+      key="SELECT ALL"
+      label="SELECT ALL"
+    />
+    <WithStyles(WithFormControlContext(FormControlLabel))
+      control={
+        <WithStyles(Checkbox)
+          checked={false}
+          onChange={[Function]}
+          value="DESELECT ALL"
+        />
+      }
+      key="DESELECT ALL"
+      label="DESELECT ALL"
+    />
+    <CSVLink
+      asyncOnClick={false}
+      data={
+        Array [
+          Object {
+            "amazonAverageRating": 4.6,
+            "amazonRatingsCount": 29,
+            "categories": Array [
+              "Religion",
+            ],
+            "description": "Elizabeth George, bestselling author and mother of two daughters",
+            "goodreadsAverageRating": 4.25,
+            "goodreadsRatingsCount": 149,
+            "isbn": "9780736917728",
+            "owned": false,
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ",
+            "title": "After God's Own Heart1",
+          },
+          Object {
+            "_id": "5c9e4509cad5d55ca38e6e4d",
+            "amazonAverageRating": 4.7,
+            "amazonRatingsCount": 1916,
+            "categories": Array [
+              "Fatherhood",
+            ],
+            "description": "It is eight years after the tours",
+            "goodreadsAverageRating": 4.21,
+            "goodreadsRatingsCount": 1860898,
+            "isbn": "9780064404990",
+            "owned": false,
+            "price": "",
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content",
+            "title": "Year of the Griffin",
+          },
+          Object {
+            "amazonAverageRating": 3.6,
+            "amazonRatingsCount": 39,
+            "categories": Array [
+              "Religion",
+              "Parenting",
+              "Dog",
+            ],
+            "description": "Description",
+            "goodreadsAverageRating": 3.25,
+            "goodreadsRatingsCount": 339,
+            "isbn": "9780737281111",
+            "owned": false,
+            "read": false,
+            "subtitle": "",
+            "thumbnail": "http://books.google.com/books/content?id=K_SDFasdf",
+            "title": "Motherhood book",
           },
         ]
       }

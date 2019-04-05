@@ -6,6 +6,7 @@ import {
   getBookshelfService,
   deleteBookOnBookshelfService,
   updateBookOnBookshelfService,
+  getGenresBookshelfService,
 } from '../../../services/bookshelfService';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
