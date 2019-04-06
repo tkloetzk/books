@@ -129,6 +129,7 @@ export class GenreSelector extends React.Component {
       { label: 'Adjusted Rating', key: 'adjustedRating' },
       { label: 'Read', key: 'read' },
       { label: 'Owned', key: 'owned' },
+      // TODO: Include Amazon link instead of description
     ];
 
     const selectionControls = [
