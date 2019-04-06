@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search } from './Search';
+import { Search, mapStateToProps } from './Search';
 import { shallow } from 'enzyme';
 import { LOADING_STATUSES } from '../../util/constants';
 
@@ -256,6 +256,22 @@ describe('Search', () => {
       };
       instance.handleSearchedBookEditSave(book, edits);
       expect(props.insertModifiedBook).toBeCalledWith(modifiedBook);
+    });
+  });
+
+  it('mapStateToProps', () => {
+    const mockedState = {
+      bookshelf: {
+        booklist: [{ title: 'title' }],
+        modifiedBooklist: [{ title: 'modified' }],
+        saveStatus: [{ message: 'message' }],
+      },
+    };
+    const state = mapStateToProps(mockedState);
+    expect(state).toEqual({
+      booklist: mockedState.bookshelf.booklist,
+      modifiedBooklist: mockedState.bookshelf.modifiedBooklist,
+      saveStatus: mockedState.bookshelf.saveStatus,
     });
   });
 });

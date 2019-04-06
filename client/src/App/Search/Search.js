@@ -99,7 +99,7 @@ Search.defaultProps = {
   },
 };
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
   return {
     booklist: state.bookshelf.booklist,
     modifiedBooklist: state.bookshelf.modifiedBooklist,
