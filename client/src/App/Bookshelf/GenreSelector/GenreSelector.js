@@ -15,31 +15,32 @@ import {
 import { CSVLink } from 'react-csv';
 import DownloadIcon from '@material-ui/icons/SaveAlt';
 import Fab from '@material-ui/core/Fab';
-import isArray from 'lodash/isArray';
 import isEqual from 'lodash/isEqual';
+import PropTypes from 'prop-types';
 
 export class GenreSelector extends React.Component {
   state = {
     genres: [],
     updateGenres: false,
+    selectChange: false,
     selectAll: true,
     deselectAll: false,
   };
 
   componentDidMount() {
-    const { getBookshelfGenres } = this.props;
     this.props.getBookshelfGenres();
   }
 
   // TODO: This is a mess. Also deleting book doesn't update genre
   componentDidUpdate(prevProps, prevState) {
-    const { genres: propGenres } = this.props;
-    const { genres } = this.state;
+    const { genres: propGenres, getBookshelf } = this.props;
+    const { genres, deselectAll, selectChange, selectAll } = this.state;
 
+    //console.log('propGenres', propGenres);
+    //console.log('prevgenres', genres);
     if (!isEqual(prevProps.genres, propGenres)) {
       const newGenres = [];
       forEach(propGenres, genre => {
-        // console.log(category, isArray(category))
         if (!find(genres, { category: genre.category })) {
           newGenres.push({ category: genre, checked: false });
         } else {
@@ -48,75 +49,43 @@ export class GenreSelector extends React.Component {
         }
       });
 
-      // const initalGenres = [];
-      // forEach(genres, genre => {
-      //   initalGenres.push({ category: genre, checked: false });
-      // });
       this.setState({
         genres: newGenres,
+        selectChange: false,
       });
     }
-    // const { genres, deselectAll, selectAll } = this.state;
-    // const { bookshelf, getBookshelf, getBookshelfGenres } = this.props;
 
-    // //console.log('bookshelf', bookshelf)
-    // //console.log('prevProps.bookshelf', prevProps.bookshelf)
-    // //Initial Load
-    // if ((!prevState.genres.length && bookshelf.length && !genres.length) ||
-    //   // If new book is added with a new genre, update genres
-    //   (bookshelf !== prevProps.bookshelf && bookshelf.length && prevProps.bookshelf.length) ||
-    //     //If book is removed from bookshelf, update genres
-    //     (deletion && prevProps.bookshelf.length && bookshelf.length < prevProps.bookshelf.length)) {
-    //    const newGenre = []
-    //   bookshelf.forEach(book =>
-    //     // Loop through each books categories
-    //     book.categories.forEach(category => {
-    //      // console.log(category, isArray(category))
-    //       if (!find(newGenre, { category })) {
-    //         newGenre.push({ category, checked: false });
-    //       }
-    //     })
-    //   );
-    //   this.setState({ genres: newGenre });
-    // }
+    if (prevState.genres.length && selectChange) {
+      if (!isEqual(genres, prevState.genres) && !deselectAll) {
+        const selectedGenre = [];
+        forEach(genres, genre => {
+          if (genre.checked) {
+            selectedGenre.push(genre.category);
+          }
+        });
+        console.log('in');
 
-    // if (selectAll !== prevState.selectAll) {
-    //   console.log('selected all difference 51')
-    // }
-    if (genres !== prevState.genres && prevState.genres.length) {
-      console.log('selection');
-      //   const selectedGenre = [];
-      //   forEach(genres, genre => {
-      //     if (genre.checked) {
-      //       selectedGenre.push(genre.category);
-      //     }
-      //   });
-      //   if (deselectAll) {
-      //     getBookshelf(false);
-      //   } else {
-      //     getBookshelf(selectedGenre);
-      //   }
+        getBookshelf(selectedGenre);
+      } else if (deselectAll && !isEqual(deselectAll, prevState.deselectAll)) {
+        getBookshelf(false);
+      } else if (prevState.deselectAll && selectAll) {
+        getBookshelf();
+      }
     }
   }
+
   handleChange = event => {
     const name = event.target.value;
     const { genres } = this.state;
     let updatedGenres = [...genres.filter(genre => name !== genre.category)];
     updatedGenres.unshift({ category: name, checked: event.target.checked });
 
-    const selectedGenre = [];
-    forEach(updatedGenres, genre => {
-      if (genre.checked) {
-        selectedGenre.push(genre.category);
-      }
-    });
     this.setState({
+      selectChange: true,
       genres: updatedGenres,
       deselectAll: false,
       selectAll: false,
     });
-    console.log(updatedGenres);
-    this.props.getBookshelf(selectedGenre);
   };
   handleSelectAll = event => {
     if (event.target.checked) {
@@ -126,6 +95,7 @@ export class GenreSelector extends React.Component {
         updatedGenre.push({ category: genre.category, checked: false })
       );
       this.setState({
+        selectChange: true,
         selectAll: event.target.checked,
         deselectAll: false,
         genres: updatedGenre,
@@ -140,6 +110,7 @@ export class GenreSelector extends React.Component {
         updatedGenre.push({ category: genre.category, checked: false });
       });
       this.setState({
+        selectChange: true,
         selectAll: false,
         deselectAll: true,
         genres: updatedGenre,
@@ -249,6 +220,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   getBookshelf,
   getBookshelfGenres,
+};
+
+GenreSelector.propTypes = {
+  getBookshelf: PropTypes.func.isRequired,
+  getBookshelfGenres: PropTypes.func.isRequired,
 };
 export default connect(
   mapStateToProps,

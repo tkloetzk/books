@@ -10,6 +10,7 @@ import remove from 'lodash/remove';
 import { clearAmazonBooks } from '../amazon/amazonActions';
 import { clearGoodreadsBooks } from '../goodreads/goodreadsActions';
 import { clearGoogleBooks } from '../google/googleActions';
+import has from 'lodash/has';
 
 export function getBookshelfIsLoading(bool) {
   return {
@@ -152,7 +153,9 @@ export function updateBookOnBookshelf(id, fields) {
     return updateBookOnBookshelfService(id, fields)
       .then(saved => {
         dispatch(updateBookOnBookshelfSuccess());
-        // dispatch(getBookshelf()); // TODO: Call when cateogry is updated
+        if (has(fields, 'categories')) {
+          dispatch(getBookshelf());
+        }
       })
       .catch(error => {
         dispatch(updateBookOnBookshelfFailure(error));
