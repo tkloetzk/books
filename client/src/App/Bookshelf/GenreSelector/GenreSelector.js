@@ -31,13 +31,10 @@ export class GenreSelector extends React.Component {
     this.props.getBookshelfGenres();
   }
 
-  // TODO: This is a mess. Also deleting book doesn't update genre
   componentDidUpdate(prevProps, prevState) {
     const { genres: propGenres, getBookshelf } = this.props;
     const { genres, deselectAll, selectChange, selectAll } = this.state;
 
-    //console.log('propGenres', propGenres);
-    //console.log('prevgenres', genres);
     if (!isEqual(prevProps.genres, propGenres)) {
       const newGenres = [];
       forEach(propGenres, genre => {
@@ -63,7 +60,6 @@ export class GenreSelector extends React.Component {
             selectedGenre.push(genre.category);
           }
         });
-        console.log('in');
 
         getBookshelf(selectedGenre);
       } else if (deselectAll && !isEqual(deselectAll, prevState.deselectAll)) {
