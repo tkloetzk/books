@@ -122,7 +122,6 @@ export class GenreSelector extends React.Component {
       { label: 'Title', key: 'title' },
       { label: 'Subtitle', key: 'subtitle' },
       { label: 'Categories', key: 'categories' },
-      { label: 'Description', key: 'description' },
       { label: 'Amazon Average Rating', key: 'amazonAverageRating' },
       { label: 'Amazon Ratings Count', key: 'amazonRatingsCount' },
       { label: 'Goodreads Average Rating', key: 'goodreadsAverageRating' },
