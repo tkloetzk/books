@@ -4,6 +4,7 @@ import {
   addBookshelfService,
   updateBookOnBookshelfService,
   deleteBookOnBookshelfService,
+  getGenresBookshelfService,
 } from '../bookshelfService';
 import apiConfig from '../../config/apiConfig';
 import MockAdapter from 'axios-mock-adapter';
@@ -136,6 +137,26 @@ describe('bookshelfService', () => {
           expect(resp.message).toEqual(errorMessage);
         }
       );
+    });
+  });
+  describe('getGenresBookshelfService', () => {
+    it('should get genres ', () => {
+      const mock = new MockAdapter(axios);
+      const genres = { data: ['Genre1', 'Genre2'] };
+      mock.onGet(`${apiConfig.bookshelf}/genres`).reply(200, genres);
+
+      return getGenresBookshelfService().then(resp => {
+        expect(resp.data).toEqual(genres.data);
+      });
+    });
+    it('should throw 400 error', () => {
+      const mock = new MockAdapter(axios);
+      const errorMessage = 'Request failed with status code 400';
+      mock.onGet(`${apiConfig.bookshelf}/genres`).reply(400, errorMessage);
+
+      return getGenresBookshelfService().catch(resp => {
+        expect(resp.message).toEqual(errorMessage);
+      });
     });
   });
 });

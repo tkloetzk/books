@@ -451,14 +451,14 @@ describe('bookshelf reducer', () => {
   });
   describe('genres', () => {
     it('FETCH_BOOKSHELF_GENRES_SUCCESS', () => {
-      const resultState = bookshelfReducer(state, {
+      const resultState = bookshelfReducer(initialState, {
         type: types.FETCH_BOOKSHELF_GENRES_SUCCESS,
         genres: ['test'],
       });
       expect(resultState.genres).toEqual(['test']);
     });
     it('FETCH_BOOKSHELF_GENRES_FAILURE', () => {
-      const resultState = bookshelfReducer(state, {
+      const resultState = bookshelfReducer(initialState, {
         type: types.FETCH_BOOKSHELF_GENRES_FAILURE,
         error: 'error',
       });

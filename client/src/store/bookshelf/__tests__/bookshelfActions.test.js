@@ -164,8 +164,8 @@ describe('bookshelf actions', () => {
         },
       ];
       const expectedResponse = [
-        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
-        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
         {
           bookshelf: [
             {
@@ -189,10 +189,14 @@ describe('bookshelf actions', () => {
               title: "Raising a Daughter After God's Own Heart",
             },
           ],
-          type: 'FETCH_BOOKSHELF_SUCCESS',
+          type: types.FETCH_BOOKSHELF_SUCCESS,
         },
-        { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
-        { genres: ['Religion'], type: 'FETCH_BOOKSHELF_GENRES_SUCCESS' },
+        {
+          error: null,
+          hasErrored: false,
+          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
+        },
+        { genres: ['Religion'], type: types.FETCH_BOOKSHELF_GENRES_SUCCESS },
       ];
 
       getBookshelfService.mockResolvedValue(bookshelf);
@@ -205,9 +209,13 @@ describe('bookshelf actions', () => {
     it('getBookshelfService failed', () => {
       const store = createMockStore();
       const expectedResponse = [
-        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
-        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
-        { error: 'err', hasErrored: true, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
+        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        {
+          error: 'err',
+          hasErrored: true,
+          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
+        },
       ];
       getBookshelfService.mockRejectedValue('err');
 
@@ -257,9 +265,9 @@ describe('bookshelf actions', () => {
       ];
       const store = createMockStore();
       const expectedResponse = [
-        { booklist: [], type: 'ADD_BOOK_TO_BOOKSHELF_SUCCESS' },
-        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
-        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { booklist: [], type: types.ADD_BOOK_TO_BOOKSHELF_SUCCESS },
+        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
         {
           bookshelf: [
             bookshelf[0],
@@ -279,12 +287,16 @@ describe('bookshelf actions', () => {
               title: "Raising a Daughter After God's Own Heart",
             },
           ],
-          type: 'FETCH_BOOKSHELF_SUCCESS',
+          type: types.FETCH_BOOKSHELF_SUCCESS,
         },
-        { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
+        {
+          error: null,
+          hasErrored: false,
+          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
+        },
         {
           genres: [bookshelf[0].categories[0], bookshelf[1].categories[0]],
-          type: 'FETCH_BOOKSHELF_GENRES_SUCCESS',
+          type: types.FETCH_BOOKSHELF_GENRES_SUCCESS,
         },
       ];
       addBookshelfService.mockResolvedValue(booklist);
@@ -301,7 +313,7 @@ describe('bookshelf actions', () => {
     it('failed', () => {
       const store = createMockStore();
       const expectedResponse = [
-        { error: 'err', type: 'ADD_BOOK_TO_BOOKSHELF_FAILURE' },
+        { error: 'err', type: types.ADD_BOOK_TO_BOOKSHELF_FAILURE },
       ];
       addBookshelfService.mockRejectedValue('err');
 
@@ -324,12 +336,33 @@ describe('bookshelf actions', () => {
     });
   });
   describe('updateBookOnBookshelf', () => {
-    it('successful', () => {
+    it('successful without categories field', () => {
       const store = createMockStore();
       const expectedResponse = [
-        { type: 'UPDATE_BOOK_ON_BOOKSHELF_SUCCESS' },
-        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
-        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { type: types.UPDATE_BOOK_ON_BOOKSHELF_SUCCESS },
+      ];
+      updateBookOnBookshelfService.mockResolvedValue({
+        n: 1,
+        nModified: 1,
+        ok: 1,
+      });
+
+      return store
+        .dispatch(
+          actions.updateBookOnBookshelf('5c967fbcbfb8c4eb4b9d463c', {
+            goodreadsRatingsCount: 21560,
+          })
+        )
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedResponse);
+        });
+    });
+    it('successful with categories field', () => {
+      const store = createMockStore();
+      const expectedResponse = [
+        { type: types.UPDATE_BOOK_ON_BOOKSHELF_SUCCESS },
+        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
         {
           bookshelf: [
             {
@@ -367,12 +400,16 @@ describe('bookshelf actions', () => {
               title: "Raising a Daughter After God's Own Heart",
             },
           ],
-          type: 'FETCH_BOOKSHELF_SUCCESS',
+          type: types.FETCH_BOOKSHELF_SUCCESS,
         },
-        { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
+        {
+          error: null,
+          hasErrored: false,
+          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
+        },
         {
           genres: ['Juvenile Fiction', 'Religion'],
-          type: 'FETCH_BOOKSHELF_GENRES_SUCCESS',
+          type: types.FETCH_BOOKSHELF_GENRES_SUCCESS,
         },
       ];
       updateBookOnBookshelfService.mockResolvedValue({
@@ -430,10 +467,10 @@ describe('bookshelf actions', () => {
       const expectedResponse = [
         {
           deleteId: '5c967fbcbfb8c4eb4b9d463c',
-          type: 'DELETE_BOOK_ON_BOOKSHELF_SUCCESS',
+          type: types.DELETE_BOOK_ON_BOOKSHELF_SUCCESS,
         },
-        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
-        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
         {
           bookshelf: [
             {
@@ -457,10 +494,14 @@ describe('bookshelf actions', () => {
             },
             booklist[0],
           ],
-          type: 'FETCH_BOOKSHELF_SUCCESS',
+          type: types.FETCH_BOOKSHELF_SUCCESS,
         },
-        { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
-        { genres: ['Religion'], type: 'FETCH_BOOKSHELF_GENRES_SUCCESS' },
+        {
+          error: null,
+          hasErrored: false,
+          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
+        },
+        { genres: ['Religion'], type: types.FETCH_BOOKSHELF_GENRES_SUCCESS },
       ];
       deleteBookOnBookshelfService.mockResolvedValue(booklist[0]);
       getGenresBookshelfService.mockResolvedValue(booklist[0].categories);
@@ -474,7 +515,7 @@ describe('bookshelf actions', () => {
     it('failed', () => {
       const store = createMockStore();
       const expectedResponse = [
-        { error: 'err', type: 'DELETE_BOOK_ON_BOOKSHELF_FAILURE' },
+        { error: 'err', type: types.DELETE_BOOK_ON_BOOKSHELF_FAILURE },
       ];
       deleteBookOnBookshelfService.mockRejectedValue(expectedResponse[0].error);
 
@@ -483,6 +524,33 @@ describe('bookshelf actions', () => {
         .then(() => {
           expect(store.getActions()).toEqual(expectedResponse);
         });
+    });
+  });
+  describe('getBookshelfGenres', () => {
+    it('successful', () => {
+      const store = createMockStore();
+      const expectedResponse = [
+        {
+          genres: ['Genre1', 'Genre2'],
+          type: types.FETCH_BOOKSHELF_GENRES_SUCCESS,
+        },
+      ];
+      getGenresBookshelfService.mockResolvedValue(['Genre1', 'Genre2']);
+
+      return store.dispatch(actions.getBookshelfGenres()).then(() => {
+        expect(store.getActions()).toEqual(expectedResponse);
+      });
+    });
+    it('failed', () => {
+      const store = createMockStore();
+      const expectedResponse = [
+        { error: 'err', type: types.FETCH_BOOKSHELF_GENRES_FAILURE },
+      ];
+      getGenresBookshelfService.mockRejectedValue(expectedResponse[0].error);
+
+      return store.dispatch(actions.getBookshelfGenres()).then(() => {
+        expect(store.getActions()).toEqual(expectedResponse);
+      });
     });
   });
   it('deleteModifiedBookFromBooklist', () => {
@@ -502,9 +570,9 @@ describe('bookshelf actions', () => {
     const action = actions.getBookshelfGenresFailure('err');
     expect(action).toEqual({
       type: types.FETCH_BOOKSHELF_GENRES_FAILURE,
-      error: 'err'
+      error: 'err',
     });
-  })
+  });
   it('can clearBooks', () => {
     const dispatch = jest.fn();
     actions.clearBooks()(dispatch);
