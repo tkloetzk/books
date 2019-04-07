@@ -1,7 +1,6 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import BookActions from './BookActions'
-import EditableLabel from 'react-inline-editing';
+import { shallow } from 'enzyme';
+import BookActions from './BookActions';
 
 describe('BookActions', () => {
   let props;
@@ -39,7 +38,7 @@ describe('BookActions', () => {
   });
   describe('renders', () => {
     it('renders correctly', () => {
-      expect(wrapper).toMatchSnapshot()
-    })
-  })
-})
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
+});

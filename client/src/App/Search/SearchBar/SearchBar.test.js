@@ -39,25 +39,35 @@ describe('SearchBar', () => {
   it('mapStateToProps', () => {
     const mockedState = {
       amazon: {
-        books: [{'title': 'amazonBook'}],
+        books: [{ title: 'amazonBook' }],
         hasErrored: false,
       },
       google: {
-        books: [{'title': 'googleBook'}],
+        books: [{ title: 'googleBook' }],
         hasErrored: false,
       },
       goodreads: {
-        books: [{'title': 'goodreadsBook'}],
+        books: [{ title: 'goodreadsBook' }],
         hasErrored: false,
       },
       bookshelf: {
         booklist: [],
-        bookshelf: [{'title': 'bookshelf'}],
-      }
-    }
-    const state = mapStateToProps(mockedState)
-    expect(state).toEqual({"amazonBookErrored": false, "amazonBooks": mockedState.amazon.books, "booklist": [], "bookshelf": mockedState.bookshelf.bookshelf, "goodreadsBooks": mockedState.goodreads.books, "goodreadsBooksErrored": false, "googleBooks": mockedState.google.books, "googleBooksErrored": false, "modifiedBooklist": undefined})
-  })
+        bookshelf: [{ title: 'bookshelf' }],
+      },
+    };
+    const state = mapStateToProps(mockedState);
+    expect(state).toEqual({
+      amazonBookErrored: false,
+      amazonBooks: mockedState.amazon.books,
+      booklist: [],
+      bookshelf: mockedState.bookshelf.bookshelf,
+      goodreadsBooks: mockedState.goodreads.books,
+      goodreadsBooksErrored: false,
+      googleBooks: mockedState.google.books,
+      googleBooksErrored: false,
+      modifiedBooklist: undefined,
+    });
+  });
   describe('search', () => {
     describe('button', () => {
       it('disabled if no text', () => {
@@ -137,11 +147,11 @@ describe('SearchBar', () => {
         expect(instance.state.searchIsbns).toEqual(['12345']);
       });
       it('does not setState on handleSearch if loading', () => {
-        instance.state.loading = true
-        instance.state.multiline = '9780805835595'
-        instance.handleSearch()
-        expect(instance.state.searchIsbns).toEqual([])
-      })
+        instance.state.loading = true;
+        instance.state.multiline = '9780805835595';
+        instance.handleSearch();
+        expect(instance.state.searchIsbns).toEqual([]);
+      });
     });
     describe('promise array', () => {
       it('function calls', () => {

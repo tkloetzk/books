@@ -1,7 +1,8 @@
 import React from 'react';
 import Notification from './Notification';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { LOADING_STATUSES } from '../../util/constants';
+import forEach from 'lodash/forEach';
 
 describe('Notification', () => {
   let props;
@@ -16,13 +17,13 @@ describe('Notification', () => {
       message: '',
       type: LOADING_STATUSES.initial,
     };
-    wrapper = mount(<Notification {...props} />);
+    wrapper = shallow(<Notification {...props} />);
   });
   afterEach(() => {
     jest.clearAllMocks();
   });
   it('renders null with no props', () => {
-    const noPropsWrapper = mount(<Notification />);
+    const noPropsWrapper = shallow(<Notification />);
     expect(noPropsWrapper).toMatchSnapshot();
   });
   it('render null with no message', () => {
@@ -30,25 +31,19 @@ describe('Notification', () => {
   });
   it('render null with no type', () => {
     props = Object.assign({ message: 'Message', type: null });
-    wrapper = mount(<Notification {...props} />);
+    wrapper = shallow(<Notification {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
-  it('render with correct success props', () => {
-    props = Object.assign({
-      message: 'Success',
-      open: true,
-      type: LOADING_STATUSES.success,
+  forEach(LOADING_STATUSES, status => {
+    it(`render with correct ${status} props`, () => {
+      props = Object.assign({}, props, {
+        message: status,
+        open: true,
+        type: status,
+      });
+      wrapper = shallow(<Notification {...props} />);
+
+      expect(wrapper.html()).toMatchSnapshot();
     });
-    wrapper = mount(<Notification {...props} />);
-    expect(wrapper).toMatchSnapshot();
-  });
-  it('render with correct success props', () => {
-    props = Object.assign({
-      message: 'Errored',
-      open: true,
-      type: LOADING_STATUSES.errored,
-    });
-    wrapper = mount(<Notification {...props} />);
-    expect(wrapper).toMatchSnapshot();
   });
 });

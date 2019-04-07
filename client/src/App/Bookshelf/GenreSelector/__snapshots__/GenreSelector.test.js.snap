@@ -68,10 +68,6 @@ exports[`GenreSelector renders deletes removes category from state when a catego
             "label": "Categories",
           },
           Object {
-            "key": "description",
-            "label": "Description",
-          },
-          Object {
             "key": "amazonAverageRating",
             "label": "Amazon Average Rating",
           },
@@ -207,10 +203,6 @@ exports[`GenreSelector renders inserts updates state after a new book with new c
             "label": "Categories",
           },
           Object {
-            "key": "description",
-            "label": "Description",
-          },
-          Object {
             "key": "amazonAverageRating",
             "label": "Amazon Average Rating",
           },
@@ -311,10 +303,6 @@ exports[`GenreSelector renders renders with no genres 1`] = `
           Object {
             "key": "categories",
             "label": "Categories",
-          },
-          Object {
-            "key": "description",
-            "label": "Description",
           },
           Object {
             "key": "amazonAverageRating",

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BookActions from './BookActions'
+import BookActions from './BookActions';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -210,7 +210,6 @@ export class Book extends Component {
         ? book.description
         : book.description.substring(0, 295) + '...';
 
-
     const bookDifferences = get(book, 'differences', []);
     remove(bookDifferences, diff => diff.key === 'categories');
     book.differences = bookDifferences;
@@ -330,11 +329,15 @@ export class Book extends Component {
           >
             <ExpandMoreIcon />
           </IconButton>
-          <Typography style={{paddingLeft: '15px', paddingRight: '15px'}}>
+          <Typography style={{ paddingLeft: '15px', paddingRight: '15px' }}>
             {Math.round(book.adjustedRating * 1000) / 1000}
           </Typography>
         </div>
-        <BookActions expanded={expanded} book={book} handleFocusOut={this._handleFocusOut} />
+        <BookActions
+          expanded={expanded}
+          book={book}
+          handleFocusOut={this._handleFocusOut}
+        />
       </Card>
     );
   }

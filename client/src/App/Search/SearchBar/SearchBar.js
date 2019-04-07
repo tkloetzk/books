@@ -149,7 +149,7 @@ export class SearchBar extends Component {
         goodreadsBooks,
         bookshelf
       );
-      // TODO: What's this doing again?
+
       forEach([...duplicates, ...duplicatedISBNs], duplicate =>
         forEach([...combinedBooks], obj =>
           obj.isbn === duplicate.isbn ? remove(combinedBooks, obj) : null
@@ -165,6 +165,10 @@ export class SearchBar extends Component {
       }
       if (combinedBooks.length) {
         saveCombinedBooks(combinedBooks);
+      }
+      if (duplicatedISBNs.length) {
+        const existingUnchangedISBN = map(duplicatedISBNs, isbn => isbn.isbn);
+        this.setState({ duplicatedISBNs: existingUnchangedISBN });
       }
       clearBooks();
       this.setState({ success: true, loading: false, multiline: '' });
@@ -295,10 +299,9 @@ export class SearchBar extends Component {
           getContent={() => <Tooltip content={tooltipObj} />}
         />
         <Notification
-          open={false}
-          //open={duplicatedISBNs.length ? true : false}
+          open={duplicatedISBNs.length > 0 ? true : false}
           handleClose={this.onClose}
-          autoHideDuration={3500}
+          autoHideDuration={7500}
           message={`${duplicatedISBNs.join(
             ', '
           )} already shelved with no differences`}

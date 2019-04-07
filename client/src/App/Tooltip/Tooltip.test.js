@@ -1,6 +1,6 @@
 import React from 'react';
 import Tooltip from './Tooltip';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import forEach from 'lodash/forEach';
 import { LOADING_STATUSES } from '../../util/constants';
 
@@ -29,9 +29,9 @@ describe('Tooltip', () => {
       props = Object.assign({}, props, {
         content: [{ label: 'Amazon', loading: status }],
       });
-      wrapper = mount(<Tooltip {...props} />);
+      wrapper = shallow(<Tooltip {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(wrapper.html()).toMatchSnapshot();
     });
   });
 });
