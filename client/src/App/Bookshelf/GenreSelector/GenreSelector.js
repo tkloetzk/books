@@ -12,9 +12,6 @@ import {
   getBookshelf,
   getBookshelfGenres,
 } from '../../../store/bookshelf/bookshelfActions';
-import { CSVLink } from 'react-csv';
-import DownloadIcon from '@material-ui/icons/SaveAlt';
-import Fab from '@material-ui/core/Fab';
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 
@@ -114,23 +111,8 @@ export class GenreSelector extends React.Component {
     }
   };
   render() {
-    const { classes, bookshelf } = this.props;
+    const { classes } = this.props;
     const { genres, selectAll, deselectAll } = this.state;
-
-    let headers = [
-      { label: 'ISBN', key: 'isbn' },
-      { label: 'Title', key: 'title' },
-      { label: 'Subtitle', key: 'subtitle' },
-      { label: 'Categories', key: 'categories' },
-      { label: 'Amazon Average Rating', key: 'amazonAverageRating' },
-      { label: 'Amazon Ratings Count', key: 'amazonRatingsCount' },
-      { label: 'Goodreads Average Rating', key: 'goodreadsAverageRating' },
-      { label: 'Goodreads Ratings Count', key: 'goodreadsRatingsCount' },
-      { label: 'Adjusted Rating', key: 'adjustedRating' },
-      { label: 'Read', key: 'read' },
-      { label: 'Owned', key: 'owned' },
-      // TODO: Include Amazon link instead of description
-    ];
 
     const selectionControls = [
       {
@@ -182,11 +164,6 @@ export class GenreSelector extends React.Component {
               />
             );
           })}
-          <CSVLink data={bookshelf} headers={headers}>
-            <Fab size="small">
-              <DownloadIcon fontSize="small" />
-            </Fab>
-          </CSVLink>
         </FormGroup>
       </FormControl>
     );
@@ -208,7 +185,6 @@ const styles = {
 };
 const mapStateToProps = state => {
   return {
-    bookshelf: state.bookshelf.bookshelf,
     genres: state.bookshelf.genres,
   };
 };
