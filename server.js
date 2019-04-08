@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const amazon = require('./routes/api/amazon');
 const goodreads = require('./routes/api/goodreads');
 const bookshelf = require('./routes/api/bookshelf');
-const bookshelfOffline = require('./routes/api/bookshelfOffline');
+const bookshelfOffline = require('./routes/api/offline/bookshelfOffline');
 const google = require('./routes/api/google');
 const app = express();
 // configure app to use bodyParser()
