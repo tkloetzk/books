@@ -85,7 +85,6 @@ bookRoutes.route('/').post((req, res) => {
     forEach(global.bookshelf, book => {
       forEach(req.body, category => {
         if (book.categories.includes(category)) {
-          console.log(book.title);
           filteredBookshelf.push(book);
         }
       });
