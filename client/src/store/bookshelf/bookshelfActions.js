@@ -148,12 +148,13 @@ export function updateBookOnBookshelfFailure(error) {
     error,
   };
 }
-export function updateBookOnBookshelf(id, fields) {
+export function updateBookOnBookshelf(id, fields, refreshBookshelf = false) {
   return dispatch => {
     return updateBookOnBookshelfService(id, fields)
       .then(saved => {
         dispatch(updateBookOnBookshelfSuccess());
-        if (has(fields, 'categories')) {
+        if (has(fields, 'categories') || refreshBookshelf) {
+          console.log('getting', id, refreshBookshelf)
           dispatch(getBookshelf());
         }
       })

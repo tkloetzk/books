@@ -5,6 +5,7 @@ import {
   getBookshelf,
   updateBookOnBookshelf,
   deleteBookOnBookshelf,
+  clearBooks,
 } from '../../store/bookshelf/bookshelfActions';
 import { getAmazonBook } from '../../store/amazon/amazonActions';
 import { getGoodreadsBook } from '../../store/goodreads/goodreadsActions';
@@ -20,34 +21,37 @@ import DownloadIcon from '@material-ui/icons/SaveAlt';
 import forEach from 'lodash/forEach';
 import util from '../../util/combineBooks';
 import find from 'lodash/find';
+import merge from 'lodash/merge'
+import keys from 'lodash/keys'
 
 export class Bookshelf extends Component {
   componentDidMount() {
     this.props.getBookshelf();
   }
 
-  componentDidUpdate() {
-    const { amazonBooks, goodreadsBooks, bookshelf } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    const { amazonBooks, goodreadsBooks, bookshelf, updateBookOnBookshelf, clearBooks } = this.props;
 
     if (
       amazonBooks.length === bookshelf.length &&
       goodreadsBooks.length === bookshelf.length
     ) {
-      // TODO: This all probably could be better
-      const { combinedBooks, duplicates, duplicatedISBNs } = util.combineBooks(
-        amazonBooks,
-        goodreadsBooks,
-        bookshelf
-      );
-
-      forEach(combinedBooks, combinedBook => {
-        const bookshelfBook = find(bookshelf, ['isbn', combinedBook.isbn]);
-        console.log(combinedBook, bookshelfBook);
-      });
-      //  console.log('combinedBooks', combinedBooks);
-      console.log('duplicates', duplicates);
-      console.log('duplicatedISBNs', duplicatedISBNs);
-      //console.log('bookshelf', bookshelf);
+      const combinedBooks = merge(amazonBooks, goodreadsBooks)
+      forEach(combinedBooks, updatedBook => {
+        const differences = []
+        const existingBook = find(bookshelf, ['isbn', updatedBook.isbn]);
+        forEach(keys(updatedBook), key => {
+          if (key !== 'price' && key !== 'isbn') {
+            if (updatedBook[key] && updatedBook[key] > 0 && existingBook[key] !== updatedBook[key]) {
+              differences.push({[key]: updatedBook[key]})
+            }
+          }
+        })
+        if (differences.length > 0) {
+          updateBookOnBookshelf(existingBook._id, assign(...differences), true)
+        }
+      })
+      clearBooks();
     }
   }
 
@@ -57,20 +61,12 @@ export class Bookshelf extends Component {
     const fields = map(edits, diff => {
       return { [diff.key]: diff.newValue };
     });
-    updateBookOnBookshelf(book._id, assign(...fields));
+
+    updateBookOnBookshelf(book._id, assign(...fields), false);
   };
 
   refreshBookshelf = () => {
     const { getAmazonBook, bookshelf, getGoodreadsBook } = this.props;
-    // if (!loading) {
-    //   this.setState({
-    //     success: false,
-    //     loading: true,
-    //     searchIsbns: isbns,
-    //     goodreadsBookLoading: LOADING_STATUSES.loading,
-    //     amazonBookLoading: LOADING_STATUSES.loading,
-    //   });
-    // }
 
     Promise.all(
       forEach(bookshelf, book => {
@@ -108,7 +104,7 @@ export class Bookshelf extends Component {
             </CSVLink>
             <Fab
               size="small"
-              onClick={this.refreshBookshelf}
+              onClick={() => this.refreshBookshelf()}
               style={{
                 marginLeft: '11px',
                 backgroundColor: 'black',
@@ -145,19 +141,18 @@ const styles = {
 export const mapStateToProps = state => ({
   bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
   amazonBooks: state.amazon.books,
-  amazonBookErrored: state.amazon.hasErrored,
-  googleBooks: state.google.books,
-  googleBooksErrored: state.google.hasErrored,
+//  amazonBookErrored: state.amazon.hasErrored,
   goodreadsBooks: state.goodreads.books,
-  goodreadsBooksErrored: state.goodreads.hasErrored,
+  //goodreadsBooksErrored: state.goodreads.hasErrored,
 });
 
 const mapDispatchToProps = {
   getBookshelf,
-  updateBookOnBookshelf,
   deleteBookOnBookshelf,
+  updateBookOnBookshelf,
   getAmazonBook,
   getGoodreadsBook,
+  clearBooks,
 };
 
 Bookshelf.defaultProps = {
