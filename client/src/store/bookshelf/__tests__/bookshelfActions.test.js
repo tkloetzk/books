@@ -429,6 +429,77 @@ describe('bookshelf actions', () => {
           expect(store.getActions()).toEqual(expectedResponse);
         });
     });
+    it('calls getBookshelf on refreshBookshelf', () => {
+      const store = createMockStore();
+      const expectedResponse = [
+        { type: types.UPDATE_BOOK_ON_BOOKSHELF_SUCCESS },
+        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        {
+          bookshelf: [
+            {
+              __v: 0,
+              _id: '5c9d6b89f2ae7a3690d6fa42',
+              adjustedRating: 4.449916512838346,
+              amazonAverageRating: 4.7,
+              amazonRatingsCount: 1916,
+              categories: ['Juvenile Fiction'],
+              description:
+                'It is eight years after the tours from offworld have stopped.',
+              goodreadsAverageRating: 4.21,
+              goodreadsRatingsCount: 1860678,
+              isbn: '9780064404990',
+              owned: false,
+              price: '',
+              read: false,
+              subtitle: '',
+              thumbnail: 'http://books.google.com/books/content?id=zCe6gRHonZg',
+              title: 'Year of the Griffin',
+            },
+            {
+              amazonAverageRating: 4.6,
+              amazonRatingsCount: 29,
+              categories: ['Religion'],
+              description:
+                'Elizabeth George, bestselling author and mother of two daughters',
+              goodreadsAverageRating: 4.25,
+              goodreadsRatingsCount: 149,
+              isbn: '9780736917728',
+              price: '',
+              subtitle: '',
+              thumbnail:
+                'http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover',
+              title: "Raising a Daughter After God's Own Heart",
+            },
+          ],
+          type: types.FETCH_BOOKSHELF_SUCCESS,
+        },
+        {
+          error: null,
+          hasErrored: false,
+          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
+        },
+        {
+          genres: ['Juvenile Fiction', 'Religion'],
+          type: types.FETCH_BOOKSHELF_GENRES_SUCCESS,
+        },
+      ];
+      updateBookOnBookshelfService.mockResolvedValue({
+        n: 1,
+        nModified: 1,
+        ok: 1,
+      });
+
+      return store
+        .dispatch(
+          actions.updateBookOnBookshelf('5c967fbcbfb8c4eb4b9d463c', {
+            goodreadsRatingsCount: 21560,
+          }, true)
+        )
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedResponse);
+        });
+    })
     it('fails', () => {
       const store = createMockStore();
       const expectedResponse = [

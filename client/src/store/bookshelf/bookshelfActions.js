@@ -154,7 +154,6 @@ export function updateBookOnBookshelf(id, fields, refreshBookshelf = false) {
       .then(saved => {
         dispatch(updateBookOnBookshelfSuccess());
         if (has(fields, 'categories') || refreshBookshelf) {
-          console.log('getting', id, refreshBookshelf)
           dispatch(getBookshelf());
         }
       })
