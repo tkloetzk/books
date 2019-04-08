@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
+    "install-all": "yarn install && yarn install --prefix client",
     "test": "cd client && yarn test; cd ../",
     "test:coverage": "cd client && yarn test:coverage; cd ../",
     "start": "node server.js",
