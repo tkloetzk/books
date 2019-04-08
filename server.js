@@ -2,10 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const amazon = require('./routes/api/amazon');
+const amazonOffline = require('./routes/api/offline/amazonOffline')
 const goodreads = require('./routes/api/goodreads');
+const goodreadsOffline = require('./routes/api/offline/goodreadsOffline');
 const bookshelf = require('./routes/api/bookshelf');
-const bookshelfOffline = require('./routes/api/bookshelfOffline');
+const bookshelfOffline = require('./routes/api/offline/bookshelfOffline');
 const google = require('./routes/api/google');
+const googleOffline = require('./routes/api/offline/googleOffline');
 const app = express();
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -27,6 +30,9 @@ if (env === 'dev') {
 if (env === 'offline') {
   console.info('using offline bookshelf');
   app.use('/api/bookshelf', bookshelfOffline);
+  app.use('/api/amazon', amazonOffline);
+  app.use('/api/google', googleOffline);
+  app.use("/api/goodreads", goodreadsOffline);
 } else {
   mongoose
     .connect(db, { useNewUrlParser: true })
@@ -34,12 +40,11 @@ if (env === 'offline') {
     .catch(err => console.error('server', err));
 
   app.use('/api/bookshelf', bookshelf);
+  app.use('/api/amazon', amazon);
+  app.use('/api/google', google);
+  //app.use("/api/goodreads", goodreads);
 }
 
-app.use('/api/amazon', amazon);
-
-app.use('/api/google', google);
-//app.use("/api/goodreads", goodreads);
 
 const port = process.env.PORT || 5000;
 
