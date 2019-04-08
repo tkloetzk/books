@@ -6,6 +6,8 @@ import {
   updateBookOnBookshelf,
   deleteBookOnBookshelf,
 } from '../../store/bookshelf/bookshelfActions';
+import { getAmazonBook } from '../../store/amazon/amazonActions';
+import { getGoodreadsBook } from '../../store/goodreads/goodreadsActions';
 import { connect } from 'react-redux';
 import Results from '../Results/Results';
 import map from 'lodash/map';
@@ -15,10 +17,37 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import Fab from '@material-ui/core/Fab';
 import { CSVLink } from 'react-csv';
 import DownloadIcon from '@material-ui/icons/SaveAlt';
+import forEach from 'lodash/forEach';
+import util from '../../util/combineBooks';
 
 export class Bookshelf extends Component {
   componentDidMount() {
     this.props.getBookshelf();
+  }
+
+  componentDidUpdate() {
+    const { amazonBooks, goodreadsBooks, bookshelf } = this.props;
+
+    if (
+      amazonBooks.length === bookshelf.length &&
+      goodreadsBooks.length === bookshelf.length
+    ) {
+      // TODO: This all probably could be better
+      const { combinedBooks, duplicates, duplicatedISBNs } = util.combineBooks(
+        amazonBooks,
+        goodreadsBooks,
+        bookshelf
+      );
+
+      forEach(combinedBooks, combinedBook => {
+        const bookshelfBook = find(bookshelf, ['isbn', combinedBook.isbn]);
+        console.log(combinedBook, bookshelfBook);
+      });
+      //  console.log('combinedBooks', combinedBooks);
+      console.log('duplicates', duplicates);
+      console.log('duplicatedISBNs', duplicatedISBNs);
+      //console.log('bookshelf', bookshelf);
+    }
   }
 
   handleSave = (book, edits) => {
@@ -30,6 +59,24 @@ export class Bookshelf extends Component {
     updateBookOnBookshelf(book._id, assign(...fields));
   };
 
+  refreshBookshelf = () => {
+    const { getAmazonBook, bookshelf, getGoodreadsBook } = this.props;
+    // if (!loading) {
+    //   this.setState({
+    //     success: false,
+    //     loading: true,
+    //     searchIsbns: isbns,
+    //     goodreadsBookLoading: LOADING_STATUSES.loading,
+    //     amazonBookLoading: LOADING_STATUSES.loading,
+    //   });
+    // }
+
+    Promise.all(
+      forEach(bookshelf, book => {
+        return [getAmazonBook(book.isbn), getGoodreadsBook(book.isbn)];
+      })
+    );
+  };
   render() {
     const { classes, bookshelf, active, deleteBookOnBookshelf } = this.props;
 
@@ -60,6 +107,7 @@ export class Bookshelf extends Component {
             </CSVLink>
             <Fab
               size="small"
+              onClick={this.refreshBookshelf}
               style={{
                 marginLeft: '11px',
                 backgroundColor: 'black',
@@ -95,12 +143,20 @@ const styles = {
 
 export const mapStateToProps = state => ({
   bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
+  amazonBooks: state.amazon.books,
+  amazonBookErrored: state.amazon.hasErrored,
+  googleBooks: state.google.books,
+  googleBooksErrored: state.google.hasErrored,
+  goodreadsBooks: state.goodreads.books,
+  goodreadsBooksErrored: state.goodreads.hasErrored,
 });
 
 const mapDispatchToProps = {
   getBookshelf,
   updateBookOnBookshelf,
   deleteBookOnBookshelf,
+  getAmazonBook,
+  getGoodreadsBook,
 };
 
 Bookshelf.defaultProps = {
