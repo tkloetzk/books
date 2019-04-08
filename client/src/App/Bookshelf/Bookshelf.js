@@ -19,6 +19,7 @@ import { CSVLink } from 'react-csv';
 import DownloadIcon from '@material-ui/icons/SaveAlt';
 import forEach from 'lodash/forEach';
 import util from '../../util/combineBooks';
+import find from 'lodash/find';
 
 export class Bookshelf extends Component {
   componentDidMount() {
