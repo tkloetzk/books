@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const randomWords = require('random-words');
-const startCase = require('lodash').startCase
-const map = require('lodash').map
-const forEach = require('lodash').forEach
+const startCase = require('lodash/startCase')
+const map = require('lodash/map')
+const forEach = require('lodash/forEach')
+
 const randomCategories = randomWords({exactly: 4, maxLength: 5})
 const categories = map(global.bookshelf, book =>  map(book.categories, category => category.toString()).toString()).concat(randomCategories)
 

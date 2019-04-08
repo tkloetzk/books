@@ -1,10 +1,10 @@
 const express = require('express');
 const bookRoutes = express.Router();
 const _ = require('lodash')
-const forEach = require('lodash').forEach
-const map = require('lodash').map
-const isEqual = require('lodash').isEqual
-const remove = require('lodash').remove
+const forEach = require('lodash/forEach')
+const map = require('lodash/map')
+const isEqual = require('lodash/isEqual')
+const remove = require('lodash/remove')
 
 global.bookshelf = [
   {
