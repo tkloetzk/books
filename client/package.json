@@ -28,6 +28,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-offline": "REACT_APP_ENV=offline react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --verbose=false",
     "eject": "react-scripts eject",

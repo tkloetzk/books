@@ -12,9 +12,10 @@
     "start:dev": "NODE_ENV=dev node server.js",
     "server:dev": "NODE_ENV=dev nodemon server.js",
     "client": "npm start --prefix client",
+    "client-offline": "npm run start-offline --prefix client",
     "dev": "concurrently \"NODE_ENV=dev npm run server\" \"npm run client\" \"java -jar goodreadsbookshelf-0.0.1-SNAPSHOT.jar\"",
     "prod": "concurrently \"NODE_ENV=prod npm run server\" \"npm run client\" \"java -jar goodreadsbookshelf-0.0.1-SNAPSHOT.jar\"",
-    "offline": "concurrently \"NODE_ENV=offline npm run server\" \"npm run client\" \"java -jar goodreadsbookshelf-0.0.1-SNAPSHOT.jar\""
+    "offline": "concurrently \"NODE_ENV=offline npm run server\" \"npm run client-offline\""
   },
   "author": "Tucker Kloetzke",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "express": "^4.16.4",
     "google-books-search": "^0.3.1",
     "mongoose": "^5.3.15",
+    "random-words": "^1.1.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   },
