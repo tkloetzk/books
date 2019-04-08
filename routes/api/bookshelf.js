@@ -1,6 +1,6 @@
 const express = require('express');
 const bookRoutes = express.Router();
-const map = require('lodash').map;
+const map = require('lodash/map');
 const { ObjectId } = require('mongodb');
 const Book = require('../../models/Book');
 

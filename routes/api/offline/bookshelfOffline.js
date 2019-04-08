@@ -1,9 +1,12 @@
 const express = require('express');
 const bookRoutes = express.Router();
-const map = require('lodash').map;
-const forEach = require('lodash').forEach;
+const _ = require('lodash')
+const forEach = require('lodash/forEach')
+const map = require('lodash/map')
+const isEqual = require('lodash/isEqual')
+const remove = require('lodash/remove')
 
-let bookshelf = [
+global.bookshelf = [
   {
     categories: ['Motherhood'],
     _id: '5c801a9f4549aac8fe03f088',
@@ -74,27 +77,54 @@ let bookshelf = [
     goodreadsRatingsCount: 11162,
     __v: 0,
   },
-];
+]
 
 bookRoutes.route('/').post((req, res) => {
   if (req.body.length) {
     const filteredBookshelf = [];
-    forEach(bookshelf, book => {
+    forEach(global.bookshelf, book => {
       forEach(req.body, category => {
         if (book.categories.includes(category)) {
-          console.log(book.title);
           filteredBookshelf.push(book);
         }
       });
     });
     res.send(filteredBookshelf);
   } else {
-    res.send(bookshelf);
+    res.send(global.bookshelf);
   }
 });
 
+bookRoutes.route('/add').post((req, res) => {
+  const books = map(req.body, book => {
+    Book.find({ isbn: book.isbn }, { isbn: 1 }).limit(1);
+    return new Book(book);
+  });
+  global.bookshelf = global.bookshelf.concat(books)
+  res.send(books);
+});
+
+
+bookRoutes.route('/update/:id').put((req, res) => {
+ forEach(global.bookshelf, book => {
+    if (isEqual(book._id.toString(), req.params.id)) {
+      forEach(Object.keys(req.body), key => {
+        book[key] = req.body[key]
+      })
+   }
+ })
+ res.send(global.bookshelf)
+});
+
+bookRoutes.route('/delete/:id').delete((req, res) => {
+  console.log('deleting', req.params);
+
+  remove(global.bookshelf, book => book._id.toString() === req.params.id)
+  res.send(global.bookshelf)
+});
+
 bookRoutes.route('/genres').get((req, res) => {
-  const genres = map(bookshelf, book =>
+  const genres = map(global.bookshelf, book =>
     forEach(book.categories, category => category).toString()
   );
   res.send(genres);
