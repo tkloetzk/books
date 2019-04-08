@@ -48,6 +48,7 @@ export class Bookshelf extends Component {
           }
         })
         if (differences.length > 0) {
+          //TODO: What if a service errors, what happens?
           updateBookOnBookshelf(existingBook._id, assign(...differences), true)
         }
       })
