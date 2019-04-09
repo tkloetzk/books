@@ -54,12 +54,12 @@ const styles = () => ({
 });
 
 const Notification = ({
-  classes = {},
+  classes,
   open = false,
   handleClose,
-  autoHideDuration = 1,
-  message = '',
-  type = '',
+  autoHideDuration,
+  message,
+  type,
 }) => {
   //TODO: Doesn't work
   if (!open || isEmpty(message) || isEmpty(type)) {

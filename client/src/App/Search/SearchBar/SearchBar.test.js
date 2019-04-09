@@ -528,7 +528,48 @@ describe('SearchBar', () => {
         expect(instance.props.saveCombinedBooks).not.toHaveBeenCalled();
       });
       it('exisiting book with no differences', () => {
-        // TODO: get this implemented
+        // const book = newBook[0]
+        // amazonBooks = [{
+        //     amazonAverageRating: book.amazonAverageRating,
+        //     amazonRatingsCount: book.amazonRatingsCount,
+        //     price: book.price,
+        //     isbn: book.isbn,
+        //   },
+        // ];
+        // goodreadsBooks = [
+        //   {
+        //     isbn: book.isbn,
+        //     goodreadsAverageRating: book.goodreadsAverageRating,
+        //     goodreadsRatingsCount: book.goodreadsRatingsCount,
+        //   },
+        // ];
+        // googleBooks = [
+        //   {
+        //     title: book.title,
+        //     isbn: book.isbn,
+        //     subtitle: book.subtitle,
+        //     description: book.description,
+        //     thumbnail: book.thumbnail,
+        //     categories: book.categories,
+        //   }
+        // ]
+        // props = Object.assign({}, props, {
+        //   googleBooks,
+        //   goodreadsBooks,
+        //   amazonBooks,
+        //   bookshelf: newBook,
+        // });
+        // wrapper = shallow(<SearchBar {...props} />);
+        // instance = wrapper.instance();
+        // instance.state.loading = true;
+        // instance.state.searchIsbns = [book.isbn];
+        //
+        // instance.componentDidUpdate(prevProps);
+        //
+        // expect(instance.props.insertModifiedBook).not.toHaveBeenCalled();
+        // expect(instance.props.saveModifiedBooks).not.toHaveBeenCalled();
+        // expect(instance.props.saveCombinedBooks).not.toHaveBeenCalled();
+        // expect(instance.state.duplicatedISBNs).toEqual([book.isbn])
       });
       it('new books with modified book', () => {
         amazonBooks[0].amazonAverageRating = 2;

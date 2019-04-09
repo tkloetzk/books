@@ -11,7 +11,6 @@ export const initialState = {
   modifiedBooklist: [],
   error: null,
   saveStatus: { status: LOADING_STATUSES.initial, message: '' },
-  refreshed: false,
   filters: [],
   genres: [],
 };
@@ -104,13 +103,13 @@ export default function bookshelf(state = initialState, action) {
     }
     case types.FETCH_BOOKSHELF_GENRES_SUCCESS: {
       return Object.assign({}, state, {
-        genres: action.genres
-      })
+        genres: action.genres,
+      });
     }
     case types.FETCH_BOOKSHELF_GENRES_FAILURE: {
       return Object.assign({}, state, {
-        error: action.error
-      })
+        error: action.error,
+      });
     }
     default:
       return state;
