@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const keys = require('./config/keys');
 const amazon = require('./routes/api/amazon');
 const amazonOffline = require('./routes/api/offline/amazonOffline')
 const goodreads = require('./routes/api/goodreads');
@@ -21,10 +22,13 @@ var env = process.env.NODE_ENV || 'prod';
 let db;
 if (env === 'dev') {
   console.info('Using database Test');
-  db = require('./config/keys').mongoURITest;
+  db = keys.mongoURITest;
+} else if (env === 'stg') {
+  console.info('Using database Stage');
+  db = keys.mongoURIStage;
 } else if (env === 'prod') {
   console.info('Using database Prod');
-  db = require('./config/keys').mongoURI;
+  db = keys.mongoURI;
 }
 
 if (env === 'offline') {
