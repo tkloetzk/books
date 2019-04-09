@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
-    "test": "cd client && yarn test; cd ../",
-    "test:coverage": "cd client && yarn test:coverage; cd ../",
+    "test": "cd client && npm test; cd ../",
+    "test:coverage": "cd client && npm run test:coverage; cd ../",
     "start": "node server.js",
     "server": "nodemon server.js",
     "start:dev": "NODE_ENV=dev node server.js",
