@@ -124,8 +124,13 @@ bookRoutes.route('/delete/:id').delete((req, res) => {
 });
 
 bookRoutes.route('/genres').get((req, res) => {
-  const genres = map(global.bookshelf, book =>
-    forEach(book.categories, category => category).toString()
+  const genres = []
+  forEach(global.bookshelf, book =>
+    forEach(book.categories, category => {
+      if (!genres.includes(category)) {
+        return genres.push(category.toString())
+      }
+    })
   );
   res.send(genres);
 });

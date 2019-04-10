@@ -19,19 +19,16 @@ import Fab from '@material-ui/core/Fab';
 import { CSVLink } from 'react-csv';
 import DownloadIcon from '@material-ui/icons/SaveAlt';
 import forEach from 'lodash/forEach';
-import util from '../../util/combineBooks';
 import find from 'lodash/find';
 import merge from 'lodash/merge';
 import keys from 'lodash/keys';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-//https://stackoverflow.com/questions/42341331/es6-promise-all-progress
 
 export class Bookshelf extends Component {
   state = {
     completed: 0,
-    color: 'blue',
-    updateFinished: false,
+    progressStatus: 'initial'
   };
 
   componentDidMount() {
@@ -39,90 +36,18 @@ export class Bookshelf extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { completed, updateFinished } = this.state;
-    const {
-      amazonBooks,
-      goodreadsBooks,
-      goodreadsBooksErrored,
-      bookshelf,
-      updateBookOnBookshelf,
-      clearBooks,
-    } = this.props;
-    //  if bookshelf is 12
-    //  total = 48
-    //  amazonBooks 12, goodreads 12, updateBook 24 potential
+    const { progressStatus } = this.state
+    const { amazonBooks, goodreadsBooks, bookshelf, getBookshelf } = this.props
 
-    if (completed === 90 && prevState.completed !== 90) {
-      const combinedBooks = merge(amazonBooks, goodreadsBooks);
-      forEach(combinedBooks, updatedBook => {
-        const progress = (100 - completed) / bookshelf.length;
-        const differences = [];
-        const existingBook = find(bookshelf, ['isbn', updatedBook.isbn]);
-        forEach(keys(updatedBook), key => {
-          if (key !== 'price' && key !== 'isbn') {
-            if (
-              updatedBook[key] &&
-              updatedBook[key] > 0 &&
-              existingBook[key] !== updatedBook[key]
-            ) {
-              differences.push({ [key]: updatedBook[key] });
-            }
-          }
-        });
-        console.log(completed + progress);
-        if (completed + progress < 100) {
-          this.setState({ completed: completed + progress }, () => {
-            if (differences.length > 0) {
-              //TODO: What if a service errors, what happens?
-              updateBookOnBookshelf(
-                existingBook._id,
-                assign(...differences),
-                true
-              );
-            }
-          });
-        }
-
-        clearBooks();
-        this.setState({ completed: 100, updateFinished: true });
-      });
-    }
-    if (
-      goodreadsBooksErrored &&
-      goodreadsBooksErrored !== prevProps.goodreadsBooksErrored
-    ) {
-      this.setState({ color: 'red' });
-    }
-    if (
-      completed !== 100 &&
-      ((amazonBooks !== prevProps.amazonBooks ||
-        goodreadsBooks !== prevProps.goodreadsBooks) &&
-        (amazonBooks.length !== bookshelf.length &&
-          goodreadsBooks.length !== bookshelf.length))
-    ) {
-      console.log(
-        ((amazonBooks.length + goodreadsBooks.length) /
-          (bookshelf.length * 2.215)) *
-          100
-      );
-      this.setState({
-        completed:
-          ((amazonBooks.length + goodreadsBooks.length) /
-            (bookshelf.length * 2.215)) *
-          100,
-      });
+    // Getting all the bookshelf values from amazon and goodreads has finished
+    if (progressStatus === 'refreshEnded' && prevState.progressStatus === 'refreshStarted' &&
+      amazonBooks.length === bookshelf.length && goodreadsBooks.length === bookshelf.length) {
+      this.findAndMergeInUpdates()
     }
 
-    if (updateFinished && !prevState.updateFinished) {
-      getBookshelf();
-    }
-    if (
-      amazonBooks.length === bookshelf.length &&
-      goodreadsBooks.length === bookshelf.length &&
-      bookshelf.length !== 0 &&
-      completed < 90
-    ) {
-      this.setState({ completed: 90 });
+    // If merge has finished, refresh the bookshelf
+    if (progressStatus === 'mergeEnded' && prevState.progressStatus !== 'mergeEnded') {
+      getBookshelf()
     }
   }
 
@@ -136,15 +61,90 @@ export class Bookshelf extends Component {
     updateBookOnBookshelf(book._id, assign(...fields), false);
   };
 
+  updatePogressState = count => {
+    console.log('count', count);
+    if (count <= 100) {
+      this.setState({ completed: count });
+    }
+  };
+
+  findAndMergeInUpdates = () => {
+    const {
+      amazonBooks,
+      goodreadsBooks,
+      bookshelf,
+      clearBooks,
+      updateBookOnBookshelf,
+    } = this.props;
+    this.setState({ progressStatus: 'mergeStarted'})
+    const combinedBooks = merge(amazonBooks, goodreadsBooks);
+
+    const promiseArray = [];
+    const allDifferencesArray = [];
+    forEach(combinedBooks, updatedBook => {
+      const bookDifferences = [];
+      const existingBook = find(bookshelf, ['isbn', updatedBook.isbn]);
+
+      forEach(keys(updatedBook), key => {
+        if (key !== 'price' && key !== 'isbn') {
+          if (
+            updatedBook[key] &&
+            updatedBook[key] > 0 &&
+            existingBook[key] !== updatedBook[key]
+          ) {
+            bookDifferences.push({ [key]: updatedBook[key] });
+          }
+        }
+      });
+      if (bookDifferences.length) {
+        allDifferencesArray.push({ id: existingBook._id, differences: bookDifferences });
+      }
+    });
+
+    if (allDifferencesArray.length > 0) {
+      const progress = (100 - this.state.completed) / allDifferencesArray.length;
+      //TODO: What if a service errors, what happens?
+      forEach(allDifferencesArray, diff => {
+        promiseArray.push(
+          updateBookOnBookshelf(diff.id, assign(...diff.differences)).then(
+            val => {
+              const { completed } = this.state;
+              if (completed + progress < 100)
+                this.progress(completed + progress);
+              return val;
+            }
+          )
+        );
+      });
+      Promise.all(promiseArray)
+    }
+    clearBooks();
+    this.setState({ completed: 100, progressStatus: 'mergeEnded'})
+  }
+
   refreshBookshelf = () => {
     const { getAmazonBook, bookshelf, getGoodreadsBook } = this.props;
 
-    this.setState({ updateFinished: false });
-    Promise.all(
-      forEach(bookshelf, book => {
-        return [getAmazonBook(book.isbn), getGoodreadsBook(book.isbn)];
-      })
-    );
+    this.setState({ progressStatus: 'refreshStarted', completed: 0 });
+    let count = 0;
+     const promiseArray = [];
+     forEach(bookshelf, book => {
+       promiseArray.push(
+         getAmazonBook(book.isbn).then(val => {
+           this.updatePogressState((++count / (bookshelf.length * 2.125)) * 100);
+           return val;
+         })
+       );
+       promiseArray.push(
+         getGoodreadsBook(book.isbn).then(val => {
+           this.updatePogressState((++count / (bookshelf.length * 2.125)) * 100);
+           return val;
+         })
+       );
+     });
+     Promise.all(promiseArray).then(() => this.setState({
+       progressStatus: 'refreshEnded',
+     }))
   };
   render() {
     const { completed, color } = this.state;

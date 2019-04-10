@@ -24,10 +24,6 @@ export class GenreSelector extends React.Component {
     deselectAll: false,
   };
 
-  componentDidMount() {
-    this.props.getBookshelfGenres();
-  }
-
   componentDidUpdate(prevProps, prevState) {
     const { genres: propGenres, getBookshelf } = this.props;
     const { genres, deselectAll, selectChange, selectAll } = this.state;
