@@ -89,9 +89,7 @@ describe('GenreSelector', () => {
   describe('renders', () => {
     it('renders with no genres', () => {
       const wrapper = shallow(<GenreSelector {...props} />);
-      const instance = wrapper.instance();
       expect(wrapper).toMatchSnapshot();
-      expect(instance.props.getBookshelfGenres).toHaveBeenCalledTimes(1);
     });
     it('sets genre state from props.genres', () => {
       const prevProps = [];
@@ -101,7 +99,6 @@ describe('GenreSelector', () => {
       const instance = wrapper.instance();
       instance.componentDidUpdate(prevProps, prevState);
 
-      expect(instance.props.getBookshelfGenres).toHaveBeenCalledTimes(1);
       expect(instance.state.genres).toEqual(genreSelectors);
     });
     // describe('componentDidUpdate', () => {
@@ -186,7 +183,6 @@ describe('GenreSelector', () => {
         instance.state.genres = genreSelectors;
         instance.componentDidUpdate(prevProps, prevState);
 
-        expect(instance.props.getBookshelfGenres).toHaveBeenCalledTimes(1);
         expect(instance.state.genres).toEqual([
           ...genreSelectors,
           { category: newGenreProp[2], checked: false },
@@ -208,7 +204,6 @@ describe('GenreSelector', () => {
         instance.state.genres = genreSelectors;
         instance.componentDidUpdate(prevProps, prevState);
         expect(instance.state.genres).toEqual([genreSelectors[0]]);
-        expect(instance.props.getBookshelfGenres).toHaveBeenCalledTimes(1);
         expect(wrapper).toMatchSnapshot();
       });
     });

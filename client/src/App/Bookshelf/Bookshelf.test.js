@@ -19,6 +19,7 @@ describe('Bookshelf', () => {
       bookshelf: [],
       amazonBooks: [],
       goodreadsBooks: [],
+      selectedGenres: [],
       active: true,
     };
     wrapper = shallow(<Bookshelf {...props} />);

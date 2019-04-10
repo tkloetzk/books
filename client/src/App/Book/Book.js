@@ -183,7 +183,7 @@ export class Book extends Component {
     forEach(filters, filter => {
       if (filter.value) {
         if (
-          (filter.key === 'unread' && read) ||
+          (filter.key === 'read' && read) ||
           (filter.key === 'owned' && !owned)
         ) {
           filteredBook = true;

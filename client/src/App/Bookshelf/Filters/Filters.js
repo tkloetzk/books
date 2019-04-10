@@ -11,7 +11,7 @@ export class Filters extends Component {
   state = {
     filters: [
       {
-        key: 'unread',
+        key: 'read',
         value: false,
       },
       {
@@ -44,11 +44,13 @@ export class Filters extends Component {
     const { unread, owned } = this.state;
     const selectionControls = [
       {
+        label: 'owned',
         category: 'owned',
         checked: owned,
       },
       {
-        category: 'unread',
+        label: 'Unread',
+        category: 'read',
         checked: unread,
       },
     ];
@@ -57,7 +59,7 @@ export class Filters extends Component {
       <FormControl component="fieldset">
         <FormGroup row className={classes.formGroup}>
           {selectionControls.map(selection => {
-            const { checked, category } = selection;
+            const { checked, category, label } = selection;
             return (
               <FormControlLabel
                 control={
@@ -68,7 +70,7 @@ export class Filters extends Component {
                     value={category}
                   />
                 }
-                label={category.toLocaleUpperCase()}
+                label={label.toLocaleUpperCase()}
                 key={category}
               />
             );

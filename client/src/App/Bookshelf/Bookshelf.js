@@ -27,7 +27,8 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 export class Bookshelf extends Component {
   state = {
     completed: 0,
-    progressStatus: 'initial'
+    progressStatus: 'initial',
+    bookshelfToUpdate: [],
   };
 
   componentDidMount() {
@@ -35,12 +36,16 @@ export class Bookshelf extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { progressStatus } = this.state
-    const { amazonBooks, goodreadsBooks, bookshelf, getBookshelf, selectedGenres } = this.props
+    const { progressStatus, bookshelfToUpdate } = this.state
+    const { amazonBooks, goodreadsBooks, getBookshelf, selectedGenres } = this.props
 
+
+    if (progressStatus === 'booksToUpdateFinished' && prevState.progressStatus !== 'booksToUpdateFinished') {
+      this.createPromiseArray()
+    }
     // Getting all the bookshelf values from amazon and goodreads has finished
-    if (progressStatus === 'refreshEnded' && prevState.progressStatus === 'refreshStarted' &&
-      amazonBooks.length === bookshelf.length && goodreadsBooks.length === bookshelf.length) {
+    if (progressStatus === 'refreshEnded' && prevState.progressStatus !== 'refreshEnded' &&
+      amazonBooks.length === bookshelfToUpdate.length && goodreadsBooks.length === bookshelfToUpdate.length) {
       this.findAndMergeInUpdates()
     }
 
@@ -67,11 +72,36 @@ export class Bookshelf extends Component {
     }
   };
 
+  createPromiseArray = () => {
+    const { bookshelfToUpdate} = this.state
+    const { getAmazonBook, getGoodreadsBook } = this.props
+
+    const promiseArray = []
+    let count = 0
+    forEach(bookshelfToUpdate, book => {
+      promiseArray.push(
+        getAmazonBook(book.isbn).then(val => {
+          this.updatePogressState((++count / (bookshelfToUpdate.length * 2.125)) * 100);
+          return val;
+        })
+      );
+      promiseArray.push(
+        getGoodreadsBook(book.isbn).then(val => {
+          this.updatePogressState((++count / (bookshelfToUpdate.length * 2.125)) * 100);
+          return val;
+        })
+      );
+    })
+    Promise.all(promiseArray).then(() => this.setState({
+      progressStatus: 'refreshEnded',
+    }))
+  }
+
   findAndMergeInUpdates = () => {
+    const { bookshelfToUpdate } = this.state
     const {
       amazonBooks,
       goodreadsBooks,
-      bookshelf,
       clearBooks,
       updateBookOnBookshelf,
     } = this.props;
@@ -82,7 +112,7 @@ export class Bookshelf extends Component {
     const allDifferencesArray = [];
     forEach(combinedBooks, updatedBook => {
       const bookDifferences = [];
-      const existingBook = find(bookshelf, ['isbn', updatedBook.isbn]);
+      const existingBook = find(bookshelfToUpdate, ['isbn', updatedBook.isbn]);
 
       forEach(keys(updatedBook), key => {
         if (key !== 'price' && key !== 'isbn') {
@@ -118,32 +148,38 @@ export class Bookshelf extends Component {
       Promise.all(promiseArray)
     }
     clearBooks();
-    this.setState({ completed: 100, progressStatus: 'mergeEnded'})
+    this.setState({ completed: 100, progressStatus: 'mergeEnded', bookshelfToUpdate: []})
   }
 
   refreshBookshelf = () => {
-    const { getAmazonBook, bookshelf, getGoodreadsBook } = this.props;
+    const { bookshelfToUpdate } = this.state
+    const { bookshelf, filters } = this.props;
 
     this.setState({ progressStatus: 'refreshStarted', completed: 0 });
-    let count = 0;
-     const promiseArray = [];
-     forEach(bookshelf, book => {
-       promiseArray.push(
-         getAmazonBook(book.isbn).then(val => {
-           this.updatePogressState((++count / (bookshelf.length * 2.125)) * 100);
-           return val;
-         })
-       );
-       promiseArray.push(
-         getGoodreadsBook(book.isbn).then(val => {
-           this.updatePogressState((++count / (bookshelf.length * 2.125)) * 100);
-           return val;
-         })
-       );
-     });
-     Promise.all(promiseArray).then(() => this.setState({
-       progressStatus: 'refreshEnded',
-     }))
+    
+    const filteredArray = []
+    forEach(filters, filter => {
+      if (filter.value) filteredArray.push(filter.key)
+    })
+     if (filteredArray.length) {
+      forEach(bookshelf, book => {
+          forEach(filteredArray, filter => {
+            if (book[filter]) {
+              this.setState({
+                bookshelfToUpdate: [...bookshelfToUpdate, book]
+              })
+            }
+          })
+        });
+        this.setState({
+          progressStatus: 'booksToUpdateFinished'
+        })
+      } else {
+        this.setState({
+          bookshelfToUpdate: bookshelf,
+          progressStatus: 'booksToUpdateFinished'
+        })
+      }
   };
   render() {
     const { completed, color } = this.state;
@@ -218,6 +254,7 @@ export const mapStateToProps = state => ({
   goodreadsBooks: state.goodreads.books,
   goodreadsBooksErrored: state.goodreads.hasErrored,
   selectedGenres: state.bookshelf.selectedGenres,
+  filters: state.bookshelf.filters,
 });
 
 const mapDispatchToProps = {

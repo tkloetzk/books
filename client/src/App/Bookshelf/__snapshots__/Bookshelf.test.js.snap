@@ -83,9 +83,14 @@ Array [
 
 exports[`Bookshelf renders does not with active false 1`] = `
 <Fragment>
+  <WithStyles(LinearProgress)
+    value={0}
+    variant="determinate"
+  />
   <div>
+    <Connect(WithStyles(GenreSelector)) />
     <div>
-      <Connect(WithStyles(GenreSelector)) />
+      <Connect(WithStyles(Filters)) />
       <CSVLink
         asyncOnClick={false}
         data={
@@ -184,16 +189,20 @@ exports[`Bookshelf renders does not with active false 1`] = `
         />
       </WithStyles(Fab)>
     </div>
-    <Connect(WithStyles(Filters)) />
   </div>
 </Fragment>
 `;
 
 exports[`Bookshelf renders with books on bookshelf 1`] = `
 <Fragment>
+  <WithStyles(LinearProgress)
+    value={0}
+    variant="determinate"
+  />
   <div>
+    <Connect(WithStyles(GenreSelector)) />
     <div>
-      <Connect(WithStyles(GenreSelector)) />
+      <Connect(WithStyles(Filters)) />
       <CSVLink
         asyncOnClick={false}
         data={
@@ -292,7 +301,6 @@ exports[`Bookshelf renders with books on bookshelf 1`] = `
         />
       </WithStyles(Fab)>
     </div>
-    <Connect(WithStyles(Filters)) />
   </div>
   <Results
     booklist={
@@ -322,9 +330,14 @@ exports[`Bookshelf renders with books on bookshelf 1`] = `
 
 exports[`Bookshelf renders with no books on bookshelf 1`] = `
 <Fragment>
+  <WithStyles(LinearProgress)
+    value={0}
+    variant="determinate"
+  />
   <div>
+    <Connect(WithStyles(GenreSelector)) />
     <div>
-      <Connect(WithStyles(GenreSelector)) />
+      <Connect(WithStyles(Filters)) />
       <CSVLink
         asyncOnClick={false}
         data={Array []}
@@ -405,7 +418,6 @@ exports[`Bookshelf renders with no books on bookshelf 1`] = `
         />
       </WithStyles(Fab)>
     </div>
-    <Connect(WithStyles(Filters)) />
   </div>
   <Results
     booklist={Array []}
