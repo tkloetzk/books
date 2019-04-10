@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
-    "install-all": "yarn install && yarn install --prefix client",
-    "test": "cd client && yarn test; cd ../",
-    "test:coverage": "cd client && yarn test:coverage; cd ../",
+    "test": "cd client && npm test; cd ../",
+    "test:coverage": "cd client && npm run test:coverage; cd ../",
+    "install-all": "npm install && npm install --prefix client",
     "start": "node server.js",
     "server": "nodemon server.js",
     "start:dev": "NODE_ENV=dev node server.js",
@@ -15,6 +15,7 @@
     "client": "npm start --prefix client",
     "client-offline": "npm run start-offline --prefix client",
     "dev": "concurrently \"NODE_ENV=dev npm run server\" \"npm run client\" \"java -jar goodreadsbookshelf-0.0.1-SNAPSHOT.jar\"",
+    "stg": "concurrently \"NODE_ENV=stg npm run server\" \"npm run client\" \"java -jar goodreadsbookshelf-0.0.1-SNAPSHOT.jar\"",
     "prod": "concurrently \"NODE_ENV=prod npm run server\" \"npm run client\" \"java -jar goodreadsbookshelf-0.0.1-SNAPSHOT.jar\"",
     "offline": "concurrently \"NODE_ENV=offline npm run server\" \"npm run client-offline\""
   },
