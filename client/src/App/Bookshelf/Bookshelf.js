@@ -21,38 +21,57 @@ import DownloadIcon from '@material-ui/icons/SaveAlt';
 import forEach from 'lodash/forEach';
 import util from '../../util/combineBooks';
 import find from 'lodash/find';
-import merge from 'lodash/merge'
-import keys from 'lodash/keys'
+import merge from 'lodash/merge';
+import keys from 'lodash/keys';
 
 export class Bookshelf extends Component {
+  state = {
+    updateFinished: false,
+  };
   componentDidMount() {
     this.props.getBookshelf();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { amazonBooks, goodreadsBooks, bookshelf, updateBookOnBookshelf, clearBooks } = this.props;
+    const {
+      amazonBooks,
+      goodreadsBooks,
+      getBookshelf,
+      bookshelf,
+      updateBookOnBookshelf,
+      clearBooks,
+    } = this.props;
+    const { updateFinished } = this.state;
 
+    if (updateFinished && !prevState.updateFinished) {
+      getBookshelf();
+    }
     if (
       amazonBooks.length === bookshelf.length &&
       goodreadsBooks.length === bookshelf.length
     ) {
-      const combinedBooks = merge(amazonBooks, goodreadsBooks)
+      const combinedBooks = merge(amazonBooks, goodreadsBooks);
       forEach(combinedBooks, updatedBook => {
-        const differences = []
+        const differences = [];
         const existingBook = find(bookshelf, ['isbn', updatedBook.isbn]);
         forEach(keys(updatedBook), key => {
           if (key !== 'price' && key !== 'isbn') {
-            if (updatedBook[key] && updatedBook[key] > 0 && existingBook[key] !== updatedBook[key]) {
-              differences.push({[key]: updatedBook[key]})
+            if (
+              updatedBook[key] &&
+              updatedBook[key] > 0 &&
+              existingBook[key] !== updatedBook[key]
+            ) {
+              differences.push({ [key]: updatedBook[key] });
             }
           }
-        })
+        });
         if (differences.length > 0) {
           //TODO: What if a service errors, what happens?
-          updateBookOnBookshelf(existingBook._id, assign(...differences), true)
+          updateBookOnBookshelf(existingBook._id, assign(...differences), true);
         }
-      })
+      });
       clearBooks();
+      this.setState({ updateFinished: true });
     }
   }
 
@@ -69,6 +88,7 @@ export class Bookshelf extends Component {
   refreshBookshelf = () => {
     const { getAmazonBook, bookshelf, getGoodreadsBook } = this.props;
 
+    this.setState({ updateFinished: false });
     Promise.all(
       forEach(bookshelf, book => {
         return [getAmazonBook(book.isbn), getGoodreadsBook(book.isbn)];
@@ -96,8 +116,9 @@ export class Bookshelf extends Component {
     return (
       <React.Fragment>
         <div className={classes.genreBar}>
+          <GenreSelector />
           <div>
-            <GenreSelector />
+            <Filters />
             <CSVLink data={bookshelf} headers={headers}>
               <Fab size="small">
                 <DownloadIcon fontSize="small" />
@@ -115,7 +136,6 @@ export class Bookshelf extends Component {
               <RefreshIcon fontSize="small" />
             </Fab>
           </div>
-          <Filters />
         </div>
         {active && (
           <Results
@@ -142,7 +162,7 @@ const styles = {
 export const mapStateToProps = state => ({
   bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
   amazonBooks: state.amazon.books,
-//  amazonBookErrored: state.amazon.hasErrored,
+  //  amazonBookErrored: state.amazon.hasErrored,
   goodreadsBooks: state.goodreads.books,
   //goodreadsBooksErrored: state.goodreads.hasErrored,
 });
