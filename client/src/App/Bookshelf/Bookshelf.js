@@ -24,7 +24,6 @@ import merge from 'lodash/merge';
 import keys from 'lodash/keys';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-
 export class Bookshelf extends Component {
   state = {
     completed: 0,
@@ -37,7 +36,7 @@ export class Bookshelf extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { progressStatus } = this.state
-    const { amazonBooks, goodreadsBooks, bookshelf, getBookshelf } = this.props
+    const { amazonBooks, goodreadsBooks, bookshelf, getBookshelf, selectedGenres } = this.props
 
     // Getting all the bookshelf values from amazon and goodreads has finished
     if (progressStatus === 'refreshEnded' && prevState.progressStatus === 'refreshStarted' &&
@@ -47,7 +46,7 @@ export class Bookshelf extends Component {
 
     // If merge has finished, refresh the bookshelf
     if (progressStatus === 'mergeEnded' && prevState.progressStatus !== 'mergeEnded') {
-      getBookshelf()
+      getBookshelf(selectedGenres)
     }
   }
 
@@ -218,6 +217,7 @@ export const mapStateToProps = state => ({
   amazonBookErrored: state.amazon.hasErrored,
   goodreadsBooks: state.goodreads.books,
   goodreadsBooksErrored: state.goodreads.hasErrored,
+  selectedGenres: state.bookshelf.selectedGenres,
 });
 
 const mapDispatchToProps = {
