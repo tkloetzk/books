@@ -4,7 +4,6 @@ const forEach = require('lodash/forEach')
 
 const router = express.Router();
 
-// router.get("/", (req, res) => res.json({ msg: "Goodreads endpoint" }));
 router.get('/v1/:isbn', (req, res) => {
   const isbn = get(req.params, 'isbn');
   res.send({

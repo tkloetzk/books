@@ -10,6 +10,8 @@ const bookshelf = require('./routes/api/bookshelf');
 const bookshelfOffline = require('./routes/api/offline/bookshelfOffline');
 const google = require('./routes/api/google');
 const googleOffline = require('./routes/api/offline/googleOffline');
+const spawn = require('child_process').spawn
+
 const app = express();
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -20,14 +22,15 @@ var env = process.env.NODE_ENV || 'prod';
 
 // db
 let db;
+let dbName;
 if (env === 'dev') {
-  console.info('Using database Test');
+  dbName = 'Using database Test'
   db = keys.mongoURITest;
 } else if (env === 'stg') {
-  console.info('Using database Stage');
+  dbName = 'Using database Stage'
   db = keys.mongoURIStage;
 } else if (env === 'prod') {
-  console.info('Using database Prod');
+  dbName = 'Using database Prod'
   db = keys.mongoURI;
 }
 
@@ -38,6 +41,7 @@ if (env === 'offline') {
   app.use('/api/google', googleOffline);
   app.use("/api/goodreads", goodreadsOffline);
 } else {
+  console.info(`using ${dbName} bookshelf`);
   mongoose
     .connect(db, { useNewUrlParser: true })
     .then(() => console.info('MongoDB Connected'))
@@ -46,10 +50,20 @@ if (env === 'offline') {
   app.use('/api/bookshelf', bookshelf);
   app.use('/api/amazon', amazon);
   app.use('/api/google', google);
-  //app.use("/api/goodreads", goodreads);
 }
 
 
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.info(`Server running on port ${port}`));
+
+['uncaughtException', 'SIGINT', 'SIGTERM'] //'SIGQUIT', 'SIGKILL'
+  .forEach(signal => process.on(signal, () => {
+    console.error(`Nodemon error= ${signal}. Force spawn restart`);
+    spawn(process.argv[0], process.argv.slice(1), {
+      env: { process_restarting: 1 },
+      detached: true,
+      stdio: 'ignore'
+    }).unref();
+    process.exit();
+  }));
