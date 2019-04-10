@@ -53,7 +53,11 @@ export class GenreSelector extends React.Component {
             selectedGenre.push(genre.category);
           }
         });
-
+        if (!selectedGenre.length) {
+          this.setState({
+            selectAll: true
+          })
+        }
         getBookshelf(selectedGenre);
       } else if (deselectAll && !isEqual(deselectAll, prevState.deselectAll)) {
         getBookshelf(false);
