@@ -23,12 +23,19 @@ import find from 'lodash/find';
 import merge from 'lodash/merge';
 import keys from 'lodash/keys';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Tooltip from '../Tooltip/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import ReactTooltip from 'react-tooltip';
+import { LOADING_STATUSES } from '../../util/constants'
 
 export class Bookshelf extends Component {
   state = {
     completed: 0,
     progressStatus: 'initial',
     bookshelfToUpdate: [],
+    loading: LOADING_STATUSES.initial,
+    amazonBookLoading: LOADING_STATUSES.initial,
+    goodreadsBookLoading: LOADING_STATUSES.initial,
   };
 
   componentDidMount() {
@@ -36,21 +43,27 @@ export class Bookshelf extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { progressStatus, bookshelfToUpdate } = this.state
-    const { amazonBooks, goodreadsBooks, getBookshelf, selectedGenres } = this.props
-
+    const { progressStatus, bookshelfToUpdate, amazonBookLoading, goodreadsBookLoading, loading } = this.state
+    const { amazonBooks, goodreadsBooks, getBookshelf,  clearBooks, selectedGenres } = this.props
 
     if (progressStatus === 'booksToUpdateFinished' && prevState.progressStatus !== 'booksToUpdateFinished') {
       this.createPromiseArray()
     }
     // Getting all the bookshelf values from amazon and goodreads has finished
-    if (progressStatus === 'refreshEnded' && prevState.progressStatus !== 'refreshEnded' &&
-      amazonBooks.length === bookshelfToUpdate.length && goodreadsBooks.length === bookshelfToUpdate.length) {
+    if (amazonBooks.length && bookshelfToUpdate.length && progressStatus !== 'mergeStarted' &&
+        amazonBooks.length === bookshelfToUpdate.length && goodreadsBooks.length === bookshelfToUpdate.length) {
       this.findAndMergeInUpdates()
+    }
+
+    if (amazonBookLoading === LOADING_STATUSES.success && goodreadsBookLoading === LOADING_STATUSES.success && loading !== LOADING_STATUSES.success) {
+      this.setState({
+        loading: LOADING_STATUSES.success
+      })
     }
 
     // If merge has finished, refresh the bookshelf
     if (progressStatus === 'mergeEnded' && prevState.progressStatus !== 'mergeEnded') {
+      clearBooks();
       getBookshelf(selectedGenres)
     }
   }
@@ -76,33 +89,37 @@ export class Bookshelf extends Component {
     const { bookshelfToUpdate} = this.state
     const { getAmazonBook, getGoodreadsBook } = this.props
 
-    const promiseArray = []
     let count = 0
+    const amazonPromiseArray = []
+    const goodreadsPromiseArray = []
     forEach(bookshelfToUpdate, book => {
-      promiseArray.push(
+      amazonPromiseArray.push(
         getAmazonBook(book.isbn).then(val => {
           this.updatePogressState((++count / (bookshelfToUpdate.length * 2.125)) * 100);
           return val;
         })
       );
-      promiseArray.push(
+      goodreadsPromiseArray.push(
         getGoodreadsBook(book.isbn).then(val => {
           this.updatePogressState((++count / (bookshelfToUpdate.length * 2.125)) * 100);
           return val;
         })
       );
     })
-    Promise.all(promiseArray).then(() => this.setState({
-      progressStatus: 'refreshEnded',
+    Promise.all(amazonPromiseArray).then(() => this.setState({
+      amazonBookLoading: LOADING_STATUSES.success
+    }))
+    Promise.all(goodreadsPromiseArray).then(() => this.setState({
+      goodreadsBookLoading: LOADING_STATUSES.success
     }))
   }
 
   findAndMergeInUpdates = () => {
+    console.log('in find merge')
     const { bookshelfToUpdate } = this.state
     const {
       amazonBooks,
       goodreadsBooks,
-      clearBooks,
       updateBookOnBookshelf,
     } = this.props;
     this.setState({ progressStatus: 'mergeStarted'})
@@ -139,23 +156,29 @@ export class Bookshelf extends Component {
             val => {
               const { completed } = this.state;
               if (completed + progress < 100)
-                this.progress(completed + progress);
+                this.updatePogressState(completed + progress);
               return val;
             }
           )
         );
       });
-      Promise.all(promiseArray)
+      Promise.all(promiseArray).then(() => {
+        this.setState({ completed: 100, progressStatus: 'mergeEnded', bookshelfToUpdate: []})
+      })
     }
-    clearBooks();
-    this.setState({ completed: 100, progressStatus: 'mergeEnded', bookshelfToUpdate: []})
   }
 
   refreshBookshelf = () => {
     const { bookshelfToUpdate } = this.state
     const { bookshelf, filters } = this.props;
 
-    this.setState({ progressStatus: 'refreshStarted', completed: 0 });
+    this.setState({ 
+      progressStatus: 'refreshStarted', 
+      completed: 0, 
+      loading: LOADING_STATUSES.loading,
+      amazonBookLoading: LOADING_STATUSES.loading,
+      goodreadsBookLoading: LOADING_STATUSES.loading
+    });
     
     const filteredArray = []
     forEach(filters, filter => {
@@ -181,8 +204,9 @@ export class Bookshelf extends Component {
         })
       }
   };
+
   render() {
-    const { completed, color } = this.state;
+    const { completed, loading, amazonBookLoading, goodreadsBookLoading } = this.state;
     const { classes, bookshelf, active, deleteBookOnBookshelf } = this.props;
 
     let headers = [
@@ -200,6 +224,11 @@ export class Bookshelf extends Component {
       // TODO: Include Amazon link instead of description
     ];
 
+    const tooltipObj = [
+      { label: 'Amazon', loading: amazonBookLoading },
+      { label: 'Goodreads', loading: goodreadsBookLoading },
+    ];
+
     return (
       <React.Fragment>
         <LinearProgress variant="determinate" value={completed} />
@@ -212,6 +241,11 @@ export class Bookshelf extends Component {
                 <DownloadIcon fontSize="small" />
               </Fab>
             </CSVLink>
+
+        <span
+          data-tip
+          data-for="refreshBookshelfButtonWrapper"
+        >
             <Fab
               size="small"
               onClick={() => this.refreshBookshelf()}
@@ -223,6 +257,18 @@ export class Bookshelf extends Component {
             >
               <RefreshIcon fontSize="small" />
             </Fab>
+            </span>
+            {loading !== LOADING_STATUSES.initial && (
+              <React.Fragment>
+                {loading === LOADING_STATUSES.loading && <CircularProgress size={24} />}
+                <ReactTooltip
+                  id="refreshBookshelfButtonWrapper"
+                  place="right"
+                  effect="solid"
+                  getContent={() => <Tooltip content={tooltipObj} />}
+                />
+              </React.Fragment>
+            )}
           </div>
         </div>
         {active && (
