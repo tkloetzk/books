@@ -23,21 +23,47 @@ import util from '../../util/combineBooks';
 import find from 'lodash/find';
 import merge from 'lodash/merge'
 import keys from 'lodash/keys'
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 
 export class Bookshelf extends Component {
+  state = {
+    completed: 0,
+    color: 'blue'
+  };
+
   componentDidMount() {
     this.props.getBookshelf();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { amazonBooks, goodreadsBooks, bookshelf, updateBookOnBookshelf, clearBooks } = this.props;
+    const { completed } = this.state
+    const { amazonBooks, goodreadsBooks, goodreadsBooksErrored, bookshelf, updateBookOnBookshelf, clearBooks } = this.props;
+  //  if bookshelf is 12
+  //  total = 48
+  //  amazonBooks 12, goodreads 12, updateBook 24 potential
+
+    if (goodreadsBooksErrored && goodreadsBooksErrored !== prevProps.goodreadsBooksErrored) {
+      this.setState({color: 'red'})
+    }
+    if (completed !== 100 && (
+      (amazonBooks !== prevProps.amazonBooks || goodreadsBooks !== prevProps.goodreadsBooks) &&
+      (amazonBooks.length !== bookshelf.length && goodreadsBooks.length !== bookshelf.length))) {
+        console.log(((amazonBooks.length + goodreadsBooks.length) / (bookshelf.length * 2.25)) * 100)
+      this.setState({completed: ((amazonBooks.length + goodreadsBooks.length) / (bookshelf.length * 2.5)) * 100})
+    }
 
     if (
       amazonBooks.length === bookshelf.length &&
-      goodreadsBooks.length === bookshelf.length
+      goodreadsBooks.length === bookshelf.length && bookshelf.length !== 0
     ) {
+      if (completed < 90) {
+        console.log('set completion to 90')
+        this.setState({completed: 90})
+      }
       const combinedBooks = merge(amazonBooks, goodreadsBooks)
       forEach(combinedBooks, updatedBook => {
+        const progress = (100 - completed) / bookshelf.length
         const differences = []
         const existingBook = find(bookshelf, ['isbn', updatedBook.isbn]);
         forEach(keys(updatedBook), key => {
@@ -51,7 +77,10 @@ export class Bookshelf extends Component {
           //TODO: What if a service errors, what happens?
           updateBookOnBookshelf(existingBook._id, assign(...differences), true)
         }
+        console.log(completed + progress)
+        if (completed + progress < 100) this.setState({completed: (completed + progress)})
       })
+      this.setState({completed: 100})
       clearBooks();
     }
   }
@@ -76,6 +105,7 @@ export class Bookshelf extends Component {
     );
   };
   render() {
+    const { completed, color } = this.state
     const { classes, bookshelf, active, deleteBookOnBookshelf } = this.props;
 
     let headers = [
@@ -95,6 +125,7 @@ export class Bookshelf extends Component {
 
     return (
       <React.Fragment>
+        <LinearProgress variant="determinate" value={completed} />
         <div className={classes.genreBar}>
           <div>
             <GenreSelector />
@@ -142,9 +173,9 @@ const styles = {
 export const mapStateToProps = state => ({
   bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
   amazonBooks: state.amazon.books,
-//  amazonBookErrored: state.amazon.hasErrored,
+  amazonBookErrored: state.amazon.hasErrored,
   goodreadsBooks: state.goodreads.books,
-  //goodreadsBooksErrored: state.goodreads.hasErrored,
+  goodreadsBooksErrored: state.goodreads.hasErrored,
 });
 
 const mapDispatchToProps = {
