@@ -31,7 +31,6 @@ import { LOADING_STATUSES } from '../../util/constants';
 export class Bookshelf extends Component {
   state = {
     completed: 0,
-    progressStatus: 'initial',
     bookshelfToUpdate: [],
     loading: LOADING_STATUSES.initial,
     amazonBookLoading: LOADING_STATUSES.initial,
@@ -43,55 +42,30 @@ export class Bookshelf extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { clearBooks, getBookshelf, selectedGenres } = this.props;
     const {
-      progressStatus,
-      bookshelfToUpdate,
       amazonBookLoading,
       goodreadsBookLoading,
-      loading,
+      bookshelfToUpdate,
+      completed,
     } = this.state;
-    const {
-      amazonBooks,
-      goodreadsBooks,
-      getBookshelf,
-      clearBooks,
-      selectedGenres,
-    } = this.props;
 
-    if (
-      progressStatus === 'booksToUpdateFinished' &&
-      prevState.progressStatus !== 'booksToUpdateFinished'
-    ) {
+    if (bookshelfToUpdate.length && !prevState.bookshelfToUpdate.length) {
       this.createPromiseArray();
     }
-    // Getting all the bookshelf values from amazon and goodreads has finished
+
     if (
-      amazonBooks.length &&
       bookshelfToUpdate.length &&
-      progressStatus !== 'mergeStarted' &&
-      amazonBooks.length === bookshelfToUpdate.length &&
-      goodreadsBooks.length === bookshelfToUpdate.length
+      amazonBookLoading === LOADING_STATUSES.success &&
+      goodreadsBookLoading === LOADING_STATUSES.success
     ) {
       this.findAndMergeInUpdates();
     }
 
-    if (
-      amazonBookLoading === LOADING_STATUSES.success &&
-      goodreadsBookLoading === LOADING_STATUSES.success &&
-      loading !== LOADING_STATUSES.success
-    ) {
-      this.setState({
-        loading: LOADING_STATUSES.success,
-      });
-    }
-
-    // If merge has finished, refresh the bookshelf
-    if (
-      progressStatus === 'mergeEnded' &&
-      prevState.progressStatus !== 'mergeEnded'
-    ) {
-      clearBooks();
+    if (completed === 100 && prevState.completed !== 100) {
       getBookshelf(selectedGenres);
+      clearBooks();
+      this.setState({ loading: LOADING_STATUSES.success });
     }
   }
 
@@ -105,11 +79,39 @@ export class Bookshelf extends Component {
     updateBookOnBookshelf(book._id, assign(...fields), false);
   };
 
-  updatePogressState = count => {
-    console.log('count', count);
-    if (count <= 100) {
+  updateProgressState = count => {
+    if (count <= 100 && count > this.state.completed) {
       this.setState({ completed: count });
     }
+  };
+
+  refreshBookshelf = () => {
+    const { bookshelf, filters } = this.props;
+
+    this.setState({
+      completed: 0,
+      loading: LOADING_STATUSES.loading,
+      amazonBookLoading: LOADING_STATUSES.loading,
+      goodreadsBookLoading: LOADING_STATUSES.loading,
+    });
+
+    const filteredArray = [];
+    const booksToUpdate = [];
+    forEach(filters, filter => {
+      if (filter.value) filteredArray.push(filter.key);
+    });
+    if (filteredArray.length) {
+      forEach(bookshelf, book => {
+        forEach(filteredArray, filter => {
+          if (book[filter]) {
+            booksToUpdate.push(book);
+          }
+        });
+      });
+    }
+    this.setState({
+      bookshelfToUpdate: booksToUpdate.length ? booksToUpdate : bookshelf,
+    });
   };
 
   createPromiseArray = () => {
@@ -122,7 +124,7 @@ export class Bookshelf extends Component {
     forEach(bookshelfToUpdate, book => {
       amazonPromiseArray.push(
         getAmazonBook(book.isbn).then(val => {
-          this.updatePogressState(
+          this.updateProgressState(
             (++count / (bookshelfToUpdate.length * 2.125)) * 100
           );
           return val;
@@ -130,7 +132,7 @@ export class Bookshelf extends Component {
       );
       goodreadsPromiseArray.push(
         getGoodreadsBook(book.isbn).then(val => {
-          this.updatePogressState(
+          this.updateProgressState(
             (++count / (bookshelfToUpdate.length * 2.125)) * 100
           );
           return val;
@@ -150,7 +152,6 @@ export class Bookshelf extends Component {
   };
 
   findAndMergeInUpdates = () => {
-    console.log('in find merge');
     const { bookshelfToUpdate } = this.state;
     const {
       amazonBooks,
@@ -158,13 +159,11 @@ export class Bookshelf extends Component {
       updateBookOnBookshelf,
       bookshelf,
     } = this.props;
-    this.setState({ progressStatus: 'mergeStarted' });
     const combinedBooks = merge(amazonBooks, goodreadsBooks);
 
     const promiseArray = [];
     const allDifferencesArray = [];
     forEach(combinedBooks, updatedBook => {
-      console.log('updatedBook');
       const bookDifferences = [];
       const existingBook = find(bookshelfToUpdate, ['isbn', updatedBook.isbn]);
 
@@ -197,61 +196,21 @@ export class Bookshelf extends Component {
             val => {
               const { completed } = this.state;
               if (completed + progress < 100)
-                this.updatePogressState(completed + progress);
+                this.updateProgressState(completed + progress);
               return val;
             }
           )
         );
       });
     }
+    this.setState({
+      bookshelfToUpdate: [],
+    });
     Promise.all(promiseArray).then(() => {
       this.setState({
         completed: 100,
-        progressStatus: 'mergeEnded',
-        bookshelfToUpdate: [],
       });
     });
-  };
-
-  refreshBookshelf = () => {
-    const { bookshelfToUpdate } = this.state;
-    const { bookshelf, filters } = this.props;
-
-    this.setState({
-      progressStatus: 'refreshStarted',
-      completed: 0,
-      loading: LOADING_STATUSES.loading,
-      amazonBookLoading: LOADING_STATUSES.loading,
-      goodreadsBookLoading: LOADING_STATUSES.loading,
-    });
-
-    const filteredArray = [];
-    forEach(filters, filter => {
-      if (filter.value) filteredArray.push(filter.key);
-    });
-    if (filteredArray.length) {
-      forEach(bookshelf, book => {
-        forEach(filteredArray, filter => {
-          if (book[filter]) {
-            let booksToUpdate = [...this.state.bookshelfToUpdate];
-
-            // Add item to it
-            booksToUpdate.push(book);
-
-            // Set state
-            this.setState({ bookshelfToUpdate: booksToUpdate });
-          }
-        });
-      });
-      this.setState({
-        progressStatus: 'booksToUpdateFinished',
-      });
-    } else {
-      this.setState({
-        bookshelfToUpdate: bookshelf,
-        progressStatus: 'booksToUpdateFinished',
-      });
-    }
   };
 
   render() {
