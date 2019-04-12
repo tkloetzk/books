@@ -56,6 +56,7 @@ export class Bookshelf extends Component {
 
     if (
       bookshelfToUpdate.length &&
+      prevState.bookshelfToUpdate.length &&
       amazonBookLoading === LOADING_STATUSES.success &&
       goodreadsBookLoading === LOADING_STATUSES.success
     ) {
@@ -153,14 +154,9 @@ export class Bookshelf extends Component {
 
   findAndMergeInUpdates = () => {
     const { bookshelfToUpdate } = this.state;
-    const {
-      amazonBooks,
-      goodreadsBooks,
-      updateBookOnBookshelf,
-      bookshelf,
-    } = this.props;
+    const { amazonBooks, goodreadsBooks, updateBookOnBookshelf } = this.props;
     const combinedBooks = merge(amazonBooks, goodreadsBooks);
-
+    console.log(combinedBooks);
     const promiseArray = [];
     const allDifferencesArray = [];
     forEach(combinedBooks, updatedBook => {
@@ -247,41 +243,43 @@ export class Bookshelf extends Component {
         <LinearProgress variant="determinate" value={completed} />
         <div className={classes.genreBar}>
           <GenreSelector />
-          <div>
-            <Filters />
-            <CSVLink data={bookshelf} headers={headers}>
-              <Fab size="small">
-                <DownloadIcon fontSize="small" />
-              </Fab>
-            </CSVLink>
+          {bookshelf.length > 0 && (
+            <div>
+              <Filters />
+              <CSVLink data={bookshelf} headers={headers}>
+                <Fab size="small">
+                  <DownloadIcon fontSize="small" />
+                </Fab>
+              </CSVLink>
 
-            <span data-tip data-for="refreshBookshelfButtonWrapper">
-              <Fab
-                size="small"
-                onClick={() => this.refreshBookshelf()}
-                style={{
-                  marginLeft: '11px',
-                  backgroundColor: 'black',
-                  color: 'white',
-                }}
-              >
-                <RefreshIcon fontSize="small" />
-              </Fab>
-            </span>
-            {loading !== LOADING_STATUSES.initial && (
-              <React.Fragment>
-                {loading === LOADING_STATUSES.loading && (
-                  <CircularProgress size={24} />
-                )}
-                <ReactTooltip
-                  id="refreshBookshelfButtonWrapper"
-                  place="right"
-                  effect="solid"
-                  getContent={() => <Tooltip content={tooltipObj} />}
-                />
-              </React.Fragment>
-            )}
-          </div>
+              <span data-tip data-for="refreshBookshelfButtonWrapper">
+                <Fab
+                  size="small"
+                  onClick={() => this.refreshBookshelf()}
+                  style={{
+                    marginLeft: '11px',
+                    backgroundColor: 'black',
+                    color: 'white',
+                  }}
+                >
+                  <RefreshIcon fontSize="small" />
+                </Fab>
+              </span>
+              {loading !== LOADING_STATUSES.initial && (
+                <React.Fragment>
+                  {loading === LOADING_STATUSES.loading && (
+                    <CircularProgress size={24} />
+                  )}
+                  <ReactTooltip
+                    id="refreshBookshelfButtonWrapper"
+                    place="right"
+                    effect="solid"
+                    getContent={() => <Tooltip content={tooltipObj} />}
+                  />
+                </React.Fragment>
+              )}
+            </div>
+          )}
         </div>
         {active && (
           <Results
