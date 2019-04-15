@@ -46,6 +46,14 @@ Array [
 ]
 `;
 
+exports[`Bookshelf Refresh Bookshelf findAndMergeInUpdates updates books with differences 2`] = `
+Array [
+  Array [],
+  Array [],
+  Array [],
+]
+`;
+
 exports[`Bookshelf renders does not with active false 1`] = `
 <Fragment>
   <WithStyles(LinearProgress)

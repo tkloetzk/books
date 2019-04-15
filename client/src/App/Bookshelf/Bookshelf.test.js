@@ -120,10 +120,8 @@ describe('Bookshelf', () => {
 
       instance.componentDidUpdate({}, prevState);
 
+      // expect(instance.props.getBookshelf).not.toHaveBeenCalled();
       expect(instance.props.clearBooks).toHaveBeenCalledTimes(1);
-      expect(instance.props.getBookshelf).toHaveBeenCalledWith(
-        props.selectedGenres
-      );
       expect(instance.state.loading).toEqual(LOADING_STATUSES.success);
     });
   });
@@ -298,6 +296,7 @@ describe('Bookshelf', () => {
         ).toMatchSnapshot();
         expect(instance.props.updateBookOnBookshelf).toHaveBeenCalledTimes(2);
         expect(instance.state.bookshelfToUpdate).toEqual([]);
+        expect(instance.props.getBookshelf.mock.calls).toMatchSnapshot();
       });
       it('does not update if no book differences', () => {
         props = Object.assign({}, props, {

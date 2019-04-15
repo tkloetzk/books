@@ -32,6 +32,7 @@ export class Bookshelf extends Component {
   state = {
     completed: 0,
     bookshelfToUpdate: [],
+    allDifferencesArray: [],
     loading: LOADING_STATUSES.initial,
     amazonBookLoading: LOADING_STATUSES.initial,
     goodreadsBookLoading: LOADING_STATUSES.initial,
@@ -48,6 +49,7 @@ export class Bookshelf extends Component {
       goodreadsBookLoading,
       bookshelfToUpdate,
       completed,
+      allDifferencesArray,
     } = this.state;
 
     if (bookshelfToUpdate.length && !prevState.bookshelfToUpdate.length) {
@@ -64,9 +66,12 @@ export class Bookshelf extends Component {
     }
 
     if (completed === 100 && prevState.completed !== 100) {
-      getBookshelf(selectedGenres);
-      clearBooks();
       this.setState({ loading: LOADING_STATUSES.success });
+      if (allDifferencesArray.length > 0) {
+        getBookshelf(selectedGenres);
+        this.setState({ allDifferencesArray: [] });
+      }
+      clearBooks();
     }
   }
 
@@ -117,7 +122,12 @@ export class Bookshelf extends Component {
 
   createPromiseArray = () => {
     const { bookshelfToUpdate } = this.state;
-    const { getAmazonBook, getGoodreadsBook } = this.props;
+    const {
+      getAmazonBook,
+      getGoodreadsBook,
+      getBookshelf,
+      clearBooks,
+    } = this.props;
 
     let count = 0;
     const amazonPromiseArray = [];
@@ -145,11 +155,11 @@ export class Bookshelf extends Component {
         amazonBookLoading: LOADING_STATUSES.success,
       })
     );
-    Promise.all(goodreadsPromiseArray).then(() =>
+    Promise.all(goodreadsPromiseArray).then(() => {
       this.setState({
         goodreadsBookLoading: LOADING_STATUSES.success,
-      })
-    );
+      });
+    });
   };
 
   findAndMergeInUpdates = () => {
@@ -185,6 +195,7 @@ export class Bookshelf extends Component {
     });
 
     if (allDifferencesArray.length > 0) {
+      this.setState({ allDifferencesArray });
       const progress =
         (100 - this.state.completed) / allDifferencesArray.length;
       //TODO: What if a service errors, what happens?
