@@ -44,31 +44,35 @@ router.post('/v2', (req, res) => {
     function(error, response, html) {
       console.info('Status:', response.statusCode);
       console.error('Error:', error);
-
-      const keywordSelector = `a[href*="keywords=${isbn}"]`;
-      const book = {
-        amazonAverageRating: parseFloat(
-          $('span[data-a-popover*="average-customer-review"]', html)
-            .text()
-            .split(' o')[0]
-        ),
-        amazonRatingsCount: parseInt(
-          $('span[data-a-popover*="average-customer-review"]', html)
-            .parent()
-            .next()
-            .text()
-            .trim()
-            .replace(',', '')
-        ),
-        price: $(`${keywordSelector} > .a-offscreen`, html).text(),
-        // href: $(
-        //   `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
-        //   html
-        // ).attr('href'),
-        isbn,
-      };
-      //   console.log(book);
-      res.send({ book });
+      if (!error) {
+        const keywordSelector = `a[href*="keywords=${isbn}"]`;
+        const book = {
+          amazonAverageRating: parseFloat(
+            $('span[data-a-popover*="average-customer-review"]', html)
+              .text()
+              .split(' o')[0]
+          ),
+          amazonRatingsCount: parseInt(
+            $('span[data-a-popover*="average-customer-review"]', html)
+              .parent()
+              .next()
+              .text()
+              .trim()
+              .replace(',', '')
+          ),
+          price: $(`${keywordSelector} > .a-offscreen`, html).text(),
+          // href: $(
+          //   `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
+          //   html
+          // ).attr('href'),
+          isbn,
+        };
+        //   console.log(book);
+        res.send({ book });
+      } else {
+        console.error(error);
+        res.error({ msg: error });
+      }
     }
   );
 });

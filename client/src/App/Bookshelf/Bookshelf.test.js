@@ -294,6 +294,7 @@ describe('Bookshelf', () => {
         expect(
           instance.props.updateBookOnBookshelf.mock.calls
         ).toMatchSnapshot();
+        expect(instance.state.allDifferencesArray).toEqual([{"differences": [{"amazonAverageRating": 3.5, "amazonRatingsCount": 322, "goodreadsAverageRating": 2.5}, {"amazonRatingsCount": 322}, {"goodreadsAverageRating": 2.5}], "id": "a1"}, {"differences": [{"amazonAverageRating": 4.5, "amazonRatingsCount": 22, "goodreadsAverageRating": 3.5, "goodreadsRatingsCount": 220}, {"amazonRatingsCount": 22}, {"goodreadsAverageRating": 3.5}, {"goodreadsRatingsCount": 220}], "id": "as234123"}])
         expect(instance.props.updateBookOnBookshelf).toHaveBeenCalledTimes(2);
         expect(instance.state.bookshelfToUpdate).toEqual([]);
         expect(instance.props.getBookshelf.mock.calls).toMatchSnapshot();
@@ -317,12 +318,36 @@ describe('Bookshelf', () => {
         });
         instance.state.bookshelfToUpdate = bookshelf;
         instance.findAndMergeInUpdates();
+        expect(instance.state.allDifferencesArray).toEqual([])
         expect(
           instance.props.updateBookOnBookshelf.mock.calls
         ).toMatchSnapshot();
         expect(instance.props.updateBookOnBookshelf).toHaveBeenCalledTimes(0);
         expect(instance.state.bookshelfToUpdate).toEqual([]);
       });
+      it('does not update book if values are zero but previous ones werent', () => {
+        props = Object.assign({}, props, {
+          goodreadsBooks: [
+            {
+              goodreadsAverageRating: 0,
+              goodreadsRatingsCount: 0,
+              isbn: '9780988995819',
+            },
+          ],
+          amazonBooks: [
+            {
+              amazonAverageRating: 1234,
+              amazonRatingsCount: 1234,
+              isbn: '9780988995819',
+            },
+          ],
+        });
+        instance.state.bookshelfToUpdate = bookshelf;
+        instance.findAndMergeInUpdates();
+        expect(instance.state.allDifferencesArray).toEqual([])
+        expect(instance.props.updateBookOnBookshelf).not.toHaveBeenCalled()
+        expect(instance.state.bookshelfToUpdate).toEqual([]);
+      })
     });
   });
   it('mapStateToProps', () => {
