@@ -92,7 +92,7 @@ export function getBookshelf(includedGenres = []) {
     } else {
       return getBookshelfService(includedGenres)
         .then(bookshelf => {
-          dispatch(setSelectedGenres(includedGenres))
+          dispatch(setSelectedGenres(includedGenres));
           dispatch(getBookshelfIsLoading(false));
           dispatch(getBookshelfSuccess(bookshelf));
           dispatch(getBookshelfGenres());
@@ -111,8 +111,8 @@ export function getBookshelf(includedGenres = []) {
 export function setSelectedGenres(selectedGenres) {
   return {
     type: types.SELECTED_GENRES,
-    selectedGenres
-  }
+    selectedGenres,
+  };
 }
 export function addBookToBookshelfSuccess(booklist) {
   return {
@@ -162,7 +162,6 @@ export function updateBookOnBookshelf(id, fields) {
       .then(saved => {
         dispatch(updateBookOnBookshelfSuccess());
         if (has(fields, 'categories')) {
-          console.log('157');
           dispatch(getBookshelf());
         }
       })
