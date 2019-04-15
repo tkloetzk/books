@@ -28,36 +28,36 @@ describe('Filters', () => {
   it('updates state when handleOwned is called', () => {
     instance.handleOwned('owned');
     expect(instance.state.filters).toEqual([
-      { key: 'unread', value: false },
+      { key: 'read', value: false },
       { key: 'owned', value: true },
     ]);
 
-    instance.handleOwned('unread');
+    instance.handleOwned('read');
     expect(instance.state.filters).toEqual([
-      { key: 'unread', value: true },
+      { key: 'read', value: true },
       { key: 'owned', value: true },
     ]);
 
     instance.handleOwned('owned');
     expect(instance.state.filters).toEqual([
-      { key: 'unread', value: true },
+      { key: 'read', value: true },
       { key: 'owned', value: false },
     ]);
 
-    instance.handleOwned('unread');
+    instance.handleOwned('read');
     expect(instance.state.filters).toEqual([
-      { key: 'unread', value: false },
+      { key: 'read', value: false },
       { key: 'owned', value: false },
     ]);
   });
 
   it('calls filterBookshelf when filters are updated', () => {
     const prevState = [
-      { key: 'unread', value: false },
+      { key: 'read', value: false },
       { key: 'owned', value: false },
     ];
     const filterState = [
-      { key: 'unread', value: true },
+      { key: 'read', value: true },
       { key: 'owned', value: false },
     ];
     instance.state.filters = filterState;
@@ -67,7 +67,7 @@ describe('Filters', () => {
   });
   it('does not call filterBookshelf when filters are not updated', () => {
     const filters = [
-      { key: 'unread', value: false },
+      { key: 'read', value: false },
       { key: 'owned', value: false },
     ];
     instance.state.filters = filters;

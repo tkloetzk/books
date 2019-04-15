@@ -23,10 +23,10 @@ exports[`Filters renders with correct props 1`] = `
         <WithStyles(Switch)
           color="primary"
           onChange={[Function]}
-          value="unread"
+          value="read"
         />
       }
-      key="unread"
+      key="read"
       label="UNREAD"
     />
   </WithStyles(FormGroup)>
@@ -56,10 +56,10 @@ exports[`Filters renders with no function passed in 1`] = `
         <WithStyles(Switch)
           color="primary"
           onChange={[Function]}
-          value="unread"
+          value="read"
         />
       }
-      key="unread"
+      key="read"
       label="UNREAD"
     />
   </WithStyles(FormGroup)>

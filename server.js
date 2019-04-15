@@ -10,24 +10,27 @@ const bookshelf = require('./routes/api/bookshelf');
 const bookshelfOffline = require('./routes/api/offline/bookshelfOffline');
 const google = require('./routes/api/google');
 const googleOffline = require('./routes/api/offline/googleOffline');
+const spawn = require('child_process').spawn
+
 const app = express();
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-var env = process.env.NODE_ENV || 'prod';
+var env = process.env.NODE_ENV || 'dev';
 
 // db
 let db;
+let dbName;
 if (env === 'dev') {
-  console.info('Using database Test');
+  dbName = 'Using database Test'
   db = keys.mongoURITest;
 } else if (env === 'stg') {
-  console.info('Using database Stage');
+  dbName = 'Using database Stage'
   db = keys.mongoURIStage;
 } else if (env === 'prod') {
-  console.info('Using database Prod');
+  dbName = 'Using database Prod'
   db = keys.mongoURI;
 }
 
@@ -38,6 +41,7 @@ if (env === 'offline') {
   app.use('/api/google', googleOffline);
   app.use("/api/goodreads", goodreadsOffline);
 } else {
+  console.info(`not offline. using ${dbName} bookshelf`);
   mongoose
     .connect(db, { useNewUrlParser: true })
     .then(() => console.info('MongoDB Connected'))
@@ -46,10 +50,32 @@ if (env === 'offline') {
   app.use('/api/bookshelf', bookshelf);
   app.use('/api/amazon', amazon);
   app.use('/api/google', google);
-  //app.use("/api/goodreads", goodreads);
 }
 
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.info(`Server running on port ${port}`));
+const server = app.listen(port, () => console.info(`Server running on port ${port}`));
+
+process.on('exit', function() { process.exit(1); });
+
+process.on( 'SIGTERM', function () {
+   server.close(function () {
+     if (env !== 'offline') {
+       mongoose.connection.close(() => {
+         console.log('close MongoDB connection')
+       })
+     }
+     console.log("Finished all requests");
+   });
+});
+
+//On uncaughtException, restart server
+// process.on('uncaughtException', () => {
+//   spawn(process.argv[0], process.argv.slice(1), {
+//     env: { process_restarting: 1, NODE_ENV: env },
+//
+//     detached: true,
+//     stdio: 'ignore'
+//   }).unref();
+// })

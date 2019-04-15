@@ -111,6 +111,11 @@ export default function bookshelf(state = initialState, action) {
         error: action.error,
       });
     }
+    case types.SELECTED_GENRES: {
+      return Object.assign({}, state, {
+        selectedGenres: action.selectedGenres,
+      });
+    }
     default:
       return state;
   }

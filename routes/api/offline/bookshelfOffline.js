@@ -15,6 +15,8 @@ global.bookshelf = [
     price: '',
     isbn: '9780310338130',
     title: 'Hands Free Mama1',
+    owned: false,
+    read: false,
     subtitle:
       'A Guide to Putting Down the Phone, Burning the To-Do List, and Letting Go of Perfection to Grasp What Really Matters!',
     description:
@@ -31,6 +33,8 @@ global.bookshelf = [
     amazonAverageRating: 4.6,
     amazonRatingsCount: 20,
     price: '',
+    owned: false,
+    read: true,
     isbn: '9780736917728',
     title: "Raising a Daughter After God's Own Heart",
     subtitle: '',
@@ -50,6 +54,8 @@ global.bookshelf = [
     price: '',
     isbn: '9781400079094',
     title: 'Operating Instructions1',
+    owned: false,
+    read: true,
     subtitle: "A Journal Of My Son's First Year",
     description:
       "A single mother and writer grappling alone with the problems of a newborn baby presents a vivid account of the confusion, joys, sorrows, and struggles of the first year in her son's life. Reprint. 20,000 first printing.",
@@ -66,6 +72,8 @@ global.bookshelf = [
     amazonRatingsCount: 3594,
     price: '',
     isbn: '9781932740080',
+    owned: true,
+    read: false,
     title: 'On Becoming Baby Wise',
     subtitle:
       'Book One : the Classic Reference Guide Utilized by Over 1,000,000 Parents Worldwide',
@@ -124,8 +132,13 @@ bookRoutes.route('/delete/:id').delete((req, res) => {
 });
 
 bookRoutes.route('/genres').get((req, res) => {
-  const genres = map(global.bookshelf, book =>
-    forEach(book.categories, category => category).toString()
+  const genres = []
+  forEach(global.bookshelf, book =>
+    forEach(book.categories, category => {
+      if (!genres.includes(category)) {
+        return genres.push(category.toString())
+      }
+    })
   );
   res.send(genres);
 });

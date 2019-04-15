@@ -87,10 +87,12 @@ export function getBookshelf(includedGenres = []) {
     if (includedGenres === false) {
       dispatch(getBookshelfIsLoading(false));
       dispatch(getBookshelfSuccess([]));
+      dispatch(setSelectedGenres(null));
       return [];
     } else {
       return getBookshelfService(includedGenres)
         .then(bookshelf => {
+          dispatch(setSelectedGenres(includedGenres));
           dispatch(getBookshelfIsLoading(false));
           dispatch(getBookshelfSuccess(bookshelf));
           dispatch(getBookshelfGenres());
@@ -106,6 +108,12 @@ export function getBookshelf(includedGenres = []) {
   };
 }
 
+export function setSelectedGenres(selectedGenres) {
+  return {
+    type: types.SELECTED_GENRES,
+    selectedGenres,
+  };
+}
 export function addBookToBookshelfSuccess(booklist) {
   return {
     type: types.ADD_BOOK_TO_BOOKSHELF_SUCCESS,
@@ -148,12 +156,12 @@ export function updateBookOnBookshelfFailure(error) {
     error,
   };
 }
-export function updateBookOnBookshelf(id, fields, refreshBookshelf = false) {
+export function updateBookOnBookshelf(id, fields) {
   return dispatch => {
     return updateBookOnBookshelfService(id, fields)
       .then(saved => {
         dispatch(updateBookOnBookshelfSuccess());
-        if (has(fields, 'categories') || refreshBookshelf) {
+        if (has(fields, 'categories')) {
           dispatch(getBookshelf());
         }
       })
