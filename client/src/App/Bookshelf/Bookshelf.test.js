@@ -13,7 +13,7 @@ describe('Bookshelf', () => {
     props = {
       classes: {},
       getBookshelf: jest.fn(),
-      updateBookOnBookshelf: jest.fn(),
+      updateBookOnBookshelf: jest.fn(() => Promise.resolve()),
       deleteBookOnBookshelf: jest.fn(),
       getAmazonBook: jest.fn(() => Promise.resolve()),
       getGoodreadsBook: jest.fn(() => Promise.resolve()),
@@ -38,6 +38,7 @@ describe('Bookshelf', () => {
         goodreadsRatingsCount: 236,
         isbn: '9780988995819',
         price: '',
+        _id: 'as234123',
         subtitle: 'Instinctive Care for Your Baby and Young Child',
         thumbnail:
           'http://books.google.com/books/content?id=daeq84DTC3IC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
@@ -231,16 +232,97 @@ describe('Bookshelf', () => {
     });
     describe('findAndMergeInUpdates', () => {
       it('updates books with differences', () => {
-        instance.state.bookshelfToUpdate = bookshelf;
-        instance.goodreadsBooks = [
+        props = Object.assign({}, props, {
+          goodreadsBooks: [
+            {
+              goodreadsAverageRating: 2.5,
+              goodreadsRatingsCount: 20,
+              isbn: '0000000000',
+            },
+            {
+              goodreadsAverageRating: 2.5,
+              goodreadsRatingsCount: 20,
+              isbn: '001234567890',
+            },
+            {
+              goodreadsAverageRating: 3.5,
+              goodreadsRatingsCount: 220,
+              isbn: '9780988995819',
+            },
+          ],
+          amazonBooks: [
+            {
+              amazonAverageRating: 4.5,
+              amazonRatingsCount: 22,
+              isbn: '9780988995819',
+            },
+            {
+              amazonAverageRating: 3.5,
+              amazonRatingsCount: 322,
+              isbn: '001234567890',
+            },
+            {
+              amazonAverageRating: 4.5,
+              amazonRatingsCount: 22,
+              isbn: '0000000000',
+            },
+          ],
+        });
+
+        wrapper = shallow(<Bookshelf {...props} />);
+        instance = wrapper.instance();
+
+        instance.state.bookshelfToUpdate = [
+          ...bookshelf,
           {
+            goodreadsAverageRating: 3,
+            goodreadsRatingsCount: 20,
+            amazonAverageRating: 5,
+            amazonRatingsCount: 1234,
+            isbn: '001234567890',
+            _id: 'a1',
+          },
+
+          {
+            goodreadsAverageRating: 2.5,
+            goodreadsRatingsCount: 20,
             amazonAverageRating: 4.5,
             amazonRatingsCount: 22,
-            isbn: '9780988995819',
-            price: '',
+            isbn: '0000000000',
+            _id: 'b2',
           },
         ];
         instance.findAndMergeInUpdates();
+        expect(
+          instance.props.updateBookOnBookshelf.mock.calls
+        ).toMatchSnapshot();
+        expect(instance.props.updateBookOnBookshelf).toHaveBeenCalledTimes(2);
+        expect(instance.state.bookshelfToUpdate).toEqual([]);
+      });
+      it('does not update if no book differences', () => {
+        props = Object.assign({}, props, {
+          goodreadsBooks: [
+            {
+              goodreadsAverageRating: bookshelf.goodreadsAverageRating,
+              goodreadsRatingsCount: bookshelf.goodreadsRatingsCount,
+              isbn: '9780988995819',
+            },
+          ],
+          amazonBooks: [
+            {
+              amazonAverageRating: bookshelf.amazonAverageRating,
+              amazonRatingsCount: bookshelf.amazonRatingsCount,
+              isbn: '9780988995819',
+            },
+          ],
+        });
+        instance.state.bookshelfToUpdate = bookshelf;
+        instance.findAndMergeInUpdates();
+        expect(
+          instance.props.updateBookOnBookshelf.mock.calls
+        ).toMatchSnapshot();
+        expect(instance.props.updateBookOnBookshelf).toHaveBeenCalledTimes(0);
+        expect(instance.state.bookshelfToUpdate).toEqual([]);
       });
     });
   });

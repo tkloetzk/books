@@ -22,6 +22,30 @@ Array [
 ]
 `;
 
+exports[`Bookshelf Refresh Bookshelf findAndMergeInUpdates does not update if no book differences 1`] = `Array []`;
+
+exports[`Bookshelf Refresh Bookshelf findAndMergeInUpdates updates books with differences 1`] = `
+Array [
+  Array [
+    "a1",
+    Object {
+      "amazonAverageRating": 3.5,
+      "amazonRatingsCount": 322,
+      "goodreadsAverageRating": 2.5,
+    },
+  ],
+  Array [
+    "as234123",
+    Object {
+      "amazonAverageRating": 4.5,
+      "amazonRatingsCount": 22,
+      "goodreadsAverageRating": 3.5,
+      "goodreadsRatingsCount": 220,
+    },
+  ],
+]
+`;
+
 exports[`Bookshelf renders does not with active false 1`] = `
 <Fragment>
   <WithStyles(LinearProgress)
@@ -37,6 +61,7 @@ exports[`Bookshelf renders does not with active false 1`] = `
         data={
           Array [
             Object {
+              "_id": "as234123",
               "amazonAverageRating": 4.6,
               "amazonRatingsCount": 113,
               "categories": Array [
@@ -156,6 +181,7 @@ exports[`Bookshelf renders with books on bookshelf 1`] = `
         data={
           Array [
             Object {
+              "_id": "as234123",
               "amazonAverageRating": 4.6,
               "amazonRatingsCount": 113,
               "categories": Array [
@@ -261,6 +287,7 @@ exports[`Bookshelf renders with books on bookshelf 1`] = `
     booklist={
       Array [
         Object {
+          "_id": "as234123",
           "amazonAverageRating": 4.6,
           "amazonRatingsCount": 113,
           "categories": Array [

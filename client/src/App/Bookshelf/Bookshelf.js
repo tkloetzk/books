@@ -156,24 +156,26 @@ export class Bookshelf extends Component {
     const { bookshelfToUpdate } = this.state;
     const { amazonBooks, goodreadsBooks, updateBookOnBookshelf } = this.props;
     const combinedBooks = merge(amazonBooks, goodreadsBooks);
-    console.log(combinedBooks);
+
     const promiseArray = [];
     const allDifferencesArray = [];
     forEach(combinedBooks, updatedBook => {
       const bookDifferences = [];
       const existingBook = find(bookshelfToUpdate, ['isbn', updatedBook.isbn]);
 
-      forEach(keys(updatedBook), key => {
-        if (key !== 'price' && key !== 'isbn') {
-          if (
-            updatedBook[key] &&
-            updatedBook[key] > 0 &&
-            existingBook[key] !== updatedBook[key]
-          ) {
-            bookDifferences.push({ [key]: updatedBook[key] });
+      if (existingBook) {
+        forEach(keys(updatedBook), key => {
+          if (key !== 'price' && key !== 'isbn') {
+            if (
+              updatedBook[key] &&
+              updatedBook[key] > 0 &&
+              existingBook[key] !== updatedBook[key]
+            ) {
+              bookDifferences.push({ [key]: updatedBook[key] });
+            }
           }
-        }
-      });
+        });
+      }
       if (bookDifferences.length) {
         allDifferencesArray.push({
           id: existingBook._id,
