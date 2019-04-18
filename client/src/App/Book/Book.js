@@ -7,18 +7,23 @@ import { connect } from 'react-redux';
 import Delete from '@material-ui/icons/DeleteForever';
 import EditableLabel from 'react-editable-label';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import find from 'lodash/find';
 import forEach from 'lodash/forEach';
+import get from 'lodash/get';
+import Icon from '@material-ui/icons/AnnouncementOutlined';
 import IconButton from '@material-ui/core/IconButton';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import OwnedBook from '@material-ui/icons/Home';
 import PropTypes from 'prop-types';
 import ReadBook from '@material-ui/icons/CheckCircle';
+import ReactTooltip from 'react-tooltip';
 // import Truncate from 'react-truncate';
 import truncate from 'lodash/truncate';
 import Typography from '@material-ui/core/Typography';
 import UnownedBook from '@material-ui/icons/HomeOutlined';
 import UnreadBook from '@material-ui/icons/CheckCircleOutline';
+import util from '../../util/combineBooks';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = {
@@ -47,6 +52,11 @@ const styles = {
     height: '145px',
     overflow: 'auto',
     // whiteSpace: 'nowrap',
+  },
+  different: {
+    cursor: 'pointer',
+    boxShadow:
+      '0px 0px 3px 6px yellow, 0px 1px 1px 2px yellow, 0px 2px 1px 1px yellow',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -77,9 +87,43 @@ const styles = {
 export class Book extends Component {
   state = {
     expanded: false,
+
+    edits: [],
     read: this.props.book.read,
     owned: this.props.book.owned,
   };
+
+  componentDidMount() {
+    const { book, bookshelf } = this.props;
+    const exisitingBook = find(bookshelf, {
+      isbn: book.isbn,
+    });
+    if (exisitingBook) {
+      this.setState({
+        edits: util.compareDifferences(exisitingBook, book, []),
+      });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      !isEqual(this.props.book.adjustedRating, prevProps.book.adjustedRating)
+    ) {
+      console.log('adjustedrating different');
+    }
+    if (prevState.edits !== this.state.edits) {
+      console.log('edits', this.state.edits);
+    }
+
+    // if (
+    //   !isEqual(book, prevProps.book) &&
+    //   !isEqual(book, prevState.book) &&
+    //   !isEmpty(prevState.book.title)
+    // ) {
+    //   this.setState({
+    //     edits: util.compareDifferences(originalBook, book, []),
+    //   });
+    // }
+  }
 
   validateSave = (key, newValue) => {
     const { book, handleSave } = this.props;
@@ -87,7 +131,12 @@ export class Book extends Component {
       if (key === 'categories') {
         newValue = newValue.split(',').map(el => el.trim());
       }
-      handleSave(book, [{ key, newValue: newValue }]);
+      const response = handleSave(book, [{ key, newValue: newValue }]);
+      if (response) {
+        this.setState({
+          edits: response,
+        });
+      }
     }
   };
 
@@ -97,7 +146,7 @@ export class Book extends Component {
 
   render() {
     const { classes, book, handleDelete, handleSave, filters } = this.props;
-    const { expanded, read, owned } = this.state;
+    const { expanded, read, owned, edits } = this.state;
 
     if (
       isEmpty(book) ||
@@ -107,12 +156,20 @@ export class Book extends Component {
       return null;
     }
 
+    const differences = get(book, 'differences', []);
+
     const expandStyle = !expanded
       ? styles.card
       : { ...styles.card, maxHeight: 614 };
 
     return (
-      <Card style={expandStyle} className={owned ? classes.owned : null}>
+      <Card
+        style={expandStyle}
+        className={[
+          owned ? classes.owned : null,
+          differences.length ? classes.different : null,
+        ]}
+      >
         <div className={classes.header}>
           <IconButton
             aria-label="Delete"
@@ -128,16 +185,35 @@ export class Book extends Component {
               }}
             />
           </Typography>
-          <IconButton
-            aria-label="Unread"
-            className={classes.headerButtons}
-            // onClick={() => this.handleOwnedReadBook('read')}
-            onClick={() => [
-              this.setState({ read: !read }),
-              this.validateSave('read', !read),
-            ]}
-            children={read ? <ReadBook /> : <UnreadBook />}
-          />
+          {edits.length ? (
+            <React.Fragment>
+              <Icon
+                aria-label="Differences"
+                data-tip
+                data-for="differencesIcon"
+              />
+              <ReactTooltip id="differencesIcon" type="info" effect="solid">
+                {edits.length > 0 &&
+                  edits.map(different => (
+                    <span key={different.key}>
+                      {different.key} {different.currentValue} ->{' '}
+                      {different.newValue}
+                      <br />
+                    </span>
+                  ))}
+              </ReactTooltip>
+            </React.Fragment>
+          ) : (
+            <IconButton
+              aria-label="Unread"
+              className={classes.headerButtons}
+              onClick={() => [
+                this.setState({ read: !read }),
+                this.validateSave('read', !read),
+              ]}
+              children={read ? <ReadBook /> : <UnreadBook />}
+            />
+          )}
         </div>
         <Typography variant="caption" align="center">
           <EditableLabel
@@ -218,6 +294,7 @@ Book.propTypes = {
 const mapStateToProps = state => {
   return {
     filters: state.bookshelf.filters,
+    bookshelf: state.bookshelf.bookshelf,
   };
 };
 

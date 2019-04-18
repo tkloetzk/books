@@ -61,6 +61,8 @@ export function compareDifferences(oldBook, newBook, difference) {
         key !== '__v' &&
         key !== '_id' &&
         key !== 'adjustedRating' &&
+        key !== 'thumbnail' &&
+        key !== 'categories' &&
         key !== 'owned' &&
         key !== 'read' &&
         newBook[key] !== '' &&
@@ -71,19 +73,19 @@ export function compareDifferences(oldBook, newBook, difference) {
           currentValue: oldBook[key],
           newValue: newBook[key],
         });
-    } else {
-      if (isArray(oldBook[key])) {
-        if (!isArray(newBook[key]) && !isEmpty(newBook[key])) {
-          newBook[key] = newBook[key].split(',');
-        }
-        if (!arraysEqual(oldBook[key], newBook[key])) {
-          difference.push({
-            key,
-            currentValue: oldBook[key],
-            newValue: newBook[key],
-          });
-        }
-      }
+      // } else {
+      //   if (isArray(oldBook[key])) {
+      //     if (!isArray(newBook[key]) && !isEmpty(newBook[key])) {
+      //       newBook[key] = newBook[key].split(',');
+      //     }
+      //     if (!arraysEqual(oldBook[key], newBook[key])) {
+      //       difference.push({
+      //         key,
+      //         currentValue: oldBook[key],
+      //         newValue: newBook[key],
+      //       });
+      //     }
+      //   }
     }
   }, difference);
 
