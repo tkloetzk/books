@@ -11,7 +11,7 @@ export const initialState = {
   modifiedBooklist: [],
   error: null,
   saveStatus: { status: LOADING_STATUSES.initial, message: '' },
-  filters: [],
+  filters: {},
   genres: [],
 };
 

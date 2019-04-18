@@ -9,18 +9,12 @@ import { filterBookshelf } from '../../../store/bookshelf/bookshelfActions';
 
 export class Filters extends Component {
   state = {
-    filters: [
-      {
-        key: 'read',
-        value: false,
-      },
-      {
-        key: 'owned',
-        value: false,
-      },
-    ],
+    filters: { read: false, owned: false },
   };
 
+  componentDidMount() {
+    this.props.filterBookshelf(this.state.filters);
+  }
   componentDidUpdate(prevProps, prevState) {
     const { filters } = this.state;
     const { filterBookshelf } = this.props;
@@ -30,13 +24,9 @@ export class Filters extends Component {
   }
 
   handleOwned = name => {
-    this.setState(prevState => ({
-      filters: prevState.filters.map(filter =>
-        filter.key === name
-          ? Object.assign(filter, { value: !filter.value })
-          : filter
-      ),
-    }));
+    let filters = Object.assign({}, this.state.filters);
+    filters[name] = !filters[name];
+    this.setState({ filters });
   };
 
   render() {

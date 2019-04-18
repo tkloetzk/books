@@ -33,5 +33,10 @@ export function deleteBookOnBookshelfService(id) {
 }
 
 export function getGenresBookshelfService() {
-  return axios.get(`${apiConfig.bookshelf}/genres`).then(res => res.data).catch(error => {throw error})
+  return axios
+    .get(`${apiConfig.bookshelf}/genres`)
+    .then(res => res.data)
+    .catch(error => {
+      throw error;
+    });
 }

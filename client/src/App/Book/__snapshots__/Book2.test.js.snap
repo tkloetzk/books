@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Book renders with correct props 1`] = `
+<WithStyles(Card)
+  className=" "
+  key="9780736917728"
+  style={
+    Object {
+      "margin": "6px",
+      "maxHeight": 461,
+      "maxWidth": 200,
+      "padding": "5px",
+    }
+  }
+>
+  <WithStyles(IconButton)
+    aria-label="Unread"
+    onClick={[Function]}
+  >
+    <pure(CheckCircleOutlineIcon) />
+  </WithStyles(IconButton)>
+  <WithStyles(IconButton)
+    onClick={[Function]}
+  >
+    <pure(DeleteForeverIcon) />
+  </WithStyles(IconButton)>
+  <div>
+    <WithStyles(Typography)
+      component="span"
+      variant="body1"
+    >
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="190px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text="Raising a Daughter After God's Own Heart"
+      />
+    </WithStyles(Typography)>
+    <WithStyles(Typography)
+      component="span"
+      variant="caption"
+    >
+      <EditableLabel
+        inputHeight="25px"
+        inputWidth="190px"
+        onFocus={[Function]}
+        onFocusOut={[Function]}
+        text=""
+      />
+    </WithStyles(Typography)>
+  </div>
+  <WithStyles(CardMedia)
+    image="http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+    title="Raising a Daughter After God's Own Heart"
+  />
+  <WithStyles(CardContent)>
+    <EditableLabel
+      inputHeight="25px"
+      inputWidth="190px"
+      onFocus={[Function]}
+      onFocusOut={[Function]}
+      text="Elizabeth George, bestselling author and mother of two daughters, provides biblical insight and guidance for every mom who wants to lead their daughter to a godly life through example, study, and prayer. Elizabeth includes questions to draw moms and daughter closer as together they pursue spiri..."
+    />
+  </WithStyles(CardContent)>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Onwed"
+      onClick={[Function]}
+    >
+      <pure(HomeOutlinedIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(IconButton)
+      aria-expanded={false}
+      aria-label="Show more"
+      onClick={[Function]}
+    >
+      <pure(ExpandMoreIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)
+      style={
+        Object {
+          "paddingLeft": "15px",
+          "paddingRight": "15px",
+        }
+      }
+    >
+      4.226
+    </WithStyles(Typography)>
+  </div>
+  <BookActions
+    book={
+      Object {
+        "__v": 0,
+        "_id": "5c806393df78d5e84f8388ad",
+        "adjustedRating": 4.225772626931567,
+        "amazonAverageRating": 4.6,
+        "amazonRatingsCount": 20,
+        "categories": Array [
+          "Religion",
+        ],
+        "description": "Elizabeth George, bestselling author and mother of two daughters, provides biblical insight and guidance for every mom who wants to lead their daughter to a godly life through example, study, and prayer. Elizabeth includes questions to draw moms and daughter closer as together they pursue spiritual priorities and God s heart.\\"",
+        "differences": Array [],
+        "goodreadsAverageRating": 4.24,
+        "goodreadsRatingsCount": 148,
+        "isbn": "9780736917728",
+        "owned": false,
+        "price": "",
+        "read": false,
+        "subtitle": "",
+        "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "Raising a Daughter After God's Own Heart",
+      }
+    }
+    expanded={false}
+    handleFocusOut={[Function]}
+  />
+</WithStyles(Card)>
+`;

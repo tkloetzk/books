@@ -23,7 +23,7 @@ router.post('/v1', (req, res) => {
 });
 
 router.post('/v2', (req, res) => {
-   const api = '90d416faaa0849a3aac0e060f6faf854'
+  const api = '90d416faaa0849a3aac0e060f6faf854';
   //const api = 'ad7f80a474b68485cc2b6f22485fcd5f';
   const isbn = get(req.body, 'isbn');
   const url =
@@ -61,13 +61,9 @@ router.post('/v2', (req, res) => {
               .replace(',', '')
           ),
           price: $(`${keywordSelector} > .a-offscreen`, html).text(),
-          // href: $(
-          //   `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
-          //   html
-          // ).attr('href'),
           isbn,
         };
-        //   console.log(book);
+        console.log(book);
         res.send({ book });
       } else {
         console.error(error);

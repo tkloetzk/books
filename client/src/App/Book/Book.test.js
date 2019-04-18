@@ -1,240 +1,185 @@
-import React from 'react';
-import { shallow } from 'enzyme';
 import { Book } from './Book';
+import React from 'react';
+import { shallow, mount } from 'enzyme';
 
 describe('Book', () => {
-  let props;
   let wrapper;
+  let props;
   let instance;
-
   beforeEach(() => {
     props = {
+      classes: {},
       handleSave: jest.fn(),
+      handleDelete: jest.fn(),
+      filters: { read: false, owned: false },
       book: {
-        categories: ['Religion'],
-        _id: '5c806393df78d5e84f8388ad',
-        amazonAverageRating: 4.6,
-        amazonRatingsCount: 20,
-        price: '',
-        isbn: '9780736917728',
-        title: "Raising a Daughter After God's Own Heart",
-        subtitle: '',
+        _id: '5c83043936c4b64ed32877f2',
+        adjustedRating: 4.0355443753888665,
+        amazonAverageRating: 4.3,
+        amazonRatingsCount: 3594,
+        categories: ['BABY'],
         description:
-          'Elizabeth George, bestselling author and mother of two daughters, provides biblical insight and guidance for every mom who wants to lead their daughter to a godly life through example, study, and prayer. Elizabeth includes questions to draw moms and daughter closer as together they pursue spiritual priorities and God s heart."',
-        thumbnail:
-          'http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api',
-        goodreadsAverageRating: 4.24,
-        goodreadsRatingsCount: 148,
-        __v: 0,
-        adjustedRating: 4.225772626931567,
+          'Discover the positive prescription for curing sleepless nights and fussy babies.',
+        goodreadsAverageRating: 3.61,
+        goodreadsRatingsCount: 11162,
+        isbn: '9781932740080',
+        owned: false,
+        price: '',
+        read: false,
+        subtitle: 'Book One',
+        thumbnail: 'http://books.google.com/books/content',
+        title: 'On Becoming Baby Wise',
       },
     };
     wrapper = shallow(<Book {...props} />);
     instance = wrapper.instance();
-    instance.state.expanded = false;
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
   describe('renders', () => {
-    // it('with no props', () => {
-    //   wrapper = shallow(<Book />);
-    //   expect(wrapper).toMatchSnapshot();
-    // });
-    it('with correct props', () => {
+    it('renders with proper props but not expanded', () => {
       expect(wrapper).toMatchSnapshot();
     });
-  });
-  describe('componentDidUpdate', () => {
-    let prevProps;
-    let prevState;
-
-    beforeEach(() => {
-      prevProps = {
-        book: props.book,
-        classes: {},
-      };
-
-      const book = Object.assign({}, props.book, { differences: [] });
-      prevState = {
-        anchorEl: null,
-        expanded: false,
-        saveIcon: false,
-        edits: [],
-        originalBook: book,
-        book,
-      };
+    it('renders with proper props and expanded', () => {
+      wrapper.setState({
+        expanded: true,
+      });
+      expect(wrapper).toMatchSnapshot();
     });
-    // adjusted rating updated, should update original book
-    it('updates book when adjusted rating changes', () => {
-      const propBook = Object.assign({}, props.book, { adjustedRating: 3 });
-      props = Object.assign({}, props, { book: propBook });
+    it('does not render if book is empty', () => {
+      props = Object.assign({}, props, { book: {} });
       wrapper = shallow(<Book {...props} />);
+      expect(wrapper).toMatchSnapshot();
+    });
+    describe('filters', () => {
+      it('does not show if read with unread filter selected', () => {
+        props = Object.assign({}, props, {
+          filters: { read: true, owned: false },
+          book: { read: true },
+        });
+        wrapper = shallow(<Book {...props} />);
+        expect(wrapper).toMatchSnapshot();
+      });
+      it('shows if unread with unread filter selected', () => {
+        props = Object.assign({}, props, {
+          filters: { read: true, owned: false },
+        });
+        wrapper = shallow(<Book {...props} />);
+        expect(wrapper).toMatchSnapshot();
+      });
+      it('does not show if unowned with owned filter selected', () => {
+        props = Object.assign({}, props, {
+          filters: { read: false, owned: true },
+          book: { owned: false },
+        });
+        wrapper = shallow(<Book {...props} />);
+        expect(wrapper).toMatchSnapshot();
+      });
+      it('shows if owned with owned filter selected', () => {
+        props = Object.assign({}, props, {
+          filters: { read: false, owned: true },
+          book: { owned: true },
+        });
+        wrapper = shallow(<Book {...props} />);
+        expect(wrapper).toMatchSnapshot();
+      });
+      it('shows if unread and owned with owned and unread filter selected', () => {
+        props = Object.assign({}, props, {
+          filters: { read: true, owned: true },
+          book: { owned: true },
+        });
+        wrapper = shallow(<Book {...props} />);
+        expect(wrapper).toMatchSnapshot();
+      });
+      it('does not show if read and owned with owned and unread filter selected', () => {
+        props = Object.assign({}, props, {
+          filters: { read: true, owned: true },
+          book: { owned: true, read: true },
+        });
+        wrapper = shallow(<Book {...props} />);
+        expect(wrapper).toMatchSnapshot();
+      });
+      it('does not show if unread and unowned with owned and unread filter selected', () => {
+        props = Object.assign({}, props, {
+          filters: { read: true, owned: true },
+          book: { owned: false, read: false },
+        });
+        wrapper = shallow(<Book {...props} />);
+        expect(wrapper).toMatchSnapshot();
+      });
+      it('does not show if read and unowned with owned and unread filter selected', () => {
+        props = Object.assign({}, props, {
+          filters: { read: true, owned: true },
+          book: { owned: false, read: true },
+        });
+        wrapper = shallow(<Book {...props} />);
+        expect(wrapper).toMatchSnapshot();
+      });
+    });
+  });
+  describe('validateSave', () => {
+    it('does not call handleSave if values are equal', () => {
+      instance.validateSave('title', props.book.title);
+      expect(instance.props.handleSave).not.toHaveBeenCalled();
+    });
+    it('calls handleSave if values are different', () => {
+      instance.validateSave('title', 'new title');
+      expect(instance.props.handleSave.mock.calls).toMatchSnapshot();
+    });
+    it('turns newValue into an array if key is categories', () => {
+      instance.validateSave('categories', 'Category, Category 2');
+      expect(instance.props.handleSave.mock.calls).toMatchSnapshot();
+    });
+  });
+  describe('handleExpandClick', () => {
+    it('updates expand state', () => {
+      instance.handleExpandClick();
+      expect(instance.state.expanded).toBe(true);
+
+      instance.handleExpandClick();
+      expect(instance.state.expanded).toBe(false);
+    });
+  });
+  describe('toggle owned', () => {
+    it('renders with owned', () => {
+      wrapper.setState({
+        owned: true,
+      });
+      expect(wrapper).toMatchSnapshot();
+    });
+    it('read onclick', () => {
+      wrapper = mount(<Book {...props} />);
       instance = wrapper.instance();
-      instance.state.originalBook.adjustedRating = 4.225772626931567;
-
-      instance.componentDidUpdate(prevProps, prevState);
-
-      expect(instance.state.originalBook.adjustedRating).toEqual(3);
-    });
-    // edited but made no changes
-    it('does not update the book edits if no edits were actually made', () => {
-      const book = Object.assign({}, props.book, { differences: [] });
-      instance.state.book = book;
-      instance.state.originalBook = book;
-      instance.state.edits = [];
-
-      instance.componentDidUpdate(prevProps, prevState);
-      expect(instance.state.edits).toEqual([]);
-    });
-    // edited initially
-    it('updates the book edits if an edit was made', () => {
-      let book = Object.assign({}, props.book, {
-        title: 'New Title',
-        differences: [],
-      });
-      instance.state.book = book;
-
-      book = Object.assign({}, props.book, { differences: [] });
-      instance.state.originalBook = book;
-      instance.state.edits = [];
-
-      instance.componentDidUpdate(prevProps, prevState);
-      expect(instance.state.edits).toEqual([
-        {
-          currentValue: props.book.title,
-          key: 'title',
-          newValue: instance.state.book.title,
-        },
-      ]);
-    });
-    // edited then edited again
-    it('updates the book edits without removing the previous edits', () => {
-      const edits = [
-        {
-          currentValue: "Raising a Daughter After God's Own Heart",
-          key: 'title',
-          newValue: 'New Title',
-        },
-      ];
-      let book = Object.assign({}, props.book, {
-        title: 'New Title',
-        goodreadsAverageRating: 3,
-        differences: [],
-      });
-      instance.state.book = book;
-      instance.state.edits = edits;
-      prevState.edits = edits;
-      prevState.book.title = 'New Title';
-
-      book = Object.assign({}, props.book, { differences: [] });
-      instance.state.originalBook = book;
-
-      instance.componentDidUpdate(prevProps, prevState);
-      expect(instance.state.edits).toEqual([
-        {
-          currentValue: props.book.title,
-          key: 'title',
-          newValue: instance.state.book.title,
-        },
-        {
-          currentValue: props.book.goodreadsAverageRating,
-          key: 'goodreadsAverageRating',
-          newValue: instance.state.book.goodreadsAverageRating,
-        },
-      ]);
-    });
-    // every field is edited
-    it('updates the book edits for every field', () => {
-      let book = Object.assign({}, props.book, {
-        title: 'New Title',
-        categories: 'New Category',
-        amazonAverageRating: 3,
-        amazonRatingsCount: 30,
-        description: 'New Descript',
-        goodreadsAverageRating: 3.1,
-        goodreadsRatingsCount: 18,
-        isbn: '123948192',
-        differences: [],
-      });
-      instance.state.book = book;
-
-      book = Object.assign({}, props.book, { differences: [] });
-      instance.state.originalBook = book;
-      instance.state.edits = [];
-
-      instance.componentDidUpdate(prevProps, prevState);
-      expect(instance.state.edits).toEqual([
-        {
-          currentValue: props.book.categories,
-          key: 'categories',
-          newValue: ['New Category'],
-        },
-        {
-          currentValue: props.book.amazonAverageRating,
-          key: 'amazonAverageRating',
-          newValue: instance.state.book.amazonAverageRating,
-        },
-        {
-          currentValue: props.book.amazonRatingsCount,
-          key: 'amazonRatingsCount',
-          newValue: instance.state.book.amazonRatingsCount,
-        },
-        {
-          currentValue: props.book.isbn,
-          key: 'isbn',
-          newValue: instance.state.book.isbn,
-        },
-        {
-          currentValue: props.book.title,
-          key: 'title',
-          newValue: instance.state.book.title,
-        },
-        {
-          currentValue: props.book.description,
-          key: 'description',
-          newValue: instance.state.book.description,
-        },
-        {
-          currentValue: props.book.goodreadsAverageRating,
-          key: 'goodreadsAverageRating',
-          newValue: instance.state.book.goodreadsAverageRating,
-        },
-        {
-          currentValue: props.book.goodreadsRatingsCount,
-          key: 'goodreadsRatingsCount',
-          newValue: instance.state.book.goodreadsRatingsCount,
-        },
-      ]);
-    });
-    // owned update
-    // read update
-  });
-  //saveIcon
-  describe('_handleFocusOut', () => {
-    it('updates state on _handleFocusOut()', () => {
-      instance._handleFocusOut('updated text', 'title');
-      expect(instance.state.book.title).toEqual('updated text');
+      const readButton = wrapper.find('button').at(1);
+      readButton.simulate('click');
+      expect(instance.state.read).toEqual(true);
+      expect(instance.props.handleSave.mock.calls).toMatchSnapshot();
     });
   });
-  // describe('handleExpandClick', () => {
-  //   instance.handleExpandClick();
-  //   expect(instance.state.expanded).toBe(true);
-  // });
-  describe('handleOwnedReadBook', () => {
-    it('owned', () => {
-      instance.handleOwnedReadBook('owned');
-      expect(instance.state.book.owned).toBe(true);
-
-      instance.handleOwnedReadBook('owned');
-      expect(instance.state.book.owned).toBe(false);
+  describe('toggles read', () => {
+    it('renders with read', () => {
+      wrapper.setState({
+        read: true,
+      });
+      expect(wrapper).toMatchSnapshot();
     });
-    it('read', () => {
-      instance.handleOwnedReadBook('read');
-      expect(instance.state.book.read).toBe(true);
-
-      instance.handleOwnedReadBook('read');
-      expect(instance.state.book.read).toBe(false);
+    it('owned onclick', () => {
+      wrapper = mount(<Book {...props} />);
+      instance = wrapper.instance();
+      const ownedButton = wrapper.find('button').at(2);
+      ownedButton.simulate('click');
+      expect(instance.state.owned).toEqual(true);
+      expect(instance.props.handleSave.mock.calls).toMatchSnapshot();
+    });
+  });
+  describe('delete', () => {
+    it('calls handleDelete on delete button click', () => {
+      wrapper = mount(<Book {...props} />);
+      instance = wrapper.instance();
+      const deleteButton = wrapper.find('button').at(0);
+      deleteButton.simulate('click');
+      expect(instance.props.handleDelete.mock.calls).toMatchSnapshot();
     });
   });
 });

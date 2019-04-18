@@ -1,71 +1,245 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Book renders with correct props 1`] = `
+exports[`Book delete calls handleDelete on delete button click 1`] = `
+Array [
+  Array [
+    Object {
+      "_id": "5c83043936c4b64ed32877f2",
+      "adjustedRating": 4.0355443753888665,
+      "amazonAverageRating": 4.3,
+      "amazonRatingsCount": 3594,
+      "categories": Array [
+        "BABY",
+      ],
+      "description": "Discover the positive prescription for curing sleepless nights and fussy babies.",
+      "goodreadsAverageRating": 3.61,
+      "goodreadsRatingsCount": 11162,
+      "isbn": "9781932740080",
+      "owned": false,
+      "price": "",
+      "read": false,
+      "subtitle": "Book One",
+      "thumbnail": "http://books.google.com/books/content",
+      "title": "On Becoming Baby Wise",
+    },
+  ],
+]
+`;
+
+exports[`Book renders does not render if book is empty 1`] = `""`;
+
+exports[`Book renders filters does not show if read and owned with owned and unread filter selected 1`] = `""`;
+
+exports[`Book renders filters does not show if read and unowned with owned and unread filter selected 1`] = `""`;
+
+exports[`Book renders filters does not show if read with unread filter selected 1`] = `""`;
+
+exports[`Book renders filters does not show if unowned with owned filter selected 1`] = `""`;
+
+exports[`Book renders filters does not show if unread and unowned with owned and unread filter selected 1`] = `""`;
+
+exports[`Book renders filters shows if owned with owned filter selected 1`] = `
 <WithStyles(Card)
-  className=" "
-  key="9780736917728"
   style={
     Object {
-      "margin": "6px",
-      "maxHeight": 461,
-      "maxWidth": 200,
+      "display": "flex",
+      "flexDirection": "column",
+      "margin": "8px",
+      "maxHeight": 455,
       "padding": "5px",
+      "width": 210,
     }
   }
 >
-  <WithStyles(IconButton)
-    aria-label="Unread"
-    onClick={[Function]}
-  >
-    <pure(CheckCircleOutlineIcon) />
-  </WithStyles(IconButton)>
-  <WithStyles(IconButton)
-    onClick={[Function]}
-  >
-    <pure(DeleteForeverIcon) />
-  </WithStyles(IconButton)>
   <div>
+    <WithStyles(IconButton)
+      aria-label="Delete"
+      onClick={[Function]}
+    >
+      <pure(DeleteForeverIcon) />
+    </WithStyles(IconButton)>
     <WithStyles(Typography)
+      align="center"
       component="span"
       variant="body1"
     >
-      <EditableLabel
-        inputHeight="25px"
-        inputWidth="190px"
-        onFocus={[Function]}
-        onFocusOut={[Function]}
-        text="Raising a Daughter After God's Own Heart"
+      <n
+        save={[Function]}
       />
     </WithStyles(Typography)>
-    <WithStyles(Typography)
-      component="span"
-      variant="caption"
+    <WithStyles(IconButton)
+      aria-label="Unread"
+      onClick={[Function]}
     >
-      <EditableLabel
-        inputHeight="25px"
-        inputWidth="190px"
-        onFocus={[Function]}
-        onFocusOut={[Function]}
-        text=""
-      />
-    </WithStyles(Typography)>
+      <pure(CheckCircleOutlineIcon) />
+    </WithStyles(IconButton)>
   </div>
-  <WithStyles(CardMedia)
-    image="http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-    title="Raising a Daughter After God's Own Heart"
-  />
+  <WithStyles(Typography)
+    align="center"
+    variant="caption"
+  >
+    <n
+      save={[Function]}
+    />
+  </WithStyles(Typography)>
+  <WithStyles(CardMedia) />
   <WithStyles(CardContent)>
-    <EditableLabel
-      inputHeight="25px"
-      inputWidth="190px"
-      onFocus={[Function]}
-      onFocusOut={[Function]}
-      text="Elizabeth George, bestselling author and mother of two daughters, provides biblical insight and guidance for every mom who wants to lead their daughter to a godly life through example, study, and prayer. Elizabeth includes questions to draw moms and daughter closer as together they pursue spiri..."
+    <n
+      save={[Function]}
     />
   </WithStyles(CardContent)>
   <div>
     <WithStyles(IconButton)
-      aria-label="Onwed"
+      aria-label="Owned"
+      onClick={[Function]}
+    >
+      <pure(HomeIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(IconButton)
+      aria-expanded={false}
+      aria-label="Show more"
+      onClick={[Function]}
+    >
+      <pure(ExpandMoreIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)>
+      NaN
+    </WithStyles(Typography)>
+  </div>
+</WithStyles(Card)>
+`;
+
+exports[`Book renders filters shows if unread and owned with owned and unread filter selected 1`] = `
+<WithStyles(Card)
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+      "margin": "8px",
+      "maxHeight": 455,
+      "padding": "5px",
+      "width": 210,
+    }
+  }
+>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Delete"
+      onClick={[Function]}
+    >
+      <pure(DeleteForeverIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)
+      align="center"
+      component="span"
+      variant="body1"
+    >
+      <n
+        save={[Function]}
+      />
+    </WithStyles(Typography)>
+    <WithStyles(IconButton)
+      aria-label="Unread"
+      onClick={[Function]}
+    >
+      <pure(CheckCircleOutlineIcon) />
+    </WithStyles(IconButton)>
+  </div>
+  <WithStyles(Typography)
+    align="center"
+    variant="caption"
+  >
+    <n
+      save={[Function]}
+    />
+  </WithStyles(Typography)>
+  <WithStyles(CardMedia) />
+  <WithStyles(CardContent)>
+    <n
+      save={[Function]}
+    />
+  </WithStyles(CardContent)>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Owned"
+      onClick={[Function]}
+    >
+      <pure(HomeIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(IconButton)
+      aria-expanded={false}
+      aria-label="Show more"
+      onClick={[Function]}
+    >
+      <pure(ExpandMoreIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)>
+      NaN
+    </WithStyles(Typography)>
+  </div>
+</WithStyles(Card)>
+`;
+
+exports[`Book renders filters shows if unread with unread filter selected 1`] = `
+<WithStyles(Card)
+  className={null}
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+      "margin": "8px",
+      "maxHeight": 455,
+      "padding": "5px",
+      "width": 210,
+    }
+  }
+>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Delete"
+      onClick={[Function]}
+    >
+      <pure(DeleteForeverIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)
+      align="center"
+      component="span"
+      variant="body1"
+    >
+      <n
+        initialValue="On Becoming Baby Wise"
+        save={[Function]}
+      />
+    </WithStyles(Typography)>
+    <WithStyles(IconButton)
+      aria-label="Unread"
+      onClick={[Function]}
+    >
+      <pure(CheckCircleOutlineIcon) />
+    </WithStyles(IconButton)>
+  </div>
+  <WithStyles(Typography)
+    align="center"
+    variant="caption"
+  >
+    <n
+      initialValue="Book One"
+      save={[Function]}
+    />
+  </WithStyles(Typography)>
+  <WithStyles(CardMedia)
+    image="http://books.google.com/books/content"
+    title="On Becoming Baby Wise"
+  />
+  <WithStyles(CardContent)>
+    <n
+      initialValue="Discover the positive prescription for curing sleepless nights and fussy babies."
+      save={[Function]}
+    />
+  </WithStyles(CardContent)>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Owned"
       onClick={[Function]}
     >
       <pure(HomeOutlinedIcon) />
@@ -77,43 +251,476 @@ exports[`Book renders with correct props 1`] = `
     >
       <pure(ExpandMoreIcon) />
     </WithStyles(IconButton)>
-    <WithStyles(Typography)
-      style={
-        Object {
-          "paddingLeft": "15px",
-          "paddingRight": "15px",
-        }
-      }
-    >
-      4.226
+    <WithStyles(Typography)>
+      4.036
     </WithStyles(Typography)>
   </div>
-  <BookActions
+</WithStyles(Card)>
+`;
+
+exports[`Book renders renders with proper props and expanded 1`] = `
+<WithStyles(Card)
+  className={null}
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+      "margin": "8px",
+      "maxHeight": 614,
+      "padding": "5px",
+      "width": 210,
+    }
+  }
+>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Delete"
+      onClick={[Function]}
+    >
+      <pure(DeleteForeverIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)
+      align="center"
+      component="span"
+      variant="body1"
+    >
+      <n
+        initialValue="On Becoming Baby Wise"
+        save={[Function]}
+      />
+    </WithStyles(Typography)>
+    <WithStyles(IconButton)
+      aria-label="Unread"
+      onClick={[Function]}
+    >
+      <pure(CheckCircleOutlineIcon) />
+    </WithStyles(IconButton)>
+  </div>
+  <WithStyles(Typography)
+    align="center"
+    variant="caption"
+  >
+    <n
+      initialValue="Book One"
+      save={[Function]}
+    />
+  </WithStyles(Typography)>
+  <WithStyles(CardMedia)
+    image="http://books.google.com/books/content"
+    title="On Becoming Baby Wise"
+  />
+  <WithStyles(CardContent)>
+    <n
+      initialValue="Discover the positive prescription for curing sleepless nights and fussy babies."
+      save={[Function]}
+    />
+  </WithStyles(CardContent)>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Owned"
+      onClick={[Function]}
+    >
+      <pure(HomeOutlinedIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(IconButton)
+      aria-expanded={true}
+      aria-label="Show more"
+      onClick={[Function]}
+    >
+      <pure(ExpandMoreIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)>
+      4.036
+    </WithStyles(Typography)>
+  </div>
+  <WithStyles(BookActions)
     book={
       Object {
-        "__v": 0,
-        "_id": "5c806393df78d5e84f8388ad",
-        "adjustedRating": 4.225772626931567,
-        "amazonAverageRating": 4.6,
-        "amazonRatingsCount": 20,
+        "_id": "5c83043936c4b64ed32877f2",
+        "adjustedRating": 4.0355443753888665,
+        "amazonAverageRating": 4.3,
+        "amazonRatingsCount": 3594,
         "categories": Array [
-          "Religion",
+          "BABY",
         ],
-        "description": "Elizabeth George, bestselling author and mother of two daughters, provides biblical insight and guidance for every mom who wants to lead their daughter to a godly life through example, study, and prayer. Elizabeth includes questions to draw moms and daughter closer as together they pursue spiritual priorities and God s heart.\\"",
-        "differences": Array [],
-        "goodreadsAverageRating": 4.24,
-        "goodreadsRatingsCount": 148,
-        "isbn": "9780736917728",
+        "description": "Discover the positive prescription for curing sleepless nights and fussy babies.",
+        "goodreadsAverageRating": 3.61,
+        "goodreadsRatingsCount": 11162,
+        "isbn": "9781932740080",
         "owned": false,
         "price": "",
         "read": false,
-        "subtitle": "",
-        "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
-        "title": "Raising a Daughter After God's Own Heart",
+        "subtitle": "Book One",
+        "thumbnail": "http://books.google.com/books/content",
+        "title": "On Becoming Baby Wise",
       }
     }
-    expanded={false}
-    handleFocusOut={[Function]}
+    expanded={true}
+    validateSave={[Function]}
   />
 </WithStyles(Card)>
+`;
+
+exports[`Book renders renders with proper props but not expanded 1`] = `
+<WithStyles(Card)
+  className={null}
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+      "margin": "8px",
+      "maxHeight": 455,
+      "padding": "5px",
+      "width": 210,
+    }
+  }
+>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Delete"
+      onClick={[Function]}
+    >
+      <pure(DeleteForeverIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)
+      align="center"
+      component="span"
+      variant="body1"
+    >
+      <n
+        initialValue="On Becoming Baby Wise"
+        save={[Function]}
+      />
+    </WithStyles(Typography)>
+    <WithStyles(IconButton)
+      aria-label="Unread"
+      onClick={[Function]}
+    >
+      <pure(CheckCircleOutlineIcon) />
+    </WithStyles(IconButton)>
+  </div>
+  <WithStyles(Typography)
+    align="center"
+    variant="caption"
+  >
+    <n
+      initialValue="Book One"
+      save={[Function]}
+    />
+  </WithStyles(Typography)>
+  <WithStyles(CardMedia)
+    image="http://books.google.com/books/content"
+    title="On Becoming Baby Wise"
+  />
+  <WithStyles(CardContent)>
+    <n
+      initialValue="Discover the positive prescription for curing sleepless nights and fussy babies."
+      save={[Function]}
+    />
+  </WithStyles(CardContent)>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Owned"
+      onClick={[Function]}
+    >
+      <pure(HomeOutlinedIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(IconButton)
+      aria-expanded={false}
+      aria-label="Show more"
+      onClick={[Function]}
+    >
+      <pure(ExpandMoreIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)>
+      4.036
+    </WithStyles(Typography)>
+  </div>
+</WithStyles(Card)>
+`;
+
+exports[`Book toggle owned read onclick 1`] = `
+Array [
+  Array [
+    Object {
+      "_id": "5c83043936c4b64ed32877f2",
+      "adjustedRating": 4.0355443753888665,
+      "amazonAverageRating": 4.3,
+      "amazonRatingsCount": 3594,
+      "categories": Array [
+        "BABY",
+      ],
+      "description": "Discover the positive prescription for curing sleepless nights and fussy babies.",
+      "goodreadsAverageRating": 3.61,
+      "goodreadsRatingsCount": 11162,
+      "isbn": "9781932740080",
+      "owned": false,
+      "price": "",
+      "read": false,
+      "subtitle": "Book One",
+      "thumbnail": "http://books.google.com/books/content",
+      "title": "On Becoming Baby Wise",
+    },
+    Array [
+      Object {
+        "key": "read",
+        "newValue": true,
+      },
+    ],
+  ],
+]
+`;
+
+exports[`Book toggle owned renders with owned 1`] = `
+<WithStyles(Card)
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+      "margin": "8px",
+      "maxHeight": 455,
+      "padding": "5px",
+      "width": 210,
+    }
+  }
+>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Delete"
+      onClick={[Function]}
+    >
+      <pure(DeleteForeverIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)
+      align="center"
+      component="span"
+      variant="body1"
+    >
+      <n
+        initialValue="On Becoming Baby Wise"
+        save={[Function]}
+      />
+    </WithStyles(Typography)>
+    <WithStyles(IconButton)
+      aria-label="Unread"
+      onClick={[Function]}
+    >
+      <pure(CheckCircleOutlineIcon) />
+    </WithStyles(IconButton)>
+  </div>
+  <WithStyles(Typography)
+    align="center"
+    variant="caption"
+  >
+    <n
+      initialValue="Book One"
+      save={[Function]}
+    />
+  </WithStyles(Typography)>
+  <WithStyles(CardMedia)
+    image="http://books.google.com/books/content"
+    title="On Becoming Baby Wise"
+  />
+  <WithStyles(CardContent)>
+    <n
+      initialValue="Discover the positive prescription for curing sleepless nights and fussy babies."
+      save={[Function]}
+    />
+  </WithStyles(CardContent)>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Owned"
+      onClick={[Function]}
+    >
+      <pure(HomeIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(IconButton)
+      aria-expanded={false}
+      aria-label="Show more"
+      onClick={[Function]}
+    >
+      <pure(ExpandMoreIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)>
+      4.036
+    </WithStyles(Typography)>
+  </div>
+</WithStyles(Card)>
+`;
+
+exports[`Book toggles read owned onclick 1`] = `
+Array [
+  Array [
+    Object {
+      "_id": "5c83043936c4b64ed32877f2",
+      "adjustedRating": 4.0355443753888665,
+      "amazonAverageRating": 4.3,
+      "amazonRatingsCount": 3594,
+      "categories": Array [
+        "BABY",
+      ],
+      "description": "Discover the positive prescription for curing sleepless nights and fussy babies.",
+      "goodreadsAverageRating": 3.61,
+      "goodreadsRatingsCount": 11162,
+      "isbn": "9781932740080",
+      "owned": false,
+      "price": "",
+      "read": false,
+      "subtitle": "Book One",
+      "thumbnail": "http://books.google.com/books/content",
+      "title": "On Becoming Baby Wise",
+    },
+    Array [
+      Object {
+        "key": "owned",
+        "newValue": true,
+      },
+    ],
+  ],
+]
+`;
+
+exports[`Book toggles read renders with read 1`] = `
+<WithStyles(Card)
+  className={null}
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+      "margin": "8px",
+      "maxHeight": 455,
+      "padding": "5px",
+      "width": 210,
+    }
+  }
+>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Delete"
+      onClick={[Function]}
+    >
+      <pure(DeleteForeverIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)
+      align="center"
+      component="span"
+      variant="body1"
+    >
+      <n
+        initialValue="On Becoming Baby Wise"
+        save={[Function]}
+      />
+    </WithStyles(Typography)>
+    <WithStyles(IconButton)
+      aria-label="Unread"
+      onClick={[Function]}
+    >
+      <pure(CheckCircleIcon) />
+    </WithStyles(IconButton)>
+  </div>
+  <WithStyles(Typography)
+    align="center"
+    variant="caption"
+  >
+    <n
+      initialValue="Book One"
+      save={[Function]}
+    />
+  </WithStyles(Typography)>
+  <WithStyles(CardMedia)
+    image="http://books.google.com/books/content"
+    title="On Becoming Baby Wise"
+  />
+  <WithStyles(CardContent)>
+    <n
+      initialValue="Discover the positive prescription for curing sleepless nights and fussy babies."
+      save={[Function]}
+    />
+  </WithStyles(CardContent)>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Owned"
+      onClick={[Function]}
+    >
+      <pure(HomeOutlinedIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(IconButton)
+      aria-expanded={false}
+      aria-label="Show more"
+      onClick={[Function]}
+    >
+      <pure(ExpandMoreIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)>
+      4.036
+    </WithStyles(Typography)>
+  </div>
+</WithStyles(Card)>
+`;
+
+exports[`Book validateSave calls handleSave if values are different 1`] = `
+Array [
+  Array [
+    Object {
+      "_id": "5c83043936c4b64ed32877f2",
+      "adjustedRating": 4.0355443753888665,
+      "amazonAverageRating": 4.3,
+      "amazonRatingsCount": 3594,
+      "categories": Array [
+        "BABY",
+      ],
+      "description": "Discover the positive prescription for curing sleepless nights and fussy babies.",
+      "goodreadsAverageRating": 3.61,
+      "goodreadsRatingsCount": 11162,
+      "isbn": "9781932740080",
+      "owned": false,
+      "price": "",
+      "read": false,
+      "subtitle": "Book One",
+      "thumbnail": "http://books.google.com/books/content",
+      "title": "On Becoming Baby Wise",
+    },
+    Array [
+      Object {
+        "key": "title",
+        "newValue": "new title",
+      },
+    ],
+  ],
+]
+`;
+
+exports[`Book validateSave turns newValue into an array if key is categories 1`] = `
+Array [
+  Array [
+    Object {
+      "_id": "5c83043936c4b64ed32877f2",
+      "adjustedRating": 4.0355443753888665,
+      "amazonAverageRating": 4.3,
+      "amazonRatingsCount": 3594,
+      "categories": Array [
+        "BABY",
+      ],
+      "description": "Discover the positive prescription for curing sleepless nights and fussy babies.",
+      "goodreadsAverageRating": 3.61,
+      "goodreadsRatingsCount": 11162,
+      "isbn": "9781932740080",
+      "owned": false,
+      "price": "",
+      "read": false,
+      "subtitle": "Book One",
+      "thumbnail": "http://books.google.com/books/content",
+      "title": "On Becoming Baby Wise",
+    },
+    Array [
+      Object {
+        "key": "categories",
+        "newValue": Array [
+          "Category",
+          "Category 2",
+        ],
+      },
+    ],
+  ],
+]
 `;
