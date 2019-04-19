@@ -76,13 +76,15 @@ export class Bookshelf extends Component {
   }
 
   handleSave = (book, edits) => {
-    const { updateBookOnBookshelf } = this.props;
+    const { getBookshelf, selectedGenres, updateBookOnBookshelf } = this.props;
 
     const fields = map(edits, diff => {
       return { [diff.key]: diff.newValue };
     });
 
-    updateBookOnBookshelf(book._id, assign(...fields), false);
+    updateBookOnBookshelf(book._id, assign(...fields), false).then(() => {
+      getBookshelf(selectedGenres);
+    });
   };
 
   updateProgressState = count => {
@@ -122,12 +124,7 @@ export class Bookshelf extends Component {
 
   createPromiseArray = () => {
     const { bookshelfToUpdate } = this.state;
-    const {
-      getAmazonBook,
-      getGoodreadsBook,
-      getBookshelf,
-      clearBooks,
-    } = this.props;
+    const { getAmazonBook, getGoodreadsBook } = this.props;
 
     let count = 0;
     const amazonPromiseArray = [];

@@ -12,6 +12,7 @@ import {
   updateBookOnBookshelf,
   clearBooks,
   insertModifiedBook,
+  getBookshelf,
 } from '../../../store/bookshelf/bookshelfActions';
 import { getGoogleBook } from '../../../store/google/googleActions';
 import { connect } from 'react-redux';
@@ -211,6 +212,7 @@ export class SearchBar extends Component {
   handleSave = () => {
     const {
       booklist,
+      getBookshelf,
       modifiedBooklist,
       addBookToBookshelf,
       updateBookOnBookshelf,
@@ -223,7 +225,9 @@ export class SearchBar extends Component {
           });
           return updateBookOnBookshelf(book._id, assign(...fields));
         })
-      );
+      ).then(() => {
+        getBookshelf();
+      });
     }
     if (booklist.length) {
       addBookToBookshelf(booklist);
@@ -343,6 +347,7 @@ const mapDispatchToProps = {
   getAmazonBook,
   getGoodreadsBook,
   getGoogleBook,
+  getBookshelf,
   saveCombinedBooks,
   saveModifiedBooks,
   addBookToBookshelf,

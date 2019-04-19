@@ -87,7 +87,6 @@ const styles = {
 export class Book extends Component {
   state = {
     expanded: false,
-
     edits: [],
     read: this.props.book.read,
     owned: this.props.book.owned,
@@ -110,9 +109,6 @@ export class Book extends Component {
     ) {
       console.log('adjustedrating different');
     }
-    if (prevState.edits !== this.state.edits) {
-      console.log('edits', this.state.edits);
-    }
 
     // if (
     //   !isEqual(book, prevProps.book) &&
@@ -131,12 +127,7 @@ export class Book extends Component {
       if (key === 'categories') {
         newValue = newValue.split(',').map(el => el.trim());
       }
-      const response = handleSave(book, [{ key, newValue: newValue }]);
-      if (response) {
-        this.setState({
-          edits: response,
-        });
-      }
+      handleSave(book, [{ key, newValue: newValue }]);
     }
   };
 
@@ -168,7 +159,7 @@ export class Book extends Component {
         className={[
           owned ? classes.owned : null,
           differences.length ? classes.different : null,
-        ]}
+        ].join(' ')}
       >
         <div className={classes.header}>
           <IconButton

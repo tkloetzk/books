@@ -118,6 +118,44 @@ describe('Book', () => {
       });
     });
   });
+  describe('componentDidMount', () => {
+    it('sets state of differences on an existing book', () => {
+      const book = Object.assign({}, props.book, {
+        categories: ['no'],
+        goodreadsAverageRating: 4,
+        amazonRatingsCount: 123,
+      });
+      props = Object.assign({}, props, {
+        bookshelf: [props.book],
+        book,
+      });
+      wrapper = shallow(<Book {...props} />);
+      instance = wrapper.instance();
+      instance.componentDidMount();
+      expect(instance.state.edits).toEqual([
+        {
+          currentValue: props.bookshelf[0].amazonRatingsCount,
+          key: 'amazonRatingsCount',
+          newValue: book.amazonRatingsCount,
+        },
+        {
+          currentValue: props.bookshelf[0].goodreadsAverageRating,
+          key: 'goodreadsAverageRating',
+          newValue: book.goodreadsAverageRating,
+        },
+      ]);
+      expect(wrapper).toMatchSnapshot();
+    });
+    it('sets state of differences on an existing book if no differences', () => {
+      props = Object.assign({}, props, {
+        bookshelf: [props.book],
+      });
+      wrapper = shallow(<Book {...props} />);
+      instance = wrapper.instance();
+      instance.componentDidMount();
+      expect(instance.state.edits).toEqual([]);
+    });
+  });
   describe('validateSave', () => {
     it('does not call handleSave if values are equal', () => {
       instance.validateSave('title', props.book.title);
@@ -126,6 +164,7 @@ describe('Book', () => {
     it('calls handleSave if values are different', () => {
       instance.validateSave('title', 'new title');
       expect(instance.props.handleSave.mock.calls).toMatchSnapshot();
+      expect(instance.state.edits).toEqual('');
     });
     it('turns newValue into an array if key is categories', () => {
       instance.validateSave('categories', 'Category, Category 2');
