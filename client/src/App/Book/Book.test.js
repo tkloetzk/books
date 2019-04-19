@@ -164,7 +164,6 @@ describe('Book', () => {
     it('calls handleSave if values are different', () => {
       instance.validateSave('title', 'new title');
       expect(instance.props.handleSave.mock.calls).toMatchSnapshot();
-      expect(instance.state.edits).toEqual('');
     });
     it('turns newValue into an array if key is categories', () => {
       instance.validateSave('categories', 'Category, Category 2');
