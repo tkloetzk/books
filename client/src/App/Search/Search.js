@@ -7,6 +7,7 @@ import { LOADING_STATUSES } from '../../util/constants';
 import {
   insertModifiedBook,
   deleteModifiedBook,
+  updateModifiedBook,
 } from '../../store/bookshelf/bookshelfActions';
 import Notification from '../Notification/Notification';
 import sortBooklist from '../../util/calculator';
@@ -41,7 +42,11 @@ export class Search extends React.Component {
   };
 
   handleSearchedBookEditSave = (book, edits) => {
-    const { modifiedBooklist, insertModifiedBook } = this.props;
+    const {
+      modifiedBooklist,
+      insertModifiedBook,
+      updateModifiedBook,
+    } = this.props;
 
     const exisitingBook = find(
       modifiedBooklist,
@@ -52,7 +57,7 @@ export class Search extends React.Component {
         .filter(diff => !edits.find(edit => diff['key'] === edit['key']))
         .concat(edits);
       exisitingBook.differences = newDiff;
-      insertModifiedBook(exisitingBook);
+      updateModifiedBook(exisitingBook);
     } else {
       insertModifiedBook(book);
     }
@@ -110,6 +115,7 @@ export const mapStateToProps = state => {
 const mapDispatchToProps = {
   insertModifiedBook,
   deleteModifiedBook,
+  updateModifiedBook,
 };
 export default connect(
   mapStateToProps,

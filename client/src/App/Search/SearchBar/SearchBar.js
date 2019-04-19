@@ -329,6 +329,7 @@ SearchBar.propTypes = {
   classes: PropTypes.object.isRequired,
   amazonBooks: PropTypes.array,
   booklist: PropTypes.array,
+  getBookshelf: PropTypes.func.isRequired,
 };
 
 export const mapStateToProps = state => ({

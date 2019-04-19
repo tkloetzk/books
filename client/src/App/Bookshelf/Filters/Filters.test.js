@@ -16,9 +16,8 @@ describe('Filters', () => {
     instance = wrapper.instance();
   });
 
-  it('renders with no function passed in', () => {
-    wrapper = shallow(<Filters classes={{}} />);
-    expect(wrapper).toMatchSnapshot();
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it('renders with correct props', () => {
@@ -27,51 +26,24 @@ describe('Filters', () => {
 
   it('updates state when handleOwned is called', () => {
     instance.handleOwned('owned');
-    expect(instance.state.filters).toEqual([
-      { key: 'read', value: false },
-      { key: 'owned', value: true },
-    ]);
+    expect(instance.state.filters).toEqual({ read: false, owned: true });
 
     instance.handleOwned('read');
-    expect(instance.state.filters).toEqual([
-      { key: 'read', value: true },
-      { key: 'owned', value: true },
-    ]);
+    expect(instance.state.filters).toEqual({ read: true, owned: true });
 
     instance.handleOwned('owned');
-    expect(instance.state.filters).toEqual([
-      { key: 'read', value: true },
-      { key: 'owned', value: false },
-    ]);
+    expect(instance.state.filters).toEqual({ read: true, owned: false });
 
     instance.handleOwned('read');
-    expect(instance.state.filters).toEqual([
-      { key: 'read', value: false },
-      { key: 'owned', value: false },
-    ]);
+    expect(instance.state.filters).toEqual({ read: false, owned: false });
   });
 
   it('calls filterBookshelf when filters are updated', () => {
-    const prevState = [
-      { key: 'read', value: false },
-      { key: 'owned', value: false },
-    ];
-    const filterState = [
-      { key: 'read', value: true },
-      { key: 'owned', value: false },
-    ];
+    const prevState = { read: false, owned: false };
+    const filterState = { read: true, owned: false };
     instance.state.filters = filterState;
     instance.componentDidUpdate(null, prevState);
     expect(instance.props.filterBookshelf).toHaveBeenCalled();
     expect(instance.props.filterBookshelf).toHaveBeenCalledWith(filterState);
-  });
-  it('does not call filterBookshelf when filters are not updated', () => {
-    const filters = [
-      { key: 'read', value: false },
-      { key: 'owned', value: false },
-    ];
-    instance.state.filters = filters;
-    instance.componentDidUpdate(null, { filters });
-    expect(instance.props.filterBookshelf).not.toHaveBeenCalled();
   });
 });

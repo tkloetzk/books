@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 import { filterBookshelf } from '../../../store/bookshelf/bookshelfActions';
+import PropTypes from 'prop-types';
 
 export class Filters extends Component {
   state = {
@@ -79,6 +80,10 @@ const styles = {
   formGroup: {
     justifyContent: 'center',
   },
+};
+
+Filters.propTypes = {
+  filterBookshelf: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {

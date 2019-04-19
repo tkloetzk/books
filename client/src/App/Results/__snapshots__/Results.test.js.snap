@@ -3,6 +3,11 @@
 exports[`Results renders with correct props 1`] = `
 <WithStyles(Grid)
   container={true}
+  style={
+    Object {
+      "justifyContent": "center",
+    }
+  }
 >
   <Connect(WithStyles(Book))
     book={
@@ -37,6 +42,11 @@ exports[`Results renders with correct props 1`] = `
 exports[`Results renders with no delete function 1`] = `
 <WithStyles(Grid)
   container={true}
+  style={
+    Object {
+      "justifyContent": "center",
+    }
+  }
 >
   <Connect(WithStyles(Book))
     book={
@@ -71,12 +81,22 @@ exports[`Results renders with no delete function 1`] = `
 exports[`Results renders with no props 1`] = `
 <WithStyles(Grid)
   container={true}
+  style={
+    Object {
+      "justifyContent": "center",
+    }
+  }
 />
 `;
 
 exports[`Results renders with no save function 1`] = `
 <WithStyles(Grid)
   container={true}
+  style={
+    Object {
+      "justifyContent": "center",
+    }
+  }
 >
   <Connect(WithStyles(Book))
     book={

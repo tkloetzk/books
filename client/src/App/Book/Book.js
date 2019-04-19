@@ -162,9 +162,13 @@ export class Book extends Component {
               <Icon
                 aria-label="Differences"
                 data-tip
-                data-for="differencesIcon"
+                data-for={`differencesIcon-${book.isbn}`}
               />
-              <ReactTooltip id="differencesIcon" type="info" effect="solid">
+              <ReactTooltip
+                id={`differencesIcon-${book.isbn}`}
+                type="info"
+                effect="solid"
+              >
                 {edits.length > 0 &&
                   edits.map(different => (
                     <span key={different.key}>

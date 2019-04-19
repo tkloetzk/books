@@ -33,12 +33,12 @@ exports[`Book componentDidMount sets state of differences on an existing book 1`
     </WithStyles(Typography)>
     <pure(AnnouncementOutlinedIcon)
       aria-label="Differences"
-      data-for="differencesIcon"
+      data-for="differencesIcon-9781932740080"
       data-tip={true}
     />
     <ReactTooltip
       effect="solid"
-      id="differencesIcon"
+      id="differencesIcon-9781932740080"
       insecure={true}
       resizeHide={true}
       type="info"
