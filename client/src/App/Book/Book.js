@@ -8,7 +8,6 @@ import Delete from '@material-ui/icons/DeleteForever';
 import EditableLabel from 'react-editable-label';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import find from 'lodash/find';
-import forEach from 'lodash/forEach';
 import get from 'lodash/get';
 import Icon from '@material-ui/icons/AnnouncementOutlined';
 import IconButton from '@material-ui/core/IconButton';
@@ -19,7 +18,6 @@ import PropTypes from 'prop-types';
 import ReadBook from '@material-ui/icons/CheckCircle';
 import ReactTooltip from 'react-tooltip';
 // import Truncate from 'react-truncate';
-import truncate from 'lodash/truncate';
 import Typography from '@material-ui/core/Typography';
 import UnownedBook from '@material-ui/icons/HomeOutlined';
 import UnreadBook from '@material-ui/icons/CheckCircleOutline';
@@ -103,23 +101,6 @@ export class Book extends Component {
       });
     }
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      !isEqual(this.props.book.adjustedRating, prevProps.book.adjustedRating)
-    ) {
-      console.log('adjustedrating different');
-    }
-
-    // if (
-    //   !isEqual(book, prevProps.book) &&
-    //   !isEqual(book, prevState.book) &&
-    //   !isEmpty(prevState.book.title)
-    // ) {
-    //   this.setState({
-    //     edits: util.compareDifferences(originalBook, book, []),
-    //   });
-    // }
-  }
 
   validateSave = (key, newValue) => {
     const { book, handleSave } = this.props;
@@ -136,7 +117,7 @@ export class Book extends Component {
   };
 
   render() {
-    const { classes, book, handleDelete, handleSave, filters } = this.props;
+    const { classes, book, handleDelete, filters } = this.props;
     const { expanded, read, owned, edits } = this.state;
 
     if (

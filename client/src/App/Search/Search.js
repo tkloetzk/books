@@ -2,7 +2,6 @@ import React from 'react';
 import SearchBar from './SearchBar/SearchBar';
 import Results from '../Results/Results';
 import { connect } from 'react-redux';
-import forEach from 'lodash/forEach';
 import find from 'lodash/find';
 import { LOADING_STATUSES } from '../../util/constants';
 import {
@@ -10,7 +9,6 @@ import {
   deleteModifiedBook,
 } from '../../store/bookshelf/bookshelfActions';
 import Notification from '../Notification/Notification';
-import remove from 'lodash/remove';
 import sortBooklist from '../../util/calculator';
 
 export class Search extends React.Component {
