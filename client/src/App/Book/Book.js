@@ -130,6 +130,9 @@ export class Book extends Component {
 
     const differences = get(book, 'differences', []);
 
+    const different =
+      differences.length || book.categories.indexOf('undefined') > -1;
+
     const expandStyle = !expanded
       ? styles.card
       : { ...styles.card, maxHeight: 614 };
@@ -139,9 +142,7 @@ export class Book extends Component {
         style={expandStyle}
         className={[
           owned ? classes.owned : null,
-          differences.length || book.categories.includes('undefined')
-            ? classes.different
-            : null,
+          different ? classes.different : null,
         ].join(' ')}
       >
         <div className={classes.header}>

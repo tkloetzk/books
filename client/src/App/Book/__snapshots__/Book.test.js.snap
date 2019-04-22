@@ -368,6 +368,84 @@ exports[`Book renders filters shows if unread with unread filter selected 1`] = 
 </WithStyles(Card)>
 `;
 
+exports[`Book renders renders if categories is undefined 1`] = `
+<WithStyles(Card)
+  className=" "
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+      "margin": "8px",
+      "maxHeight": 455,
+      "padding": "5px",
+      "width": 210,
+    }
+  }
+>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Delete"
+      onClick={[Function]}
+    >
+      <pure(DeleteForeverIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)
+      align="center"
+      component="span"
+      variant="body1"
+    >
+      <n
+        initialValue="On Becoming Baby Wise"
+        save={[Function]}
+      />
+    </WithStyles(Typography)>
+    <WithStyles(IconButton)
+      aria-label="Unread"
+      onClick={[Function]}
+    >
+      <pure(CheckCircleOutlineIcon) />
+    </WithStyles(IconButton)>
+  </div>
+  <WithStyles(Typography)
+    align="center"
+    variant="caption"
+  >
+    <n
+      initialValue="Book One"
+      save={[Function]}
+    />
+  </WithStyles(Typography)>
+  <WithStyles(CardMedia)
+    image="http://books.google.com/books/content"
+    title="On Becoming Baby Wise"
+  />
+  <WithStyles(CardContent)>
+    <n
+      initialValue="Discover the positive prescription for curing sleepless nights and fussy babies."
+      save={[Function]}
+    />
+  </WithStyles(CardContent)>
+  <div>
+    <WithStyles(IconButton)
+      aria-label="Owned"
+      onClick={[Function]}
+    >
+      <pure(HomeOutlinedIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(IconButton)
+      aria-expanded={false}
+      aria-label="Show more"
+      onClick={[Function]}
+    >
+      <pure(ExpandMoreIcon) />
+    </WithStyles(IconButton)>
+    <WithStyles(Typography)>
+      4.036
+    </WithStyles(Typography)>
+  </div>
+</WithStyles(Card)>
+`;
+
 exports[`Book renders renders with proper props and expanded 1`] = `
 <WithStyles(Card)
   className=" "

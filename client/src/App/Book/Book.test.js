@@ -52,6 +52,13 @@ describe('Book', () => {
       wrapper = shallow(<Book {...props} />);
       expect(wrapper).toMatchSnapshot();
     });
+    it('renders if categories is undefined', () => {
+      const book = Object.assign({}, props.book, { categories: 'undefined' });
+      props = Object.assign({}, props, { book });
+
+      wrapper = shallow(<Book {...props} />);
+      expect(wrapper).toMatchSnapshot();
+    });
     describe('filters', () => {
       it('does not show if read with unread filter selected', () => {
         props = Object.assign({}, props, {
