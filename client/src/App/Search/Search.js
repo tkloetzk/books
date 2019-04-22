@@ -5,12 +5,13 @@ import { connect } from 'react-redux';
 import find from 'lodash/find';
 import { LOADING_STATUSES } from '../../util/constants';
 import {
-  insertModifiedBook,
+  updateBookInBooklist,
   deleteModifiedBook,
   updateModifiedBook,
 } from '../../store/bookshelf/bookshelfActions';
 import Notification from '../Notification/Notification';
 import sortBooklist from '../../util/calculator';
+import forEach from 'lodash/forEach';
 
 export class Search extends React.Component {
   state = {
@@ -44,7 +45,7 @@ export class Search extends React.Component {
   handleSearchedBookEditSave = (book, edits) => {
     const {
       modifiedBooklist,
-      insertModifiedBook,
+      updateBookInBooklist,
       updateModifiedBook,
     } = this.props;
 
@@ -59,7 +60,10 @@ export class Search extends React.Component {
       exisitingBook.differences = newDiff;
       updateModifiedBook(exisitingBook);
     } else {
-      insertModifiedBook(book);
+      forEach(edits, edit => {
+        book[edit.key] = edit.newValue;
+      });
+      updateBookInBooklist(book);
     }
   };
 
@@ -113,7 +117,7 @@ export const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  insertModifiedBook,
+  updateBookInBooklist,
   deleteModifiedBook,
   updateModifiedBook,
 };

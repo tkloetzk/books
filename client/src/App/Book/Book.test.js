@@ -79,7 +79,7 @@ describe('Book', () => {
       it('shows if owned with owned filter selected', () => {
         props = Object.assign({}, props, {
           filters: { read: false, owned: true },
-          book: { owned: true },
+          book: { owned: true, categories: [] },
         });
         wrapper = shallow(<Book {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -87,7 +87,7 @@ describe('Book', () => {
       it('shows if unread and owned with owned and unread filter selected', () => {
         props = Object.assign({}, props, {
           filters: { read: true, owned: true },
-          book: { owned: true },
+          book: { owned: true, categories: [] },
         });
         wrapper = shallow(<Book {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -166,7 +166,7 @@ describe('Book', () => {
       expect(instance.props.handleSave.mock.calls).toMatchSnapshot();
     });
     it('turns newValue into an array if key is categories', () => {
-      instance.validateSave('categories', 'Category, Category 2');
+      instance.validateSave('categories', ['Category, Category 2']);
       expect(instance.props.handleSave.mock.calls).toMatchSnapshot();
     });
   });

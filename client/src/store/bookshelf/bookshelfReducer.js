@@ -37,6 +37,14 @@ export default function bookshelf(state = initialState, action) {
       return Object.assign({}, state, {
         modifiedBooklist: action.modifiedBooklist,
       });
+    case types.UPDATE_BOOK_IN_BOOKLIST:
+      remove(state.booklist, {
+        isbn: action.book.isbn,
+      });
+
+      return Object.assign({}, state, {
+        booklist: [...state.booklist, action.book],
+      });
     case types.UPDATE_MODIFIED_BOOK_SUCCESS:
       const { modifiedBook } = action;
       const { modifiedBooklist } = state;
@@ -49,8 +57,12 @@ export default function bookshelf(state = initialState, action) {
         modifiedBooklist: newModifiedBooklist,
       });
     case types.INSERT_MODIFIED_BOOK_SUCCESS:
+      remove(state.modifiedBooklist, {
+        isbn: action.modifiedBook.isbn,
+      });
+
       return Object.assign({}, state, {
-        modifiedBooklist: [...state.modifiedBooklist, ...action.modifiedBook],
+        modifiedBooklist: [...state.modifiedBooklist, action.modifiedBook],
       });
     case types.ADD_BOOK_TO_BOOKSHELF_SUCCESS: {
       return Object.assign({}, state, {

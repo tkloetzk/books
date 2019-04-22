@@ -83,6 +83,7 @@ describe('Search', () => {
     props = {
       booklist,
       modifiedBooklist,
+      updateBookInBooklist: jest.fn(),
       insertModifiedBook: jest.fn(),
       updateModifiedBook: jest.fn(),
     };
@@ -185,7 +186,7 @@ describe('Search', () => {
         { key: 'title', currentValue: 'Interrupted', newValue: 'Interrupted1' },
       ];
       instance.handleSearchedBookEditSave(book, edits);
-      expect(props.insertModifiedBook).toBeCalledWith(book);
+      expect(props.updateBookInBooklist).toBeCalledWith(book);
     });
     it('saves an edited exisiting book', () => {
       const book = {

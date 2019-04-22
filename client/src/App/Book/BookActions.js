@@ -79,7 +79,7 @@ const BookActions = ({ classes, expanded = false, book, validateSave }) => {
         <EditableLabel
           initialValue={`${book.categories}`}
           save={value => {
-            validateSave('categories', value);
+            validateSave('categories', [value]);
           }}
         />
       </Typography>

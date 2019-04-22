@@ -60,6 +60,20 @@ export function saveModifiedBooks(books) {
   };
 }
 
+export function updateBookInBooklist(book) {
+  console.log('in', book);
+  return dispatch => {
+    dispatch(updateBookInBooklistSuccess(book));
+  };
+}
+
+export function updateBookInBooklistSuccess(book) {
+  return {
+    type: types.UPDATE_BOOK_IN_BOOKLIST,
+    book,
+  };
+}
+
 export function updateModifiedBook(modifiedBook) {
   return dispatch => {
     dispatch(updateModifiedBookSuccess(modifiedBook));

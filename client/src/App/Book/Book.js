@@ -106,7 +106,7 @@ export class Book extends Component {
     const { book, handleSave } = this.props;
     if (!isEqual(book[key], newValue)) {
       if (key === 'categories') {
-        newValue = newValue.split(',').map(el => el.trim());
+        newValue = newValue[0].split(',').map(el => el.trim());
       }
       handleSave(book, [{ key, newValue: newValue }]);
     }
@@ -139,7 +139,9 @@ export class Book extends Component {
         style={expandStyle}
         className={[
           owned ? classes.owned : null,
-          differences.length ? classes.different : null,
+          differences.length || book.categories.includes('undefined')
+            ? classes.different
+            : null,
         ].join(' ')}
       >
         <div className={classes.header}>
