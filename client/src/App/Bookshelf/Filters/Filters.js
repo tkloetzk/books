@@ -6,21 +6,16 @@ import { connect } from 'react-redux';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 import { filterBookshelf } from '../../../store/bookshelf/bookshelfActions';
+import PropTypes from 'prop-types';
 
 export class Filters extends Component {
   state = {
-    filters: [
-      {
-        key: 'read',
-        value: false,
-      },
-      {
-        key: 'owned',
-        value: false,
-      },
-    ],
+    filters: { read: false, owned: false },
   };
 
+  componentDidMount() {
+    this.props.filterBookshelf(this.state.filters);
+  }
   componentDidUpdate(prevProps, prevState) {
     const { filters } = this.state;
     const { filterBookshelf } = this.props;
@@ -30,13 +25,9 @@ export class Filters extends Component {
   }
 
   handleOwned = name => {
-    this.setState(prevState => ({
-      filters: prevState.filters.map(filter =>
-        filter.key === name
-          ? Object.assign(filter, { value: !filter.value })
-          : filter
-      ),
-    }));
+    let filters = Object.assign({}, this.state.filters);
+    filters[name] = !filters[name];
+    this.setState({ filters });
   };
 
   render() {
@@ -89,6 +80,10 @@ const styles = {
   formGroup: {
     justifyContent: 'center',
   },
+};
+
+Filters.propTypes = {
+  filterBookshelf: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {

@@ -8,13 +8,14 @@ router.get('/v1/:isbn', (req, res) => {
     if (!error) {
       // TODO: This needed? Use schema/model?
       const subtitle = get(books[0], 'subtitle', '');
+      const categories = get(books[0], 'categories', 'undefined');
       const book = {
         title: books[0].title,
         isbn: req.params.isbn,
-        subtitle: subtitle,
+        subtitle,
         description: books[0].description,
         thumbnail: books[0].thumbnail,
-        categories: books[0].categories,
+        categories,
       };
       res.send(book);
     } else {

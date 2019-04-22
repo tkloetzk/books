@@ -61,13 +61,9 @@ router.post('/v2', (req, res) => {
               .replace(',', '')
           ),
           price: $(`${keywordSelector} > .a-offscreen`, html).text(),
-          // href: $(
-          //   `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
-          //   html
-          // ).attr('href'),
           isbn,
         };
-        //   console.log(book);
+        console.log(book);
         res.send({ book });
       } else {
         console.error(error);

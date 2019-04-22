@@ -1,126 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`BookActions renders renders correctly 1`] = `
-<WithStyles(Collapse)
-  in={true}
-  timeout="auto"
-  unmountOnExit={true}
->
-  <WithStyles(CardContent)
-    style={
-      Object {
-        "textAlign": "center",
-      }
+<BookActions
+  book={
+    Object {
+      "__v": 0,
+      "_id": "5c806393df78d5e84f8388ad",
+      "adjustedRating": 4.225772626931567,
+      "amazonAverageRating": 4.6,
+      "amazonRatingsCount": 20,
+      "categories": Array [
+        "Religion",
+      ],
+      "description": "Elizabeth George, bestselling author and mother of two daughters, provides biblical insight and guidance for every mom who wants to lead their daughter to a godly life through example, study, and prayer. Elizabeth includes questions to draw moms and daughter closer as together they pursue spiritual priorities and God s heart.\\"",
+      "goodreadsAverageRating": 4.24,
+      "goodreadsRatingsCount": 148,
+      "isbn": "9780736917728",
+      "price": "",
+      "subtitle": "",
+      "thumbnail": "http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+      "title": "Raising a Daughter After God's Own Heart",
     }
-  >
-    <WithStyles(Typography)
-      component="span"
-      style={
-        Object {
-          "display": "inline-flex",
-        }
-      }
-    >
-      ISBN:
-       
-      <EditableLabel
-        inputHeight="25px"
-        inputWidth="100px"
-        onFocus={[Function]}
-        onFocusOut={[Function]}
-        text="9780736917728"
-      />
-    </WithStyles(Typography)>
-    <WithStyles(Typography)
-      component="span"
-      style={
-        Object {
-          "display": "inline-flex",
-        }
-      }
-    >
-      Amazon Rating:
-       
-      <EditableLabel
-        inputHeight="25px"
-        inputWidth="75px"
-        onFocus={[Function]}
-        onFocusOut={[Function]}
-        text="4.6"
-      />
-    </WithStyles(Typography)>
-    <WithStyles(Typography)
-      component="span"
-      style={
-        Object {
-          "display": "inline-flex",
-        }
-      }
-    >
-      Goodreads Rating:
-       
-      <EditableLabel
-        inputHeight="25px"
-        inputWidth="75px"
-        onFocus={[Function]}
-        onFocusOut={[Function]}
-        text="4.24"
-      />
-    </WithStyles(Typography)>
-    <WithStyles(Typography)
-      component="span"
-      style={
-        Object {
-          "display": "inline-flex",
-        }
-      }
-    >
-      Amazon Review:
-       
-      <EditableLabel
-        inputHeight="25px"
-        inputWidth="75px"
-        onFocus={[Function]}
-        onFocusOut={[Function]}
-        text="20"
-      />
-    </WithStyles(Typography)>
-    <WithStyles(Typography)
-      component="span"
-      style={
-        Object {
-          "display": "inline-flex",
-        }
-      }
-    >
-      Goodreads Review:
-       
-      <EditableLabel
-        inputHeight="25px"
-        inputWidth="75px"
-        onFocus={[Function]}
-        onFocusOut={[Function]}
-        text="148"
-      />
-    </WithStyles(Typography)>
-    <WithStyles(Typography)
-      component="span"
-      style={
-        Object {
-          "display": "inline-flex",
-        }
-      }
-    >
-      Category:
-       
-      <EditableLabel
-        inputHeight="25px"
-        inputWidth="75px"
-        onFocus={[Function]}
-        onFocusOut={[Function]}
-        text="Religion"
-      />
-    </WithStyles(Typography)>
-  </WithStyles(CardContent)>
-</WithStyles(Collapse)>
+  }
+  classes={
+    Object {
+      "categories": "BookActions-categories-1",
+    }
+  }
+  expanded={true}
+  handleFocusOut={[MockFunction]}
+/>
 `;

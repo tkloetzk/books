@@ -60,6 +60,32 @@ export function saveModifiedBooks(books) {
   };
 }
 
+export function updateBookInBooklist(book) {
+  console.log('in', book);
+  return dispatch => {
+    dispatch(updateBookInBooklistSuccess(book));
+  };
+}
+
+export function updateBookInBooklistSuccess(book) {
+  return {
+    type: types.UPDATE_BOOK_IN_BOOKLIST,
+    book,
+  };
+}
+
+export function updateModifiedBook(modifiedBook) {
+  return dispatch => {
+    dispatch(updateModifiedBookSuccess(modifiedBook));
+  };
+}
+
+export function updateModifiedBookSuccess(modifiedBook) {
+  return {
+    type: types.UPDATE_MODIFIED_BOOK_SUCCESS,
+    modifiedBook,
+  };
+}
 export function insertModifiedBookSuccess(modifiedBook) {
   return {
     type: types.INSERT_MODIFIED_BOOK_SUCCESS,
