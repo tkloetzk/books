@@ -61,7 +61,6 @@ export function saveModifiedBooks(books) {
 }
 
 export function updateBookInBooklist(book) {
-  console.log('in', book);
   return dispatch => {
     dispatch(updateBookInBooklistSuccess(book));
   };
@@ -105,20 +104,13 @@ export function filterBookshelf(filters) {
     filters,
   };
 }
-export function getBookshelf(includedGenres = []) {
+export function getBookshelf() {
   return dispatch => {
     dispatch(getBookshelfIsLoading(true));
 
     // If false, means no genres are selected so return nothing
-    if (includedGenres === false) {
-      dispatch(getBookshelfIsLoading(false));
-      dispatch(getBookshelfSuccess([]));
-      dispatch(setSelectedGenres(null));
-      return [];
-    } else {
-      return getBookshelfService(includedGenres)
+      return getBookshelfService()
         .then(bookshelf => {
-          dispatch(setSelectedGenres(includedGenres));
           dispatch(getBookshelfIsLoading(false));
           dispatch(getBookshelfSuccess(bookshelf));
           dispatch(getBookshelfGenres());
@@ -131,7 +123,6 @@ export function getBookshelf(includedGenres = []) {
           console.error('bookshelf error', error);
         });
     }
-  };
 }
 
 export function setSelectedGenres(selectedGenres) {

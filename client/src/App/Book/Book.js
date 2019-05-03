@@ -265,8 +265,8 @@ Book.propTypes = {
   handleSave: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
   filters: PropTypes.shape({
-    read: PropTypes.bool.isRequired,
-    owned: PropTypes.bool.isRequired,
+    read: PropTypes.bool,
+    owned: PropTypes.bool,
   }),
 };
 

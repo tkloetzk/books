@@ -17,6 +17,7 @@ describe('GenreSelector', () => {
       classes: {},
       getBookshelf: jest.fn(),
       getBookshelfGenres: jest.fn(),
+      setSelectedGenres: jest.fn(),
       bookshelf: [],
       genres: [],
     };
@@ -101,6 +102,7 @@ describe('GenreSelector', () => {
 
       expect(instance.state.genres).toEqual(genreSelectors);
     });
+  })
     // describe('componentDidUpdate', () => {
     //   let prevProps;
     //   let prevState;
@@ -207,5 +209,7 @@ describe('GenreSelector', () => {
         expect(wrapper).toMatchSnapshot();
       });
     });
-  });
+  describe('selected but bookshelf updates', () => {
+
+  })
 });
