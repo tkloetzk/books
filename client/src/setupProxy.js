@@ -20,5 +20,3 @@ module.exports = function(app) {
     })
   );
 };
-
-// TODO: can i cycle through apiConfigs?
