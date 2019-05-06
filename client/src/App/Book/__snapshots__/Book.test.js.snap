@@ -37,6 +37,7 @@ exports[`Book componentDidMount sets state of differences on an existing book 1`
       data-tip={true}
     />
     <ReactTooltip
+      clickable={false}
       effect="solid"
       id="differencesIcon-9781932740080"
       insecure={true}

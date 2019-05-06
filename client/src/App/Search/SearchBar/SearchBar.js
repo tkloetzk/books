@@ -186,6 +186,7 @@ export class SearchBar extends Component {
     const { getAmazonBook, getGoogleBook, getGoodreadsBook } = this.props;
     const { multiline, loading } = this.state;
     const isbns = multiline.split(/[\n, ]/).filter(v => v !== '');
+    console.log(isbns);
     if (!loading) {
       this.setState({
         success: false,
