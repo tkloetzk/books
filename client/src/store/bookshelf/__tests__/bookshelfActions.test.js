@@ -135,77 +135,6 @@ describe('bookshelf actions', () => {
     expect(dispatch.mock.calls).toMatchSnapshot();
   });
   describe('getBookshelf', () => {
-    it('includedGenres = false, no genres selected', () => {
-      const dispatch = jest.fn();
-      actions.getBookshelf(false)(dispatch);
-      expect(dispatch.mock.calls).toMatchSnapshot();
-    });
-    it('bookshelf returned with includedGenres', () => {
-      const store = createMockStore();
-      const bookshelf = [
-        {
-          categories: ['Religion'],
-          read: false,
-          owned: false,
-          _id: '5c959505494f5dd029aeff74',
-          amazonAverageRating: 4.6,
-          amazonRatingsCount: 29,
-          price: '',
-          isbn: '9780736917728',
-          title: "Raising a Daughter After God's Own Heart",
-          subtitle: '',
-          description:
-            'Elizabeth George, bestselling author and mother of two daughters',
-          thumbnail: 'http://books.google.com/books/content?id=K_AhmQEACAAJ&pr',
-          goodreadsAverageRating: 4.25,
-          goodreadsRatingsCount: 149,
-          __v: 0,
-          adjustedRating: 4.425,
-        },
-      ];
-      const expectedResponse = [
-        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
-        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
-        {
-          bookshelf: [
-            {
-              __v: 0,
-              _id: '5c959505494f5dd029aeff74',
-              adjustedRating: 4.425,
-              amazonAverageRating: 4.6,
-              amazonRatingsCount: 29,
-              categories: ['Religion'],
-              description:
-                'Elizabeth George, bestselling author and mother of two daughters',
-              goodreadsAverageRating: 4.25,
-              goodreadsRatingsCount: 149,
-              isbn: '9780736917728',
-              owned: false,
-              price: '',
-              read: false,
-              subtitle: '',
-              thumbnail:
-                'http://books.google.com/books/content?id=K_AhmQEACAAJ&pr',
-              title: "Raising a Daughter After God's Own Heart",
-            },
-          ],
-          type: types.FETCH_BOOKSHELF_SUCCESS,
-        },
-        {
-          error: null,
-          hasErrored: false,
-          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
-        },
-        { genres: ['Religion'], type: types.FETCH_BOOKSHELF_GENRES_SUCCESS },
-      ];
-
-      getBookshelfService.mockResolvedValue(bookshelf);
-      getGenresBookshelfService.mockResolvedValue(bookshelf[0].categories);
-
-      return store.dispatch(actions.getBookshelf(['Parenting'])).then(() => {
-        expect(store.getActions()).toEqual(expectedResponse);
-      });
-    });
     it('getBookshelfService failed', () => {
       const store = createMockStore();
       const expectedResponse = [
@@ -265,12 +194,30 @@ describe('bookshelf actions', () => {
       ];
       const store = createMockStore();
       const expectedResponse = [
-        { booklist: [], type: types.ADD_BOOK_TO_BOOKSHELF_SUCCESS },
-        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
-        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        { booklist: [], type: 'ADD_BOOK_TO_BOOKSHELF_SUCCESS' },
+        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
         {
           bookshelf: [
-            bookshelf[0],
+            {
+              __v: 0,
+              _id: '5c9d6b89f2ae7a3690d6fa42',
+              adjustedRating: 4.449916512838346,
+              amazonAverageRating: 4.7,
+              amazonRatingsCount: 1916,
+              categories: ['Juvenile Fiction'],
+              description:
+                'It is eight years after the tours from offworld have stopped.',
+              goodreadsAverageRating: 4.21,
+              goodreadsRatingsCount: 1860678,
+              isbn: '9780064404990',
+              owned: false,
+              price: '',
+              read: false,
+              subtitle: '',
+              thumbnail: 'http://books.google.com/books/content?id=zCe6gRHonZg',
+              title: 'Year of the Griffin',
+            },
             {
               amazonAverageRating: 4.6,
               amazonRatingsCount: 29,
@@ -287,16 +234,12 @@ describe('bookshelf actions', () => {
               title: "Raising a Daughter After God's Own Heart",
             },
           ],
-          type: types.FETCH_BOOKSHELF_SUCCESS,
+          type: 'FETCH_BOOKSHELF_SUCCESS',
         },
+        { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
         {
-          error: null,
-          hasErrored: false,
-          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
-        },
-        {
-          genres: [bookshelf[0].categories[0], bookshelf[1].categories[0]],
-          type: types.FETCH_BOOKSHELF_GENRES_SUCCESS,
+          genres: ['Juvenile Fiction', 'Religion'],
+          type: 'FETCH_BOOKSHELF_GENRES_SUCCESS',
         },
       ];
       addBookshelfService.mockResolvedValue(booklist);
@@ -360,9 +303,9 @@ describe('bookshelf actions', () => {
     it('successful with categories field', () => {
       const store = createMockStore();
       const expectedResponse = [
-        { type: types.UPDATE_BOOK_ON_BOOKSHELF_SUCCESS },
-        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
-        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        { type: 'UPDATE_BOOK_ON_BOOKSHELF_SUCCESS' },
+        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
         {
           bookshelf: [
             {
@@ -400,18 +343,15 @@ describe('bookshelf actions', () => {
               title: "Raising a Daughter After God's Own Heart",
             },
           ],
-          type: types.FETCH_BOOKSHELF_SUCCESS,
+          type: 'FETCH_BOOKSHELF_SUCCESS',
         },
-        {
-          error: null,
-          hasErrored: false,
-          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
-        },
+        { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
         {
           genres: ['Juvenile Fiction', 'Religion'],
-          type: types.FETCH_BOOKSHELF_GENRES_SUCCESS,
+          type: 'FETCH_BOOKSHELF_GENRES_SUCCESS',
         },
       ];
+
       updateBookOnBookshelfService.mockResolvedValue({
         n: 1,
         nModified: 1,
@@ -424,6 +364,29 @@ describe('bookshelf actions', () => {
             goodreadsRatingsCount: 21560,
             categories: ['Juvenile Fiction'],
           })
+        )
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedResponse);
+        });
+    });
+    it('calls getBookshelf on refreshBookshelf', () => {
+      const store = createMockStore();
+      const expectedResponse = [{ type: 'UPDATE_BOOK_ON_BOOKSHELF_SUCCESS' }];
+      updateBookOnBookshelfService.mockResolvedValue({
+        n: 1,
+        nModified: 1,
+        ok: 1,
+      });
+
+      return store
+        .dispatch(
+          actions.updateBookOnBookshelf(
+            '5c967fbcbfb8c4eb4b9d463c',
+            {
+              goodreadsRatingsCount: 21560,
+            },
+            true
+          )
         )
         .then(() => {
           expect(store.getActions()).toEqual(expectedResponse);
@@ -467,10 +430,10 @@ describe('bookshelf actions', () => {
       const expectedResponse = [
         {
           deleteId: '5c967fbcbfb8c4eb4b9d463c',
-          type: types.DELETE_BOOK_ON_BOOKSHELF_SUCCESS,
+          type: 'DELETE_BOOK_ON_BOOKSHELF_SUCCESS',
         },
-        { isLoading: true, type: types.FETCH_BOOKSHELF_IS_LOADING },
-        { isLoading: false, type: types.FETCH_BOOKSHELF_IS_LOADING },
+        { isLoading: true, type: 'FETCH_BOOKSHELF_IS_LOADING' },
+        { isLoading: false, type: 'FETCH_BOOKSHELF_IS_LOADING' },
         {
           bookshelf: [
             {
@@ -492,16 +455,26 @@ describe('bookshelf actions', () => {
               thumbnail: 'http://books.google.com/books/content?id=zCe6gRHonZg',
               title: 'Year of the Griffin',
             },
-            booklist[0],
+            {
+              amazonAverageRating: 4.6,
+              amazonRatingsCount: 29,
+              categories: ['Religion'],
+              description:
+                'Elizabeth George, bestselling author and mother of two daughters',
+              goodreadsAverageRating: 4.25,
+              goodreadsRatingsCount: 149,
+              isbn: '9780736917728',
+              price: '',
+              subtitle: '',
+              thumbnail:
+                'http://books.google.com/books/content?id=K_AhmQEACAAJ&printsec=frontcover',
+              title: "Raising a Daughter After God's Own Heart",
+            },
           ],
-          type: types.FETCH_BOOKSHELF_SUCCESS,
+          type: 'FETCH_BOOKSHELF_SUCCESS',
         },
-        {
-          error: null,
-          hasErrored: false,
-          type: types.FETCH_BOOKSHELF_HAS_ERRORED,
-        },
-        { genres: ['Religion'], type: types.FETCH_BOOKSHELF_GENRES_SUCCESS },
+        { error: null, hasErrored: false, type: 'FETCH_BOOKSHELF_HAS_ERRORED' },
+        { genres: ['Religion'], type: 'FETCH_BOOKSHELF_GENRES_SUCCESS' },
       ];
       deleteBookOnBookshelfService.mockResolvedValue(booklist[0]);
       getGenresBookshelfService.mockResolvedValue(booklist[0].categories);

@@ -18,6 +18,7 @@ describe('SearchBar', () => {
       getAmazonBook: jest.fn(),
       getGoogleBook: jest.fn(),
       getGoodreadsBook: jest.fn(),
+      getBookshelf: jest.fn(),
       saveCombinedBooks: jest.fn(),
       amazonBookErrored: false,
       insertModifiedBook: jest.fn(),
@@ -39,25 +40,35 @@ describe('SearchBar', () => {
   it('mapStateToProps', () => {
     const mockedState = {
       amazon: {
-        books: [{'title': 'amazonBook'}],
+        books: [{ title: 'amazonBook' }],
         hasErrored: false,
       },
       google: {
-        books: [{'title': 'googleBook'}],
+        books: [{ title: 'googleBook' }],
         hasErrored: false,
       },
       goodreads: {
-        books: [{'title': 'goodreadsBook'}],
+        books: [{ title: 'goodreadsBook' }],
         hasErrored: false,
       },
       bookshelf: {
         booklist: [],
-        bookshelf: [{'title': 'bookshelf'}],
-      }
-    }
-    const state = mapStateToProps(mockedState)
-    expect(state).toEqual({"amazonBookErrored": false, "amazonBooks": mockedState.amazon.books, "booklist": [], "bookshelf": mockedState.bookshelf.bookshelf, "goodreadsBooks": mockedState.goodreads.books, "goodreadsBooksErrored": false, "googleBooks": mockedState.google.books, "googleBooksErrored": false, "modifiedBooklist": undefined})
-  })
+        bookshelf: [{ title: 'bookshelf' }],
+      },
+    };
+    const state = mapStateToProps(mockedState);
+    expect(state).toEqual({
+      amazonBookErrored: false,
+      amazonBooks: mockedState.amazon.books,
+      booklist: [],
+      bookshelf: mockedState.bookshelf.bookshelf,
+      goodreadsBooks: mockedState.goodreads.books,
+      goodreadsBooksErrored: false,
+      googleBooks: mockedState.google.books,
+      googleBooksErrored: false,
+      modifiedBooklist: undefined,
+    });
+  });
   describe('search', () => {
     describe('button', () => {
       it('disabled if no text', () => {
@@ -137,11 +148,11 @@ describe('SearchBar', () => {
         expect(instance.state.searchIsbns).toEqual(['12345']);
       });
       it('does not setState on handleSearch if loading', () => {
-        instance.state.loading = true
-        instance.state.multiline = '9780805835595'
-        instance.handleSearch()
-        expect(instance.state.searchIsbns).toEqual([])
-      })
+        instance.state.loading = true;
+        instance.state.multiline = '9780805835595';
+        instance.handleSearch();
+        expect(instance.state.searchIsbns).toEqual([]);
+      });
     });
     describe('promise array', () => {
       it('function calls', () => {
@@ -518,7 +529,48 @@ describe('SearchBar', () => {
         expect(instance.props.saveCombinedBooks).not.toHaveBeenCalled();
       });
       it('exisiting book with no differences', () => {
-        // TODO: get this implemented
+        // const book = newBook[0]
+        // amazonBooks = [{
+        //     amazonAverageRating: book.amazonAverageRating,
+        //     amazonRatingsCount: book.amazonRatingsCount,
+        //     price: book.price,
+        //     isbn: book.isbn,
+        //   },
+        // ];
+        // goodreadsBooks = [
+        //   {
+        //     isbn: book.isbn,
+        //     goodreadsAverageRating: book.goodreadsAverageRating,
+        //     goodreadsRatingsCount: book.goodreadsRatingsCount,
+        //   },
+        // ];
+        // googleBooks = [
+        //   {
+        //     title: book.title,
+        //     isbn: book.isbn,
+        //     subtitle: book.subtitle,
+        //     description: book.description,
+        //     thumbnail: book.thumbnail,
+        //     categories: book.categories,
+        //   }
+        // ]
+        // props = Object.assign({}, props, {
+        //   googleBooks,
+        //   goodreadsBooks,
+        //   amazonBooks,
+        //   bookshelf: newBook,
+        // });
+        // wrapper = shallow(<SearchBar {...props} />);
+        // instance = wrapper.instance();
+        // instance.state.loading = true;
+        // instance.state.searchIsbns = [book.isbn];
+        //
+        // instance.componentDidUpdate(prevProps);
+        //
+        // expect(instance.props.insertModifiedBook).not.toHaveBeenCalled();
+        // expect(instance.props.saveModifiedBooks).not.toHaveBeenCalled();
+        // expect(instance.props.saveCombinedBooks).not.toHaveBeenCalled();
+        // expect(instance.state.duplicatedISBNs).toEqual([book.isbn])
       });
       it('new books with modified book', () => {
         amazonBooks[0].amazonAverageRating = 2;
@@ -569,28 +621,44 @@ describe('SearchBar', () => {
         ]);
       });
       it('modified book with previous modified book', () => {
-        //This needs to be reworked
-        prevProps.modifiedBooklist = modifiedBook;
-        amazonBooks[0].amazonAverageRating = 2;
-        amazonBooks[0].amazonRatingsCount = 7;
-        delete modifiedBook.differences;
-        props = Object.assign({}, props, {
-          googleBooks,
-          goodreadsBooks,
-          amazonBooks,
-          bookshelf: [...newBook, ...modifiedBook],
-        });
-        wrapper = shallow(<SearchBar {...props} />);
-        instance = wrapper.instance();
-        instance.state.loading = true;
-        instance.state.searchIsbns = ['9780988995819'];
-
-        instance.componentDidUpdate(prevProps);
-        expect(instance.props.insertModifiedBook).toHaveBeenCalled();
+        // TODO: get this implemented
       });
       it('new books, modified books, exisiting with no differences', () => {
         // TODO: get this implemented
       });
     });
+  });
+  describe('search for already searched book', () => {
+    it('is not added to booklist if already present', () => {
+      const isbn = '1234'
+      props = Object.assign({}, props, { booklist: [{ isbn }] });
+      wrapper = shallow(<SearchBar {...props} />);
+      instance = wrapper.instance();
+
+      instance.state.multiline = isbn;
+      instance.handleSearch();
+
+      expect(instance.props.getAmazonBook).not.toHaveBeenCalled();
+      expect(instance.props.getGoogleBook).not.toHaveBeenCalled();
+      expect(instance.props.getGoodreadsBook).not.toHaveBeenCalled();
+      expect(instance.state.duplicatedISBNs).toEqual([isbn])
+    });
+    it('calls the promise array with only non-exisiting books', () => {
+      const isbn = ['000', '123']
+      props = Object.assign({}, props, { booklist: [{ isbn: isbn[1] }] });
+      wrapper = shallow(<SearchBar {...props} />);
+      instance = wrapper.instance();
+
+      instance.state.multiline = isbn.join(',');
+      instance.handleSearch();
+
+      expect(instance.props.getAmazonBook).toHaveBeenCalledTimes(1);
+      expect(instance.props.getGoogleBook).toHaveBeenCalledTimes(1);
+      expect(instance.props.getGoodreadsBook).toHaveBeenCalledTimes(1);
+      expect(instance.state.duplicatedISBNs).toEqual([isbn[1]])
+    })
+    // it('displays correct duplicatedISBNs when booklist and bookshelf have duplicates', () => {
+    
+    // })
   });
 });

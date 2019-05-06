@@ -80,7 +80,13 @@ describe('Search', () => {
     },
   ];
   beforeEach(() => {
-    props = { booklist, modifiedBooklist, insertModifiedBook: jest.fn() };
+    props = {
+      booklist,
+      modifiedBooklist,
+      updateBookInBooklist: jest.fn(),
+      insertModifiedBook: jest.fn(),
+      updateModifiedBook: jest.fn(),
+    };
     wrapper = shallow(<Search {...props} />);
     instance = wrapper.instance();
   });
@@ -180,7 +186,7 @@ describe('Search', () => {
         { key: 'title', currentValue: 'Interrupted', newValue: 'Interrupted1' },
       ];
       instance.handleSearchedBookEditSave(book, edits);
-      expect(props.insertModifiedBook).toBeCalledWith(book);
+      expect(props.updateBookInBooklist).toBeCalledWith(book);
     });
     it('saves an edited exisiting book', () => {
       const book = {
@@ -255,7 +261,7 @@ describe('Search', () => {
         _id: '5c801a9f4549aac8fe03f088',
       };
       instance.handleSearchedBookEditSave(book, edits);
-      expect(props.insertModifiedBook).toBeCalledWith(modifiedBook);
+      expect(props.updateModifiedBook).toBeCalledWith(modifiedBook);
     });
   });
 

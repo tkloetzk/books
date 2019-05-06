@@ -12,6 +12,7 @@ import {
   updateBookOnBookshelf,
   clearBooks,
   insertModifiedBook,
+  getBookshelf,
 } from '../../../store/bookshelf/bookshelfActions';
 import { getGoogleBook } from '../../../store/google/googleActions';
 import { connect } from 'react-redux';
@@ -27,6 +28,7 @@ import assign from 'lodash/assign';
 import Notification from '../../Notification/Notification';
 import util from '../../../util/combineBooks';
 import Tooltip from '../../Tooltip/Tooltip';
+import find from 'lodash/find'
 
 // TODO: This file is getting huge
 const styles = {
@@ -149,7 +151,7 @@ export class SearchBar extends Component {
         goodreadsBooks,
         bookshelf
       );
-      // TODO: What's this doing again?
+
       forEach([...duplicates, ...duplicatedISBNs], duplicate =>
         forEach([...combinedBooks], obj =>
           obj.isbn === duplicate.isbn ? remove(combinedBooks, obj) : null
@@ -166,6 +168,10 @@ export class SearchBar extends Component {
       if (combinedBooks.length) {
         saveCombinedBooks(combinedBooks);
       }
+      if (duplicatedISBNs.length) {
+        const existingUnchangedISBN = map(duplicatedISBNs, isbn => isbn.isbn);
+        this.setState({ duplicatedISBNs: [...this.state.duplicatedISBNs, existingUnchangedISBN] });
+      }
       clearBooks();
       this.setState({ success: true, loading: false, multiline: '' });
     }
@@ -178,35 +184,52 @@ export class SearchBar extends Component {
   };
 
   handleSearch = () => {
-    const { getAmazonBook, getGoogleBook, getGoodreadsBook } = this.props;
+    const { booklist, getAmazonBook, getGoogleBook, getGoodreadsBook } = this.props;
     const { multiline, loading } = this.state;
     const isbns = multiline.split(/[\n, ]/).filter(v => v !== '');
-    if (!loading) {
+
+    const promiseIsbns = []
+    forEach(isbns, isbn => {
+      const formattedIsbn = isbn.replace(/[- ]/g, '');
+      if (!find(booklist, {isbn: formattedIsbn})) {
+        promiseIsbns.push(formattedIsbn)
+      } else {
+     //   const updatedSearchIsbns = remove(searchIsbns, isbn)
+        this.setState({
+          duplicatedISBNs: [...this.state.duplicatedISBNs, formattedIsbn]
+        })
+      }
+    })
+
+    if (promiseIsbns.length) {
+      if (!loading) {
+        this.setState({
+          success: false,
+          loading: true,
+          searchIsbns: promiseIsbns,
+          goodreadsBookLoading: LOADING_STATUSES.loading,
+          googleBookLoading: LOADING_STATUSES.loading,
+          amazonBookLoading: LOADING_STATUSES.loading,
+        });
+      }
+
+      Promise.all(promiseIsbns.map(isbn => [
+        getAmazonBook(isbn),
+        getGoogleBook(isbn),
+        getGoodreadsBook(isbn),
+      ]))
+    } else {
       this.setState({
-        success: false,
-        loading: true,
-        searchIsbns: isbns,
-        goodreadsBookLoading: LOADING_STATUSES.loading,
-        googleBookLoading: LOADING_STATUSES.loading,
-        amazonBookLoading: LOADING_STATUSES.loading,
-      });
+        multiline: '',
+      })
     }
 
-    Promise.all(
-      forEach(isbns, isbn => {
-        const formattedIsbn = isbn.replace(/[- ]/g, '');
-        return [
-          getAmazonBook(formattedIsbn),
-          getGoogleBook(formattedIsbn),
-          getGoodreadsBook(formattedIsbn),
-        ];
-      })
-    );
   };
 
   handleSave = () => {
     const {
       booklist,
+      getBookshelf,
       modifiedBooklist,
       addBookToBookshelf,
       updateBookOnBookshelf,
@@ -219,7 +242,9 @@ export class SearchBar extends Component {
           });
           return updateBookOnBookshelf(book._id, assign(...fields));
         })
-      );
+      ).then(() => {
+        getBookshelf();
+      });
     }
     if (booklist.length) {
       addBookToBookshelf(booklist);
@@ -247,6 +272,7 @@ export class SearchBar extends Component {
     ];
     const showSaveIcon =
       booklist.length > 0 || modifiedBooklist.length > 0 ? true : false;
+
     return (
       <form className={classes.container} noValidate autoComplete="off">
         <TextField
@@ -295,13 +321,12 @@ export class SearchBar extends Component {
           getContent={() => <Tooltip content={tooltipObj} />}
         />
         <Notification
-          open={false}
-          //open={duplicatedISBNs.length ? true : false}
+          open={duplicatedISBNs.length > 0 ? true : false}
           handleClose={this.onClose}
-          autoHideDuration={3500}
+          autoHideDuration={7500}
           message={`${duplicatedISBNs.join(
             ', '
-          )} already shelved with no differences`}
+          )} already exists with no differences`}
           type={LOADING_STATUSES.info}
         />
       </form>
@@ -322,6 +347,7 @@ SearchBar.propTypes = {
   classes: PropTypes.object.isRequired,
   amazonBooks: PropTypes.array,
   booklist: PropTypes.array,
+  getBookshelf: PropTypes.func.isRequired,
 };
 
 export const mapStateToProps = state => ({
@@ -340,6 +366,7 @@ const mapDispatchToProps = {
   getAmazonBook,
   getGoodreadsBook,
   getGoogleBook,
+  getBookshelf,
   saveCombinedBooks,
   saveModifiedBooks,
   addBookToBookshelf,

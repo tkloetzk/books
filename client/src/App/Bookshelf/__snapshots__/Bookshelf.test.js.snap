@@ -1,40 +1,82 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Bookshelf Refresh Bookshelf createPromiseArray creates amazon and goodreads promise arrays 1`] = `
+Array [
+  Array [
+    "9780988995819",
+  ],
+  Array [
+    "5678",
+  ],
+]
+`;
+
+exports[`Bookshelf Refresh Bookshelf createPromiseArray creates amazon and goodreads promise arrays 2`] = `
+Array [
+  Array [
+    "9780988995819",
+  ],
+  Array [
+    "5678",
+  ],
+]
+`;
+
+exports[`Bookshelf Refresh Bookshelf findAndMergeInUpdates does not update if no book differences 1`] = `Array []`;
+
+exports[`Bookshelf Refresh Bookshelf findAndMergeInUpdates updates books with differences 1`] = `
+Array [
+  Array [
+    "a1",
+    Object {
+      "amazonAverageRating": 3.5,
+      "amazonRatingsCount": 322,
+      "goodreadsAverageRating": 2.5,
+    },
+  ],
+  Array [
+    "as234123",
+    Object {
+      "amazonAverageRating": 4.5,
+      "amazonRatingsCount": 22,
+      "goodreadsAverageRating": 3.5,
+      "goodreadsRatingsCount": 220,
+    },
+  ],
+]
+`;
+
+exports[`Bookshelf Refresh Bookshelf findAndMergeInUpdates updates books with differences 2`] = `
+Array [
+  Array [],
+  Array [],
+  Array [],
+]
+`;
+
 exports[`Bookshelf renders does not with active false 1`] = `
 <Fragment>
+  <WithStyles(LinearProgress)
+    value={0}
+    variant="determinate"
+  />
   <div>
     <Connect(WithStyles(GenreSelector)) />
-    <Connect(WithStyles(Filters)) />
   </div>
 </Fragment>
 `;
 
 exports[`Bookshelf renders with books on bookshelf 1`] = `
 <Fragment>
+  <WithStyles(LinearProgress)
+    value={0}
+    variant="determinate"
+  />
   <div>
     <Connect(WithStyles(GenreSelector)) />
-    <Connect(WithStyles(Filters)) />
   </div>
   <Results
-    booklist={
-      Array [
-        Object {
-          "amazonAverageRating": 4.6,
-          "amazonRatingsCount": 113,
-          "categories": Array [
-            "Family & Relationships",
-          ],
-          "description": "A complete guide to the concept of attachment parenting, which argues that parental responsiveness to a baby's needs leads to a well-adjusted child, offers tips on breastfeeding on demand, responding to a baby's cries, minimizing parent-child separation, and avoiding baby \\"gadgets.\\" Original.",
-          "goodreadsAverageRating": 4.22,
-          "goodreadsRatingsCount": 236,
-          "isbn": "9780988995819",
-          "price": "",
-          "subtitle": "Instinctive Care for Your Baby and Young Child",
-          "thumbnail": "http://books.google.com/books/content?id=daeq84DTC3IC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-          "title": "Attachment Parenting",
-        },
-      ]
-    }
+    booklist={Array []}
     handleDelete={[Function]}
     handleSave={[Function]}
   />
@@ -43,9 +85,12 @@ exports[`Bookshelf renders with books on bookshelf 1`] = `
 
 exports[`Bookshelf renders with no books on bookshelf 1`] = `
 <Fragment>
+  <WithStyles(LinearProgress)
+    value={0}
+    variant="determinate"
+  />
   <div>
     <Connect(WithStyles(GenreSelector)) />
-    <Connect(WithStyles(Filters)) />
   </div>
   <Results
     booklist={Array []}

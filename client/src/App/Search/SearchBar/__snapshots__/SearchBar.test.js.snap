@@ -3,7 +3,7 @@
 exports[`SearchBar Saving Fab save shows save button if there are books in booklist and not in modifiedbooklist 1`] = `
 <button
   aria-label="Save"
-  className="MuiButtonBase-root-66 MuiFab-root-119 MuiFab-primary-121"
+  className="MuiButtonBase-root-66 MuiFab-root-122 MuiFab-primary-124"
   disabled={false}
   id="SaveIcon"
   onBlur={[Function]}
@@ -22,7 +22,7 @@ exports[`SearchBar Saving Fab save shows save button if there are books in bookl
   type="button"
 >
   <span
-    className="MuiFab-label-120"
+    className="MuiFab-label-123"
   >
     <pure(SaveIcon)>
       <SaveIcon>
@@ -78,25 +78,25 @@ exports[`SearchBar Saving Fab save shows save button if there are books in bookl
         center={false}
         classes={
           Object {
-            "child": "MuiTouchRipple-child-133",
-            "childLeaving": "MuiTouchRipple-childLeaving-134",
-            "childPulsate": "MuiTouchRipple-childPulsate-135",
-            "ripple": "MuiTouchRipple-ripple-130",
-            "ripplePulsate": "MuiTouchRipple-ripplePulsate-132",
-            "rippleVisible": "MuiTouchRipple-rippleVisible-131",
-            "root": "MuiTouchRipple-root-129",
+            "child": "MuiTouchRipple-child-136",
+            "childLeaving": "MuiTouchRipple-childLeaving-137",
+            "childPulsate": "MuiTouchRipple-childPulsate-138",
+            "ripple": "MuiTouchRipple-ripple-133",
+            "ripplePulsate": "MuiTouchRipple-ripplePulsate-135",
+            "rippleVisible": "MuiTouchRipple-rippleVisible-134",
+            "root": "MuiTouchRipple-root-132",
           }
         }
       >
         <TransitionGroup
           childFactory={[Function]}
-          className="MuiTouchRipple-root-129"
+          className="MuiTouchRipple-root-132"
           component="span"
           enter={true}
           exit={true}
         >
           <span
-            className="MuiTouchRipple-root-129"
+            className="MuiTouchRipple-root-132"
           />
         </TransitionGroup>
       </TouchRipple>
@@ -108,7 +108,7 @@ exports[`SearchBar Saving Fab save shows save button if there are books in bookl
 exports[`SearchBar Saving Fab save shows save button if there are no books in booklist but in modifiedBooklist 1`] = `
 <button
   aria-label="Save"
-  className="MuiButtonBase-root-66 MuiFab-root-119 MuiFab-primary-121"
+  className="MuiButtonBase-root-66 MuiFab-root-122 MuiFab-primary-124"
   disabled={false}
   id="SaveIcon"
   onBlur={[Function]}
@@ -127,7 +127,7 @@ exports[`SearchBar Saving Fab save shows save button if there are no books in bo
   type="button"
 >
   <span
-    className="MuiFab-label-120"
+    className="MuiFab-label-123"
   >
     <pure(SaveIcon)>
       <SaveIcon>
@@ -183,25 +183,25 @@ exports[`SearchBar Saving Fab save shows save button if there are no books in bo
         center={false}
         classes={
           Object {
-            "child": "MuiTouchRipple-child-133",
-            "childLeaving": "MuiTouchRipple-childLeaving-134",
-            "childPulsate": "MuiTouchRipple-childPulsate-135",
-            "ripple": "MuiTouchRipple-ripple-130",
-            "ripplePulsate": "MuiTouchRipple-ripplePulsate-132",
-            "rippleVisible": "MuiTouchRipple-rippleVisible-131",
-            "root": "MuiTouchRipple-root-129",
+            "child": "MuiTouchRipple-child-136",
+            "childLeaving": "MuiTouchRipple-childLeaving-137",
+            "childPulsate": "MuiTouchRipple-childPulsate-138",
+            "ripple": "MuiTouchRipple-ripple-133",
+            "ripplePulsate": "MuiTouchRipple-ripplePulsate-135",
+            "rippleVisible": "MuiTouchRipple-rippleVisible-134",
+            "root": "MuiTouchRipple-root-132",
           }
         }
       >
         <TransitionGroup
           childFactory={[Function]}
-          className="MuiTouchRipple-root-129"
+          className="MuiTouchRipple-root-132"
           component="span"
           enter={true}
           exit={true}
         >
           <span
-            className="MuiTouchRipple-root-129"
+            className="MuiTouchRipple-root-132"
           />
         </TransitionGroup>
       </TouchRipple>
@@ -249,6 +249,7 @@ exports[`SearchBar renders 1`] = `
     </WithStyles(Button)>
   </span>
   <ReactTooltip
+    clickable={false}
     effect="solid"
     getContent={[Function]}
     id="searchButtonWrapper"
@@ -258,10 +259,11 @@ exports[`SearchBar renders 1`] = `
     wrapper="div"
   />
   <WithStyles(Notification)
-    autoHideDuration={3500}
+    autoHideDuration={7500}
     handleClose={[Function]}
-    message=" already shelved with no differences"
+    message=" already exists with no differences"
     open={false}
+    type="info"
   />
 </form>
 `;

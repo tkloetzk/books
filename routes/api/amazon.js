@@ -23,8 +23,8 @@ router.post('/v1', (req, res) => {
 });
 
 router.post('/v2', (req, res) => {
-  // const api = '90d416faaa0849a3aac0e060f6faf854'
-  const api = 'ad7f80a474b68485cc2b6f22485fcd5f';
+  const api = '90d416faaa0849a3aac0e060f6faf854';
+  //const api = 'ad7f80a474b68485cc2b6f22485fcd5f';
   const isbn = get(req.body, 'isbn');
   const url =
     `http://api.scraperapi.com/?key=${api}&url=` +
@@ -44,31 +44,31 @@ router.post('/v2', (req, res) => {
     function(error, response, html) {
       console.info('Status:', response.statusCode);
       console.error('Error:', error);
-
-      const keywordSelector = `a[href*="keywords=${isbn}"]`;
-      const book = {
-        amazonAverageRating: parseFloat(
-          $('span[data-a-popover*="average-customer-review"]', html)
-            .text()
-            .split(' o')[0]
-        ),
-        amazonRatingsCount: parseInt(
-          $('span[data-a-popover*="average-customer-review"]', html)
-            .parent()
-            .next()
-            .text()
-            .trim()
-            .replace(',', '')
-        ),
-        price: $(`${keywordSelector} > .a-offscreen`, html).text(),
-        // href: $(
-        //   `${keywordSelector}.a-link-normal.s-access-detail-page.s-color-twister-title-link.a-text-normal`,
-        //   html
-        // ).attr('href'),
-        isbn,
-      };
-      //   console.log(book);
-      res.send({ book });
+      if (!error) {
+        const keywordSelector = `a[href*="keywords=${isbn}"]`;
+        const book = {
+          amazonAverageRating: parseFloat(
+            $('span[data-a-popover*="average-customer-review"]', html)
+              .text()
+              .split(' o')[0]
+          ),
+          amazonRatingsCount: parseInt(
+            $('span[data-a-popover*="average-customer-review"]', html)
+              .parent()
+              .next()
+              .text()
+              .trim()
+              .replace(',', '')
+          ),
+          price: $(`${keywordSelector} > .a-offscreen`, html).text(),
+          isbn,
+        };
+        console.log(book);
+        res.send({ book });
+      } else {
+        console.error(error);
+        res.error({ msg: error });
+      }
     }
   );
 });

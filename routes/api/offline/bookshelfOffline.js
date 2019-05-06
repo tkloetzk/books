@@ -1,17 +1,22 @@
 const express = require('express');
 const bookRoutes = express.Router();
-const map = require('lodash').map;
-const forEach = require('lodash').forEach;
+const _ = require('lodash')
+const forEach = require('lodash/forEach')
+const map = require('lodash/map')
+const isEqual = require('lodash/isEqual')
+const remove = require('lodash/remove')
 
-let bookshelf = [
+global.bookshelf = [
   {
-    categories: ['Motherhood'],
+    categories: ['Motherhood', 'Baby'],
     _id: '5c801a9f4549aac8fe03f088',
     amazonAverageRating: 4.4,
     amazonRatingsCount: 340,
     price: '',
     isbn: '9780310338130',
     title: 'Hands Free Mama1',
+    owned: false,
+    read: false,
     subtitle:
       'A Guide to Putting Down the Phone, Burning the To-Do List, and Letting Go of Perfection to Grasp What Really Matters!',
     description:
@@ -28,6 +33,8 @@ let bookshelf = [
     amazonAverageRating: 4.6,
     amazonRatingsCount: 20,
     price: '',
+    owned: false,
+    read: true,
     isbn: '9780736917728',
     title: "Raising a Daughter After God's Own Heart",
     subtitle: '',
@@ -47,6 +54,8 @@ let bookshelf = [
     price: '',
     isbn: '9781400079094',
     title: 'Operating Instructions1',
+    owned: false,
+    read: true,
     subtitle: "A Journal Of My Son's First Year",
     description:
       "A single mother and writer grappling alone with the problems of a newborn baby presents a vivid account of the confusion, joys, sorrows, and struggles of the first year in her son's life. Reprint. 20,000 first printing.",
@@ -57,12 +66,14 @@ let bookshelf = [
     __v: 0,
   },
   {
-    categories: ['BABY'],
+    categories: ['Baby'],
     _id: '5c83043936c4b64ed32877f2',
     amazonAverageRating: 4.3,
     amazonRatingsCount: 3594,
     price: '',
     isbn: '9781932740080',
+    owned: true,
+    read: false,
     title: 'On Becoming Baby Wise',
     subtitle:
       'Book One : the Classic Reference Guide Utilized by Over 1,000,000 Parents Worldwide',
@@ -74,28 +85,60 @@ let bookshelf = [
     goodreadsRatingsCount: 11162,
     __v: 0,
   },
-];
+]
 
 bookRoutes.route('/').post((req, res) => {
   if (req.body.length) {
     const filteredBookshelf = [];
-    forEach(bookshelf, book => {
+    forEach(global.bookshelf, book => {
       forEach(req.body, category => {
         if (book.categories.includes(category)) {
-          console.log(book.title);
           filteredBookshelf.push(book);
         }
       });
     });
     res.send(filteredBookshelf);
   } else {
-    res.send(bookshelf);
+    res.send(global.bookshelf);
   }
 });
 
+bookRoutes.route('/add').post((req, res) => {
+  const books = map(req.body, book => {
+    Book.find({ isbn: book.isbn }, { isbn: 1 }).limit(1);
+    return new Book(book);
+  });
+  global.bookshelf = global.bookshelf.concat(books)
+  res.send(books);
+});
+
+
+bookRoutes.route('/update/:id').put((req, res) => {
+ forEach(global.bookshelf, book => {
+    if (isEqual(book._id.toString(), req.params.id)) {
+      forEach(Object.keys(req.body), key => {
+        book[key] = req.body[key]
+      })
+   }
+ })
+ res.send(global.bookshelf)
+});
+
+bookRoutes.route('/delete/:id').delete((req, res) => {
+  console.log('deleting', req.params);
+
+  remove(global.bookshelf, book => book._id.toString() === req.params.id)
+  res.send(global.bookshelf)
+});
+
 bookRoutes.route('/genres').get((req, res) => {
-  const genres = map(bookshelf, book =>
-    forEach(book.categories, category => category).toString()
+  const genres = []
+  forEach(global.bookshelf, book =>
+    forEach(book.categories, category => {
+      if (!genres.includes(category)) {
+        return genres.push(category.toString())
+      }
+    })
   );
   res.send(genres);
 });

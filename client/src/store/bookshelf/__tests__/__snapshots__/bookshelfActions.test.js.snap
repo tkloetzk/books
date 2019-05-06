@@ -79,29 +79,6 @@ Array [
 ]
 `;
 
-exports[`bookshelf actions getBookshelf includedGenres = false, no genres selected 1`] = `
-Array [
-  Array [
-    Object {
-      "isLoading": true,
-      "type": "FETCH_BOOKSHELF_IS_LOADING",
-    },
-  ],
-  Array [
-    Object {
-      "isLoading": false,
-      "type": "FETCH_BOOKSHELF_IS_LOADING",
-    },
-  ],
-  Array [
-    Object {
-      "bookshelf": Array [],
-      "type": "FETCH_BOOKSHELF_SUCCESS",
-    },
-  ],
-]
-`;
-
 exports[`bookshelf actions insertModifiedBook 1`] = `
 Array [
   Array [

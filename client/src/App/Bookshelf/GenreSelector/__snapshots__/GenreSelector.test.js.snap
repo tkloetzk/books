@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GenreSelector renders deletes removes category from state when a category is deleted 1`] = `
+exports[`GenreSelector deletes removes category from state when a category is deleted 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
 >
@@ -45,79 +45,11 @@ exports[`GenreSelector renders deletes removes category from state when a catego
       key="DESELECT ALL"
       label="DESELECT ALL"
     />
-    <CSVLink
-      asyncOnClick={false}
-      data={Array []}
-      filename="generatedBy_react-csv.csv"
-      headers={
-        Array [
-          Object {
-            "key": "isbn",
-            "label": "ISBN",
-          },
-          Object {
-            "key": "title",
-            "label": "Title",
-          },
-          Object {
-            "key": "subtitle",
-            "label": "Subtitle",
-          },
-          Object {
-            "key": "categories",
-            "label": "Categories",
-          },
-          Object {
-            "key": "description",
-            "label": "Description",
-          },
-          Object {
-            "key": "amazonAverageRating",
-            "label": "Amazon Average Rating",
-          },
-          Object {
-            "key": "amazonRatingsCount",
-            "label": "Amazon Ratings Count",
-          },
-          Object {
-            "key": "goodreadsAverageRating",
-            "label": "Goodreads Average Rating",
-          },
-          Object {
-            "key": "goodreadsRatingsCount",
-            "label": "Goodreads Ratings Count",
-          },
-          Object {
-            "key": "adjustedRating",
-            "label": "Adjusted Rating",
-          },
-          Object {
-            "key": "read",
-            "label": "Read",
-          },
-          Object {
-            "key": "owned",
-            "label": "Owned",
-          },
-        ]
-      }
-      separator=","
-      target="_blank"
-      uFEFF={true}
-    >
-      <WithStyles(Fab)
-        size="small"
-      >
-        <pure(SaveAltIcon)
-          fontSize="small"
-        />
-      </WithStyles(Fab)>
-    </CSVLink>
   </WithStyles(FormGroup)>
 </WithStyles(FormControl)>
 `;
 
-exports[`GenreSelector renders inserts updates state after a new book with new category is inserted 1`] = `
+exports[`GenreSelector inserts updates state after a new book with new category is inserted 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
 >
@@ -184,74 +116,6 @@ exports[`GenreSelector renders inserts updates state after a new book with new c
       key="DESELECT ALL"
       label="DESELECT ALL"
     />
-    <CSVLink
-      asyncOnClick={false}
-      data={Array []}
-      filename="generatedBy_react-csv.csv"
-      headers={
-        Array [
-          Object {
-            "key": "isbn",
-            "label": "ISBN",
-          },
-          Object {
-            "key": "title",
-            "label": "Title",
-          },
-          Object {
-            "key": "subtitle",
-            "label": "Subtitle",
-          },
-          Object {
-            "key": "categories",
-            "label": "Categories",
-          },
-          Object {
-            "key": "description",
-            "label": "Description",
-          },
-          Object {
-            "key": "amazonAverageRating",
-            "label": "Amazon Average Rating",
-          },
-          Object {
-            "key": "amazonRatingsCount",
-            "label": "Amazon Ratings Count",
-          },
-          Object {
-            "key": "goodreadsAverageRating",
-            "label": "Goodreads Average Rating",
-          },
-          Object {
-            "key": "goodreadsRatingsCount",
-            "label": "Goodreads Ratings Count",
-          },
-          Object {
-            "key": "adjustedRating",
-            "label": "Adjusted Rating",
-          },
-          Object {
-            "key": "read",
-            "label": "Read",
-          },
-          Object {
-            "key": "owned",
-            "label": "Owned",
-          },
-        ]
-      }
-      separator=","
-      target="_blank"
-      uFEFF={true}
-    >
-      <WithStyles(Fab)
-        size="small"
-      >
-        <pure(SaveAltIcon)
-          fontSize="small"
-        />
-      </WithStyles(Fab)>
-    </CSVLink>
   </WithStyles(FormGroup)>
 </WithStyles(FormControl)>
 `;
@@ -290,74 +154,6 @@ exports[`GenreSelector renders renders with no genres 1`] = `
       key="DESELECT ALL"
       label="DESELECT ALL"
     />
-    <CSVLink
-      asyncOnClick={false}
-      data={Array []}
-      filename="generatedBy_react-csv.csv"
-      headers={
-        Array [
-          Object {
-            "key": "isbn",
-            "label": "ISBN",
-          },
-          Object {
-            "key": "title",
-            "label": "Title",
-          },
-          Object {
-            "key": "subtitle",
-            "label": "Subtitle",
-          },
-          Object {
-            "key": "categories",
-            "label": "Categories",
-          },
-          Object {
-            "key": "description",
-            "label": "Description",
-          },
-          Object {
-            "key": "amazonAverageRating",
-            "label": "Amazon Average Rating",
-          },
-          Object {
-            "key": "amazonRatingsCount",
-            "label": "Amazon Ratings Count",
-          },
-          Object {
-            "key": "goodreadsAverageRating",
-            "label": "Goodreads Average Rating",
-          },
-          Object {
-            "key": "goodreadsRatingsCount",
-            "label": "Goodreads Ratings Count",
-          },
-          Object {
-            "key": "adjustedRating",
-            "label": "Adjusted Rating",
-          },
-          Object {
-            "key": "read",
-            "label": "Read",
-          },
-          Object {
-            "key": "owned",
-            "label": "Owned",
-          },
-        ]
-      }
-      separator=","
-      target="_blank"
-      uFEFF={true}
-    >
-      <WithStyles(Fab)
-        size="small"
-      >
-        <pure(SaveAltIcon)
-          fontSize="small"
-        />
-      </WithStyles(Fab)>
-    </CSVLink>
   </WithStyles(FormGroup)>
 </WithStyles(FormControl)>
 `;

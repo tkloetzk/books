@@ -2,6 +2,8 @@ import React from 'react';
 import InitialIcon from '@material-ui/icons/RadioButtonUnchecked';
 import DoneIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
+import blue from '@material-ui/core/colors/blue';
 import { LOADING_STATUSES } from '../../util/constants';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -22,8 +24,12 @@ function TooltipProgress(props) {
     );
   }
   if (progress === LOADING_STATUSES.success) return <DoneIcon style={green} />;
+  if (progress === LOADING_STATUSES.info)
+    return <InfoIcon style={{ color: blue[300] }} />;
   if (progress === LOADING_STATUSES.errored)
     return <ErrorIcon style={{ color: 'red' }} />;
+
+  return null;
 }
 
 export default function Tooltip({ content }) {

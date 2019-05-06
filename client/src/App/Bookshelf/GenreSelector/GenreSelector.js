@@ -11,12 +11,11 @@ import forEach from 'lodash/forEach';
 import {
   getBookshelf,
   getBookshelfGenres,
+  setSelectedGenres,
 } from '../../../store/bookshelf/bookshelfActions';
-import { CSVLink } from 'react-csv';
-import DownloadIcon from '@material-ui/icons/SaveAlt';
-import Fab from '@material-ui/core/Fab';
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
+import some from 'lodash/some'
 
 export class GenreSelector extends React.Component {
   state = {
@@ -28,44 +27,48 @@ export class GenreSelector extends React.Component {
   };
 
   componentDidMount() {
-    this.props.getBookshelfGenres();
+    this.props.getBookshelfGenres()
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { genres: propGenres, getBookshelf } = this.props;
+    const { genres: propGenres, setSelectedGenres } = this.props;
     const { genres, deselectAll, selectChange, selectAll } = this.state;
 
     if (!isEqual(prevProps.genres, propGenres)) {
       const newGenres = [];
       forEach(propGenres, genre => {
-        if (!find(genres, { category: genre.category })) {
-          newGenres.push({ category: genre, checked: false });
+        const exisiting = find(genres, { category: genre})
+        if (exisiting) {
+          newGenres.push({ category: genre, checked: exisiting.checked })
         } else {
-          const exisitingGenre = find(genres, { category: genre.category });
-          newGenres.push({ category: genre, checked: exisitingGenre.checked });
+          newGenres.push({ category: genre, checked: false })
         }
-      });
-
+      })
+      
       this.setState({
         genres: newGenres,
         selectChange: false,
+        selectAll: !some(newGenres, o => o.checked)
       });
     }
 
-    if (prevState.genres.length && selectChange) {
-      if (!isEqual(genres, prevState.genres) && !deselectAll) {
-        const selectedGenre = [];
-        forEach(genres, genre => {
-          if (genre.checked) {
-            selectedGenre.push(genre.category);
-          }
-        });
-
-        getBookshelf(selectedGenre);
-      } else if (deselectAll && !isEqual(deselectAll, prevState.deselectAll)) {
-        getBookshelf(false);
-      } else if (prevState.deselectAll && selectAll) {
-        getBookshelf();
+    if (selectChange) {
+      if (!isEqual(genres, prevState.genres)) {
+        if (!isEqual(genres, prevState.genres) && !deselectAll) {
+          const selectedGenre = [];
+          forEach(genres, genre => {
+            if (genre.checked) {
+              selectedGenre.push(genre.category);
+            }
+          });
+          setSelectedGenres(selectedGenre)
+        }
+      }
+      if (selectAll && !prevState.selectAll) {
+        setSelectedGenres(propGenres)
+      } else
+      if (deselectAll && !prevState.deselectAll) {
+        setSelectedGenres([])
       }
     }
   }
@@ -114,23 +117,8 @@ export class GenreSelector extends React.Component {
     }
   };
   render() {
-    const { classes, bookshelf } = this.props;
+    const { classes } = this.props;
     const { genres, selectAll, deselectAll } = this.state;
-
-    let headers = [
-      { label: 'ISBN', key: 'isbn' },
-      { label: 'Title', key: 'title' },
-      { label: 'Subtitle', key: 'subtitle' },
-      { label: 'Categories', key: 'categories' },
-      { label: 'Description', key: 'description' },
-      { label: 'Amazon Average Rating', key: 'amazonAverageRating' },
-      { label: 'Amazon Ratings Count', key: 'amazonRatingsCount' },
-      { label: 'Goodreads Average Rating', key: 'goodreadsAverageRating' },
-      { label: 'Goodreads Ratings Count', key: 'goodreadsRatingsCount' },
-      { label: 'Adjusted Rating', key: 'adjustedRating' },
-      { label: 'Read', key: 'read' },
-      { label: 'Owned', key: 'owned' },
-    ];
 
     const selectionControls = [
       {
@@ -182,11 +170,6 @@ export class GenreSelector extends React.Component {
               />
             );
           })}
-          <CSVLink data={bookshelf} headers={headers}>
-            <Fab size="small">
-              <DownloadIcon fontSize="small" />
-            </Fab>
-          </CSVLink>
         </FormGroup>
       </FormControl>
     );
@@ -208,7 +191,6 @@ const styles = {
 };
 const mapStateToProps = state => {
   return {
-    bookshelf: state.bookshelf.bookshelf,
     genres: state.bookshelf.genres,
   };
 };
@@ -216,6 +198,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   getBookshelf,
   getBookshelfGenres,
+  setSelectedGenres
 };
 
 GenreSelector.propTypes = {

@@ -58,11 +58,6 @@ describe('combineBooks', () => {
           newValue: 'Love You Forever1',
         },
         {
-          key: 'categories',
-          currentValue: ['Juvenile Fiction'],
-          newValue: ["Children's Book"],
-        },
-        {
           key: 'goodreadsAverageRating',
           currentValue: 4.35,
           newValue: 4.25,

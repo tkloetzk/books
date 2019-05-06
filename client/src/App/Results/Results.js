@@ -4,7 +4,7 @@ import Book from '../Book/Book';
 import sortBooklist from '../../util/calculator';
 
 const Results = ({ booklist = [], handleSave, handleDelete }) => (
-  <Grid container>
+  <Grid container style={{ justifyContent: 'center' }}>
     {sortBooklist(booklist).map(book => {
       return (
         <Book

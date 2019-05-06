@@ -60,6 +60,31 @@ export function saveModifiedBooks(books) {
   };
 }
 
+export function updateBookInBooklist(book) {
+  return dispatch => {
+    dispatch(updateBookInBooklistSuccess(book));
+  };
+}
+
+export function updateBookInBooklistSuccess(book) {
+  return {
+    type: types.UPDATE_BOOK_IN_BOOKLIST,
+    book,
+  };
+}
+
+export function updateModifiedBook(modifiedBook) {
+  return dispatch => {
+    dispatch(updateModifiedBookSuccess(modifiedBook));
+  };
+}
+
+export function updateModifiedBookSuccess(modifiedBook) {
+  return {
+    type: types.UPDATE_MODIFIED_BOOK_SUCCESS,
+    modifiedBook,
+  };
+}
 export function insertModifiedBookSuccess(modifiedBook) {
   return {
     type: types.INSERT_MODIFIED_BOOK_SUCCESS,
@@ -79,17 +104,12 @@ export function filterBookshelf(filters) {
     filters,
   };
 }
-export function getBookshelf(includedGenres = []) {
+export function getBookshelf() {
   return dispatch => {
     dispatch(getBookshelfIsLoading(true));
 
     // If false, means no genres are selected so return nothing
-    if (includedGenres === false) {
-      dispatch(getBookshelfIsLoading(false));
-      dispatch(getBookshelfSuccess([]));
-      return [];
-    } else {
-      return getBookshelfService(includedGenres)
+      return getBookshelfService()
         .then(bookshelf => {
           dispatch(getBookshelfIsLoading(false));
           dispatch(getBookshelfSuccess(bookshelf));
@@ -103,9 +123,14 @@ export function getBookshelf(includedGenres = []) {
           console.error('bookshelf error', error);
         });
     }
-  };
 }
 
+export function setSelectedGenres(selectedGenres) {
+  return {
+    type: types.SELECTED_GENRES,
+    selectedGenres,
+  };
+}
 export function addBookToBookshelfSuccess(booklist) {
   return {
     type: types.ADD_BOOK_TO_BOOKSHELF_SUCCESS,
