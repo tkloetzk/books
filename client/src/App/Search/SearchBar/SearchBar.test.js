@@ -630,14 +630,35 @@ describe('SearchBar', () => {
   });
   describe('search for already searched book', () => {
     it('is not added to booklist if already present', () => {
-      props = Object.assign({}, props, { booklist: [{ isbn: '1234' }] });
+      const isbn = '1234'
+      props = Object.assign({}, props, { booklist: [{ isbn }] });
       wrapper = shallow(<SearchBar {...props} />);
       instance = wrapper.instance();
 
-      instance.state.multiline = '1234';
+      instance.state.multiline = isbn;
       instance.handleSearch();
 
-      expect();
+      expect(instance.props.getAmazonBook).not.toHaveBeenCalled();
+      expect(instance.props.getGoogleBook).not.toHaveBeenCalled();
+      expect(instance.props.getGoodreadsBook).not.toHaveBeenCalled();
+      expect(instance.state.duplicatedISBNs).toEqual([isbn])
     });
+    it('calls the promise array with only non-exisiting books', () => {
+      const isbn = ['000', '123']
+      props = Object.assign({}, props, { booklist: [{ isbn: isbn[1] }] });
+      wrapper = shallow(<SearchBar {...props} />);
+      instance = wrapper.instance();
+
+      instance.state.multiline = isbn.join(',');
+      instance.handleSearch();
+
+      expect(instance.props.getAmazonBook).toHaveBeenCalledTimes(1);
+      expect(instance.props.getGoogleBook).toHaveBeenCalledTimes(1);
+      expect(instance.props.getGoodreadsBook).toHaveBeenCalledTimes(1);
+      expect(instance.state.duplicatedISBNs).toEqual([isbn[1]])
+    })
+    // it('displays correct duplicatedISBNs when booklist and bookshelf have duplicates', () => {
+    
+    // })
   });
 });

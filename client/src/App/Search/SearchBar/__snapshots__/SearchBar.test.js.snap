@@ -261,7 +261,7 @@ exports[`SearchBar renders 1`] = `
   <WithStyles(Notification)
     autoHideDuration={7500}
     handleClose={[Function]}
-    message=" already shelved with no differences"
+    message=" already exists with no differences"
     open={false}
     type="info"
   />
