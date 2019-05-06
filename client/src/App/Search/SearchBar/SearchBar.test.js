@@ -630,13 +630,14 @@ describe('SearchBar', () => {
   });
   describe('search for already searched book', () => {
     it('is not added to booklist if already present', () => {
-      props = Object.assign({}, props, { booklist: [{isbn: '1234'}]})
-      wrapper = shallow(<SearchBar {...props} />)
-      instance = wrapper.instance()
+      props = Object.assign({}, props, { booklist: [{ isbn: '1234' }] });
+      wrapper = shallow(<SearchBar {...props} />);
+      instance = wrapper.instance();
 
-      instance.state.multiline = '1234'
-      instance.handleSearch()
+      instance.state.multiline = '1234';
+      instance.handleSearch();
 
-    })
-  })
+      expect();
+    });
+  });
 });
