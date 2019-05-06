@@ -49,12 +49,11 @@ describe('Bookshelf', () => {
     ];
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
   describe('renders', () => {
     it('does not with active false', () => {
       props = Object.assign({}, props, {
-        bookshelf,
         active: false,
       });
       wrapper = shallow(<Bookshelf {...props} />);
@@ -68,9 +67,10 @@ describe('Bookshelf', () => {
     });
     it('with books on bookshelf', () => {
       props = Object.assign({}, props, {
-        bookshelf,
+        propBookshelf: bookshelf,
       });
       wrapper = shallow(<Bookshelf {...props} />);
+      instance.state.bookshelf = bookshelf
       expect(instance.props.getBookshelf).toHaveBeenCalled();
       expect(wrapper).toMatchSnapshot();
     });
@@ -85,7 +85,7 @@ describe('Bookshelf', () => {
     it('calls createPromiseArray when bookshelfToUpdate has a length', () => {
       instance.state.bookshelfToUpdate = bookshelf;
 
-      instance.componentDidUpdate({}, prevState);
+      instance.componentDidUpdate({ propBookshelf: bookshelf }, prevState);
       expect(instance.createPromiseArray).toHaveBeenCalledTimes(1);
       expect(instance.findAndMergeInUpdates).toHaveBeenCalledTimes(0);
       expect(instance.props.clearBooks).toHaveBeenCalledTimes(0);
@@ -99,7 +99,7 @@ describe('Bookshelf', () => {
       prevState = Object.assign({}, prevState, {
         bookshelfToUpdate: bookshelf,
       });
-      instance.componentDidUpdate({}, prevState);
+      instance.componentDidUpdate({propBookshelf: []}, prevState);
       expect(instance.createPromiseArray).toHaveBeenCalledTimes(0);
       expect(instance.findAndMergeInUpdates).toHaveBeenCalledTimes(1);
       expect(instance.props.clearBooks).toHaveBeenCalledTimes(0);
@@ -118,7 +118,7 @@ describe('Bookshelf', () => {
       instance = wrapper.instance();
       instance.state.completed = 100;
 
-      instance.componentDidUpdate({}, prevState);
+      instance.componentDidUpdate({propBookshelf: bookshelf}, prevState);
 
       // expect(instance.props.getBookshelf).not.toHaveBeenCalled();
       expect(instance.props.clearBooks).toHaveBeenCalledTimes(1);
@@ -137,6 +137,7 @@ describe('Bookshelf', () => {
     });
     describe('refreshBookshelf', () => {
       it('creates bookshelfToUpdate with no filters', () => {
+        instance.state.bookshelf = bookshelf
         instance.refreshBookshelf();
         expect(instance.state.completed).toEqual(0);
         expect(instance.state.loading).toEqual(LOADING_STATUSES.loading);
@@ -159,6 +160,7 @@ describe('Bookshelf', () => {
 
         wrapper = shallow(<Bookshelf {...props} />);
         instance = wrapper.instance();
+        instance.state.bookshelf = bookshelf
         instance.refreshBookshelf();
 
         expect(instance.state.completed).toEqual(0);
@@ -182,6 +184,7 @@ describe('Bookshelf', () => {
 
         wrapper = shallow(<Bookshelf {...props} />);
         instance = wrapper.instance();
+        instance.state.bookshelf = bookshelf
         instance.refreshBookshelf();
 
         expect(instance.state.completed).toEqual(0);
@@ -205,6 +208,7 @@ describe('Bookshelf', () => {
 
         wrapper = shallow(<Bookshelf {...props} />);
         instance = wrapper.instance();
+        instance.state.bookshelf = bookshelf
         instance.refreshBookshelf();
 
         expect(instance.state.completed).toEqual(0);
@@ -364,7 +368,7 @@ describe('Bookshelf', () => {
     };
     const state = mapStateToProps(mockedState);
     expect(state).toEqual({
-      bookshelf: mockedState.bookshelf.bookshelf,
+      propBookshelf: mockedState.bookshelf.bookshelf,
       amazonBooks: mockedState.amazon.books,
       goodreadsBooks: mockedState.goodreads.books,
     });

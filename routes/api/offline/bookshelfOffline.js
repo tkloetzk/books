@@ -8,7 +8,7 @@ const remove = require('lodash/remove')
 
 global.bookshelf = [
   {
-    categories: ['Motherhood'],
+    categories: ['Motherhood', 'Baby'],
     _id: '5c801a9f4549aac8fe03f088',
     amazonAverageRating: 4.4,
     amazonRatingsCount: 340,
@@ -66,7 +66,7 @@ global.bookshelf = [
     __v: 0,
   },
   {
-    categories: ['BABY'],
+    categories: ['Baby'],
     _id: '5c83043936c4b64ed32877f2',
     amazonAverageRating: 4.3,
     amazonRatingsCount: 3594,

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GenreSelector renders deletes removes category from state when a category is deleted 1`] = `
+exports[`GenreSelector deletes removes category from state when a category is deleted 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
 >
@@ -49,7 +49,7 @@ exports[`GenreSelector renders deletes removes category from state when a catego
 </WithStyles(FormControl)>
 `;
 
-exports[`GenreSelector renders inserts updates state after a new book with new category is inserted 1`] = `
+exports[`GenreSelector inserts updates state after a new book with new category is inserted 1`] = `
 <WithStyles(FormControl)
   component="fieldset"
 >
