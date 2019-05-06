@@ -16,7 +16,7 @@ router.get('/v1/:isbn', (req, res) => {
     isbn: req.params.isbn,
     subtitle: startCase(randomWords({ exactly: 7, join: ' ' })),
     description: randomWords({ exactly: 45, join: ' ' }),
-    //thumbnail: books[0].thumbnail, TODO: Image
+    thumbnail: '', // TODO: Add thumbnail
     categories: categories[Math.floor(Math.random() * categories.length)],
   };
   res.send(book);
