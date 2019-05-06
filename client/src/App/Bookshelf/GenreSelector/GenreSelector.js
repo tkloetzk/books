@@ -11,9 +11,11 @@ import forEach from 'lodash/forEach';
 import {
   getBookshelf,
   getBookshelfGenres,
+  setSelectedGenres,
 } from '../../../store/bookshelf/bookshelfActions';
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
+import some from 'lodash/some'
 
 export class GenreSelector extends React.Component {
   state = {
@@ -24,45 +26,49 @@ export class GenreSelector extends React.Component {
     deselectAll: false,
   };
 
+  componentDidMount() {
+    this.props.getBookshelfGenres()
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    const { genres: propGenres, getBookshelf } = this.props;
+    const { genres: propGenres, setSelectedGenres } = this.props;
     const { genres, deselectAll, selectChange, selectAll } = this.state;
 
     if (!isEqual(prevProps.genres, propGenres)) {
       const newGenres = [];
       forEach(propGenres, genre => {
-        if (!find(genres, { category: genre.category })) {
-          newGenres.push({ category: genre, checked: false });
+        const exisiting = find(genres, { category: genre})
+        if (exisiting) {
+          newGenres.push({ category: genre, checked: exisiting.checked })
         } else {
-          const exisitingGenre = find(genres, { category: genre.category });
-          newGenres.push({ category: genre, checked: exisitingGenre.checked });
+          newGenres.push({ category: genre, checked: false })
         }
-      });
-
+      })
+      
       this.setState({
         genres: newGenres,
         selectChange: false,
+        selectAll: !some(newGenres, o => o.checked)
       });
     }
 
-    if (prevState.genres.length && selectChange) {
-      if (!isEqual(genres, prevState.genres) && !deselectAll) {
-        const selectedGenre = [];
-        forEach(genres, genre => {
-          if (genre.checked) {
-            selectedGenre.push(genre.category);
-          }
-        });
-        if (!selectedGenre.length) {
-          this.setState({
-            selectAll: true
-          })
+    if (selectChange) {
+      if (!isEqual(genres, prevState.genres)) {
+        if (!isEqual(genres, prevState.genres) && !deselectAll) {
+          const selectedGenre = [];
+          forEach(genres, genre => {
+            if (genre.checked) {
+              selectedGenre.push(genre.category);
+            }
+          });
+          setSelectedGenres(selectedGenre)
         }
-        getBookshelf(selectedGenre);
-      } else if (deselectAll && !isEqual(deselectAll, prevState.deselectAll)) {
-        getBookshelf(false);
-      } else if (prevState.deselectAll && selectAll) {
-        getBookshelf();
+      }
+      if (selectAll && !prevState.selectAll) {
+        setSelectedGenres(propGenres)
+      } else
+      if (deselectAll && !prevState.deselectAll) {
+        setSelectedGenres([])
       }
     }
   }
@@ -192,6 +198,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   getBookshelf,
   getBookshelfGenres,
+  setSelectedGenres
 };
 
 GenreSelector.propTypes = {

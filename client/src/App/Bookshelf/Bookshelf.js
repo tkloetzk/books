@@ -27,10 +27,13 @@ import Tooltip from '../Tooltip/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ReactTooltip from 'react-tooltip';
 import { LOADING_STATUSES } from '../../util/constants';
+import filter from 'lodash/filter'
+import isEqual from 'lodash/isEqual'
 
 export class Bookshelf extends Component {
   state = {
     completed: 0,
+    bookshelf: [],
     bookshelfToUpdate: [],
     allDifferencesArray: [],
     loading: LOADING_STATUSES.initial,
@@ -39,19 +42,25 @@ export class Bookshelf extends Component {
   };
 
   componentDidMount() {
-    this.props.getBookshelf();
+    this.props.getBookshelf()
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { clearBooks, getBookshelf, selectedGenres } = this.props;
+    const { clearBooks, getBookshelf, selectedGenres, propBookshelf } = this.props;
     const {
       amazonBookLoading,
       goodreadsBookLoading,
       bookshelfToUpdate,
       completed,
+      bookshelf,
       allDifferencesArray,
     } = this.state;
 
+    if (prevProps.propBookshelf.length && !bookshelf.length) {
+      this.setState({
+        bookshelf: propBookshelf
+      })
+    }
     if (bookshelfToUpdate.length && !prevState.bookshelfToUpdate.length) {
       this.createPromiseArray();
     }
@@ -62,6 +71,7 @@ export class Bookshelf extends Component {
       amazonBookLoading === LOADING_STATUSES.success &&
       goodreadsBookLoading === LOADING_STATUSES.success
     ) {
+      
       this.findAndMergeInUpdates();
     }
 
@@ -72,6 +82,19 @@ export class Bookshelf extends Component {
         this.setState({ allDifferencesArray: [] });
       }
       clearBooks();
+    }
+
+    // Genre Selection has changed
+    if (!isEqual(selectedGenres, prevProps.selectedGenres) || (prevProps.propBookshelf.length && !isEqual(prevProps.propBookshelf, propBookshelf))) {
+      const selectedBooks = []
+      forEach(propBookshelf, (book) => {
+        forEach(book.categories, category => {
+          if (selectedGenres.includes(category) && !selectedBooks.includes(book)) {
+            selectedBooks.push(book)
+          }
+        })
+      })
+      this.setState({bookshelf: selectedBooks})
     }
   }
 
@@ -94,7 +117,8 @@ export class Bookshelf extends Component {
   };
 
   refreshBookshelf = () => {
-    const { bookshelf, filters } = this.props;
+    const { bookshelf } = this.state
+    const { filters } = this.props;
 
     this.setState({
       completed: 0,
@@ -222,11 +246,12 @@ export class Bookshelf extends Component {
   render() {
     const {
       completed,
+      bookshelf,
       loading,
       amazonBookLoading,
       goodreadsBookLoading,
     } = this.state;
-    const { classes, bookshelf, active, deleteBookOnBookshelf } = this.props;
+    const { classes, active, deleteBookOnBookshelf } = this.props;
 
     let headers = [
       { label: 'ISBN', key: 'isbn' },
@@ -314,7 +339,7 @@ const styles = {
 };
 
 export const mapStateToProps = state => ({
-  bookshelf: state.bookshelf.bookshelf, // TODO: better naming?
+  propBookshelf: state.bookshelf.bookshelf,
   amazonBooks: state.amazon.books,
   amazonBookErrored: state.amazon.hasErrored,
   goodreadsBooks: state.goodreads.books,
@@ -333,9 +358,9 @@ const mapDispatchToProps = {
 };
 
 Bookshelf.defaultProps = {
-  bookshelf: [],
-};
-
+  propBookshelf: [],
+  selectedGenres: [],
+}
 export default connect(
   mapStateToProps,
   mapDispatchToProps

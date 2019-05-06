@@ -28,6 +28,7 @@ import assign from 'lodash/assign';
 import Notification from '../../Notification/Notification';
 import util from '../../../util/combineBooks';
 import Tooltip from '../../Tooltip/Tooltip';
+import find from 'lodash/find'
 
 // TODO: This file is getting huge
 const styles = {
@@ -169,7 +170,7 @@ export class SearchBar extends Component {
       }
       if (duplicatedISBNs.length) {
         const existingUnchangedISBN = map(duplicatedISBNs, isbn => isbn.isbn);
-        this.setState({ duplicatedISBNs: existingUnchangedISBN });
+        this.setState({ duplicatedISBNs: [...this.state.duplicatedISBNs, existingUnchangedISBN] });
       }
       clearBooks();
       this.setState({ success: true, loading: false, multiline: '' });
@@ -183,30 +184,46 @@ export class SearchBar extends Component {
   };
 
   handleSearch = () => {
-    const { getAmazonBook, getGoogleBook, getGoodreadsBook } = this.props;
+    const { booklist, getAmazonBook, getGoogleBook, getGoodreadsBook } = this.props;
     const { multiline, loading } = this.state;
     const isbns = multiline.split(/[\n, ]/).filter(v => v !== '');
-    if (!loading) {
+
+    const promiseIsbns = []
+    forEach(isbns, isbn => {
+      const formattedIsbn = isbn.replace(/[- ]/g, '');
+      if (!find(booklist, {isbn: formattedIsbn})) {
+        promiseIsbns.push(formattedIsbn)
+      } else {
+     //   const updatedSearchIsbns = remove(searchIsbns, isbn)
+        this.setState({
+          duplicatedISBNs: [...this.state.duplicatedISBNs, formattedIsbn]
+        })
+      }
+    })
+
+    if (promiseIsbns.length) {
+      if (!loading) {
+        this.setState({
+          success: false,
+          loading: true,
+          searchIsbns: promiseIsbns,
+          goodreadsBookLoading: LOADING_STATUSES.loading,
+          googleBookLoading: LOADING_STATUSES.loading,
+          amazonBookLoading: LOADING_STATUSES.loading,
+        });
+      }
+
+      Promise.all(promiseIsbns.map(isbn => [
+        getAmazonBook(isbn),
+        getGoogleBook(isbn),
+        getGoodreadsBook(isbn),
+      ]))
+    } else {
       this.setState({
-        success: false,
-        loading: true,
-        searchIsbns: isbns,
-        goodreadsBookLoading: LOADING_STATUSES.loading,
-        googleBookLoading: LOADING_STATUSES.loading,
-        amazonBookLoading: LOADING_STATUSES.loading,
-      });
+        multiline: '',
+      })
     }
 
-    Promise.all(
-      forEach(isbns, isbn => {
-        const formattedIsbn = isbn.replace(/[- ]/g, '');
-        return [
-          getAmazonBook(formattedIsbn),
-          getGoogleBook(formattedIsbn),
-          getGoodreadsBook(formattedIsbn),
-        ];
-      })
-    );
   };
 
   handleSave = () => {
@@ -255,6 +272,7 @@ export class SearchBar extends Component {
     ];
     const showSaveIcon =
       booklist.length > 0 || modifiedBooklist.length > 0 ? true : false;
+
     return (
       <form className={classes.container} noValidate autoComplete="off">
         <TextField
@@ -308,7 +326,7 @@ export class SearchBar extends Component {
           autoHideDuration={7500}
           message={`${duplicatedISBNs.join(
             ', '
-          )} already shelved with no differences`}
+          )} already exists with no differences`}
           type={LOADING_STATUSES.info}
         />
       </form>
